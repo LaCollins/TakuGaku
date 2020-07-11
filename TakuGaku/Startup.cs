@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TakuGaku.Models;
 using TakuGaku.Repositories;
 
 namespace TakuGaku
@@ -32,6 +33,7 @@ namespace TakuGaku
                     builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             services.AddTransient<SchoolRepository>();
             services.AddTransient<TeacherRepository>();
+            services.AddTransient<StudentRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
 

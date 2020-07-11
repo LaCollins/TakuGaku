@@ -63,16 +63,28 @@ namespace TakuGaku.Controllers
         [HttpPost]
         public IActionResult AddTeacher(Teacher teacherToAdd)
         {
-            var result = _teacherRepository.AddTeacher(teacherToAdd);
-            return Ok(result);
+            var checkUsername = _teacherRepository.GetTeacherByUserName(teacherToAdd.UserName);
+            if (checkUsername == null)
+            {
+                var result = _teacherRepository.AddTeacher(teacherToAdd);
+                return Ok(result);
+            }
+
+            return Ok("That username already exists, teacher not added.");
         }
 
         //Update Teacher
         [HttpPut("update/{teacherId}")]
         public IActionResult UpdateTeacher(int teacherId, Teacher updatedTeacher)
         {
-            var newTeacher = _teacherRepository.UpdateTeacher(teacherId, updatedTeacher);
-            return Ok(newTeacher);
+            var checkUsername = _teacherRepository.GetTeacherByUserName(updatedTeacher.UserName);
+            if (checkUsername == null)
+            {
+                var newTeacher = _teacherRepository.UpdateTeacher(teacherId, updatedTeacher);
+                return Ok(newTeacher);
+            }
+
+            return Ok("That username already exists, teacher not added.");
         }
 
         //Delete Teacher
