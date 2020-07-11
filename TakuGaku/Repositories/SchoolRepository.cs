@@ -45,5 +45,45 @@ namespace TakuGaku.Repositories
                 return school;
             }
         }
+
+        public School AddSchool(School schoolToAdd)
+        {
+            var sql = @"INSERT INTO School(schoolName, [UID], eMail, Active)
+                        OUTPUT INSERTED.*
+                        VALUES (@SchoolName, @UID, @Email, @Active)";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<School>(sql, schoolToAdd);
+
+                return result;
+            }
+        }
+
+        public School CloseSchool(int schoolId)
+        {
+            var sql = @"UPDATE School
+                        SET active = 0
+                        OUTPUT INSERTED.*
+                        WHERE SchoolId = @schoolId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                return db.QueryFirstOrDefault<School>(sql, new { SchoolId = schoolId });
+            }
+        }
+
+        public School OpenSchool(int schoolId)
+        {
+            var sql = @"UPDATE School
+                        SET active = 1
+                        OUTPUT INSERTED.*
+                        WHERE SchoolId = @schoolId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                return db.QueryFirstOrDefault<School>(sql, new { SchoolId = schoolId });
+            }
+        }
     }
 }

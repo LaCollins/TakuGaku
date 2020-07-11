@@ -45,5 +45,30 @@ namespace TakuGaku.Controllers
 
             return Ok(result);
         }
+
+        //Add A School
+        [HttpPost]
+        public IActionResult AddSchool(School schoolToAdd)
+        {
+            var result = _schoolRepository.AddSchool(schoolToAdd);
+            return Ok(result);
+        }
+
+        //Close A School
+        [HttpPut("close/{schoolId}")]
+        public IActionResult CloseSchool(int schoolId)
+        {
+            var result = _schoolRepository.CloseSchool(schoolId);
+            return Ok(result);
+        }
+
+        //Open School
+        //Close A School
+        [HttpPut("open/{schoolId}")]
+        public IActionResult OpenSchool(int schoolId)
+        {
+            var result = _schoolRepository.OpenSchool(schoolId);
+            return Ok(result);
+        }
     }
 }
