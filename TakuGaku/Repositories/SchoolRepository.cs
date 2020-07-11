@@ -31,5 +31,19 @@ namespace TakuGaku.Repositories
                 return schools;
             }
         }
+
+        public School GetSchoolById(int schoolId)
+        {
+            var sql = @"SELECT *
+                        FROM School
+                        WHERE SchoolId = @schoolId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var school = db.QueryFirstOrDefault<School>(sql, new { SchoolId = schoolId });
+
+                return school;
+            }
+        }
     }
 }
