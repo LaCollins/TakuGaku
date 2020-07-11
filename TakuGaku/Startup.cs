@@ -31,6 +31,7 @@ namespace TakuGaku
                 options.AddPolicy("ItsAllGood",
                     builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
             services.AddTransient<SchoolRepository>();
+            services.AddTransient<TeacherRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
 
