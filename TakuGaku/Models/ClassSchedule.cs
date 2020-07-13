@@ -11,7 +11,7 @@ namespace TakuGaku.Models
         public int StudentId { get; set; }
         public int SubjectId { get; set; }
         public string DayOfWeek { get; set; }
-        public TimeSpan TimeSlot { get; set; }
+        public DateTime TimeSlot { get; set; }
         public string ClassTitle { get; set; }
     }
 }

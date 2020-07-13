@@ -37,6 +37,7 @@ namespace TakuGaku
             services.AddTransient<SubjectRepository>();
             services.AddTransient<AssignmentTypeRepository>();
             services.AddTransient<ClassScheduleRepository>();
+            services.AddTransient<AssignmentRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
 
