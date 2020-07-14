@@ -45,112 +45,92 @@ namespace TakuGaku.Repositories
             }
         }
 
-        //public IEnumerable<ClassSchedule> GetClassBySubject(int subjectId)
-        //{
-        //    var sql = @"SELECT *
-        //                FROM ClassSchedule
-        //                WHERE SubjectId = @subjectId";
+        public IEnumerable<Assignment> GetAssignmentsBySubject(int subjectId)
+        {
+            var sql = @"SELECT *
+                        FROM assignment
+                        WHERE SubjectId = @subjectId";
 
-        //    using (var db = new SqlConnection(ConnectionString))
-        //    {
-        //        var classes = db.Query<ClassSchedule>(sql, new { SubjectId = subjectId });
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var assignments = db.Query<Assignment>(sql, new { SubjectId = subjectId });
 
-        //        return classes;
-        //    }
-        //}
+                return assignments;
+            }
+        }
 
-        //public bool CheckExistingClass(ClassSchedule classToAdd)
-        //{
-        //    var classes = GetClassByStudent(classToAdd.StudentId);
-        //    var classExists = false;
+        public Assignment GetAssignmentById(int assignmentId)
+        {
+            var sql = @"SELECT *
+                        FROM assignment
+                        WHERE AssignmentId = @assignmentId";
 
-        //    if (classes.Any())
-        //    {
-        //        foreach (var classItem in classes)
-        //        {
-        //            if (classItem.DayOfWeek == classToAdd.DayOfWeek
-        //                && classItem.TimeSlot == classToAdd.TimeSlot
-        //                && classItem.SubjectId == classToAdd.SubjectId)
-        //            {
-        //                classExists = true;
-        //            }
-        //        }
-        //    }
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var assignment = db.QueryFirstOrDefault<Assignment>(sql, new { AssignmentId = assignmentId });
 
-        //    return classExists;
-        //}
+                return assignment;
+            }
+        }
 
-        //public bool CheckOpenTimeslot(ClassSchedule classToAdd)
-        //{
-        //    var classes = GetClassByStudent(classToAdd.StudentId);
-        //    var timeSlotOpen = true;
+        public Assignment AddAssignment(Assignment assignmentToAdd)
+        {
+            var sql = @"INSERT INTO assignment(studentId, classId, assignmentTypeId, subjectId, instructions, completed, grade, dateAssigned, dateDue, dateComplete, assignmentTitle)
+                        OUTPUT INSERTED.*
+                        VALUES (@studentId, @classId, @assignmentTypeId, @subjectId, @instructions, @completed, @grade, @dateAssigned, @dateDue, @dateComplete, @assignmentTitle)";
 
-        //    if (classes.Any())
-        //    {
-        //        foreach (var classItem in classes)
-        //        {
-        //            if (classItem.DayOfWeek == classToAdd.DayOfWeek
-        //                && classItem.TimeSlot == classToAdd.TimeSlot
-        //                && classItem.ClassId != classToAdd.ClassId)
-        //            {
-        //                timeSlotOpen = false;
-        //            }
-        //        }
-        //    }
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<Assignment>(sql, assignmentToAdd);
 
-        //    return timeSlotOpen;
-        //}
+                return result;
+            }
+        }
 
-        //public ClassSchedule AddClass(ClassSchedule classToAdd)
-        //{
-        //    var sql = @"INSERT INTO ClassSchedule(studentId, subjectId, [dayOfWeek], timeSlot, classTitle)
-        //                OUTPUT INSERTED.*
-        //                VALUES (@studentId, @subjectId, @dayOfWeek, @timeSlot, @classTitle)";
+        public Assignment UpdateAssignment(int assignmentId, Assignment updatedAssignment)
+        {
+            var sql = @"UPDATE assignment
+                        SET StudentId = @studentId, ClassId = @classId, AssignmentTypeId = @assignmentTypeId,
+                            SubjectId = @subjectId, Instructions = @instructions, Completed = @completed, Grade = @grade,
+                            DateAssigned = @dateAssigned, DateDue = @dateDue, DateComplete = @dateComplete, AssignmentTitle = @assignmentTitle
+                        OUTPUT INSERTED.*
+                        WHERE AssignmentId = @assignmentId";
 
-        //    using (var db = new SqlConnection(ConnectionString))
-        //    {
-        //        var result = db.QueryFirstOrDefault<ClassSchedule>(sql, classToAdd);
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new
+                {
+                    updatedAssignment.StudentId,
+                    updatedAssignment.ClassId,
+                    updatedAssignment.AssignmentTypeId,
+                    updatedAssignment.SubjectId,
+                    updatedAssignment.Instructions,
+                    updatedAssignment.Completed,
+                    updatedAssignment.Grade,
+                    updatedAssignment.DateAssigned,
+                    updatedAssignment.DateDue,
+                    updatedAssignment.DateComplete,
+                    updatedAssignment.AssignmentTitle,
+                    AssignmentId = assignmentId
+                };
 
-        //        return result;
-        //    }
-        //}
+                var result = db.QueryFirstOrDefault<Assignment>(sql, parameters);
+                return result;
+            }
+        }
 
-        //public ClassSchedule UpdateClass(int classId, ClassSchedule updatedClass)
-        //{
-        //    var sql = @"UPDATE classSchedule
-        //                SET StudentId = @studentId, SubjectId = @subjectId, [dayOfWeek] = @dayOfWeek, TimeSlot = @timeslot, ClassTitle = @classTitle
-        //                OUTPUT INSERTED.*
-        //                WHERE ClassId = @classId";
+        public string DeleteAssignment(int assignmentId)
+        {
+            var sql = @"DELETE
+                        FROM assignment
+                        WHERE AssignmentId = @assignmentId";
 
-        //    using (var db = new SqlConnection(ConnectionString))
-        //    {
-        //        var parameters = new
-        //        {
-        //            updatedClass.StudentId,
-        //            updatedClass.SubjectId,
-        //            updatedClass.DayOfWeek,
-        //            updatedClass.TimeSlot,
-        //            updatedClass.ClassTitle,
-        //            ClassId = classId,
-        //        };
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId });
 
-        //        var result = db.QueryFirstOrDefault<ClassSchedule>(sql, parameters);
-        //        return result;
-        //    }
-        //}
-
-        //public string DeleteClass(int classId)
-        //{
-        //    var sql = @"DELETE
-        //                FROM ClassSchedule
-        //                WHERE ClassId = @classId";
-
-        //    using (var db = new SqlConnection(ConnectionString))
-        //    {
-        //        db.QueryFirstOrDefault(sql, new { ClassId = classId });
-
-        //        return ($"Successfully deleted class with Id #:{classId}");
-        //    }
-        //}
+                return ($"Successfully deleted assignment with Id #:{assignmentId}");
+            }
+        }
     }
 }

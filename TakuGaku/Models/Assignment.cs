@@ -13,7 +13,7 @@ namespace TakuGaku.Models
         public int AssignmentTypeId { get; set; }
         public int SubjectId { get; set; }
         public string Instructions { get; set; }
-        public bool Completeed { get; set; }
+        public bool Completed { get; set; }
         public decimal Grade { get; set; }
         public DateTime DateAssigned { get; set; }
         public DateTime DateDue { get; set; }
