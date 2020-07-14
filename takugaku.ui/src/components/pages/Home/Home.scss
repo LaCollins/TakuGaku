@@ -1,0 +1,29 @@
+.Home {
+    margin-top: 20px;
+
+    #owl {
+        height: 400px;
+    }
+    
+    .title, .title3 {
+        font-family: 'Fredoka One', cursive;
+        text-shadow: 5px 10px 10px rgb(172, 172, 172);
+    }
+    
+    .title2 {
+        font-family: 'Kosugi Maru', sans-serif;
+        font-size: 2em;
+        text-shadow: 5px 10px 10px rgb(172, 172, 172);
+    }
+
+    .buttonContainer {
+        margin-top: 20px;
+        font-family: 'Bubblegum Sans', cursive;
+
+        .mainPgButton {
+            font-size: 1.75em;
+            width: 200px;
+            box-shadow: 5px 10px 10px rgb(55, 55, 55);
+        }
+    }
+}
