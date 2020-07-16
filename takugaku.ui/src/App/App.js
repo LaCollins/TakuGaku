@@ -45,7 +45,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <Switch>
-            <Route path="/" exact component={Home} authed={authed} />
+            <Route path="/" render={(props) => <Home {...props} authed={authed}/>} />
           </Switch>
         </Router>
       </div>
