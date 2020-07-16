@@ -10,6 +10,7 @@ import 'firebase/auth';
 import './App.scss';
 
 import Home from '../components/pages/Home/Home';
+import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
 import firebaseApp from '../helpers/data/connection';
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
@@ -45,7 +46,8 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <Switch>
-            <Route path="/" render={(props) => <Home {...props} authed={authed}/>} />
+            <Route path="/" exact render={(props) => <Home {...props} authed={authed}/>} />
+            <Route path="/register/school" component={SchoolForm}/>
           </Switch>
         </Router>
       </div>
