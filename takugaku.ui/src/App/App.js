@@ -5,23 +5,37 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import './App.scss';
 
 import Home from '../components/pages/Home/Home';
-
-const PublicRoute = ({ component: Component, authed, ...rest }) => {
-  const routeChecker = (props) => (authed === false ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/', state: { from: props.location } }}/>);
-  return <Route {...rest} render={(props) => routeChecker(props)} />;
-};
+import firebaseApp from '../helpers/data/connection';
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
   const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/', state: { from: props.location } }} />);
   return <Route {...rest} render={(props) => routeChecker(props)} />;
 };
 
+firebaseApp();
+
 class App extends React.Component {
   state = {
     authed: false,
+  }
+
+  componentDidMount() {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ authed: true });
+      } else {
+        this.setState({ authed: false });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.removeListener();
   }
 
   render() {
@@ -31,7 +45,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
           <Switch>
-            <PublicRoute path="/" exact component={Home} authed={authed} />
+            <Route path="/" render={(props) => <Home {...props} authed={authed}/>} />
           </Switch>
         </Router>
       </div>
