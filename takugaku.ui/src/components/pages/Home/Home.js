@@ -7,6 +7,12 @@ import owl from './images/owl.png';
 import authData from '../../../helpers/data/authData';
 
 class Home extends React.Component {
+  logOutEvent = (e) => {
+    e.preventDefault();
+    authData.logoutUser();
+    sessionStorage.removeItem('teacher');
+  }
+
   render() {
     const { authed } = this.props;
 
@@ -22,7 +28,7 @@ class Home extends React.Component {
                       : (<Link to="/register/school" className="btn btn-secondary register mainPgButton">Register</Link>)}
                 </div>
                 <div className="row d-flex justify-content-center buttonContainer mt-5">
-                  { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton" onClick={authData.logoutUser}>Log Out</Button>)
+                  { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton" onClick={this.logOutEvent}>Log Out</Button>)
                     : ('')}
                 </div>
             </div>
