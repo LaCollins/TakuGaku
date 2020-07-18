@@ -46,12 +46,30 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("uid/{uid}")]
+        public IActionResult GetSchoolByUid(string uid)
+        {
+            var result = _schoolRepository.GetSchoolByUid(uid);
+            if (result == null)
+            {
+                return NotFound("No school exist");
+            }
+
+            return Ok(result);
+        }
+
         //Add A School
         [HttpPost]
         public IActionResult AddSchool(School schoolToAdd)
         {
-            var result = _schoolRepository.AddSchool(schoolToAdd);
-            return Ok(result);
+            var checkSchool = _schoolRepository.GetSchoolByUid(schoolToAdd.UID);
+            if (checkSchool == null)
+            {
+                var result = _schoolRepository.AddSchool(schoolToAdd);
+                return Ok(result);
+            }
+
+            return Ok("School already exists for this account");
         }
 
         //Close A School

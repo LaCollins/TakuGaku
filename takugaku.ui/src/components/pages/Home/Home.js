@@ -1,15 +1,12 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 import './Home.scss';
 import Auth from '../Auth/Auth';
 import owl from './images/owl.png';
 import authData from '../../../helpers/data/authData';
 
 class Home extends React.Component {
-  componentDidMount() {
-    console.error(this.props.authed);
-  }
-
   render() {
     const { authed } = this.props;
 
@@ -22,7 +19,7 @@ class Home extends React.Component {
                     { authed ? (<Button variant="secondary" className="teacherLogIn mainPgButton">Teacher Log In</Button>)
                       : (<Auth />) }
                     { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton">Student Log In</Button>)
-                      : (<Button variant="secondary" className="register mainPgButton">Register</Button>)}
+                      : (<Link to="/register/school" className="btn btn-secondary register mainPgButton">Register</Link>)}
                 </div>
                 <div className="row d-flex justify-content-center buttonContainer mt-5">
                   { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton" onClick={authData.logoutUser}>Log Out</Button>)

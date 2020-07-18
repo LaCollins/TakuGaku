@@ -46,6 +46,20 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public School GetSchoolByUid(string uid)
+        {
+            var sql = @"SELECT *
+                        FROM School
+                        WHERE [UID] = @uid";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var school = db.QueryFirstOrDefault<School>(sql, new { UID = uid });
+
+                return school;
+            }
+        }
+
         public School AddSchool(School schoolToAdd)
         {
             var sql = @"INSERT INTO School(schoolName, [UID], eMail, Active)
