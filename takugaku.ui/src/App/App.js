@@ -11,13 +11,12 @@ import './App.scss';
 
 import Home from '../components/pages/Home/Home';
 import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
+import TeacherRegistration from '../components/pages/TeacherRegistration/TeacherRegistration';
+import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
+import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
-
-const PrivateRoute = ({ component: Component, authed, ...rest }) => {
-  const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/', state: { from: props.location } }} />);
-  return <Route {...rest} render={(props) => routeChecker(props)} />;
-};
+import teacherData from '../helpers/data/teacherData';
 
 firebaseApp();
 
@@ -26,7 +25,9 @@ class App extends React.Component {
     authed: false,
     uid: '',
     school: {},
+    teacher: {},
     schoolExists: false,
+    teacherExists: false,
   }
 
   componentDidMount() {
@@ -38,6 +39,14 @@ class App extends React.Component {
           .then((response) => {
             this.setState({ school: response });
             this.setState({ schoolExists: true });
+            teacherData.getTeacherBySchoolId(response.schoolId)
+              .then((teachers) => {
+                if (teachers !== null) {
+                  this.setState({ teacherExists: true });
+                } else {
+                  this.setState({ teacherExists: false });
+                }
+              });
           })
           .catch(() => {
             this.setState({ school: {} });
@@ -47,12 +56,21 @@ class App extends React.Component {
         this.setState({ uid: '' });
         this.setState({ school: {} });
         this.setState({ schoolExists: false });
+        this.setState({ teacherExists: false });
       }
     });
   }
 
-  setSchool = (schoolData) => {
-    this.setState({ school: schoolData });
+  setSchool = (schoolInfo) => {
+    this.setState({ school: schoolInfo });
+  }
+
+  // setTeacher = (teacherInfo) => {
+  //   this.setState({ teacher: teacherInfo });
+  // }
+
+  setTeacherExists = () => {
+    this.setState({ teacherExists: true });
   }
 
   componentWillUnmount() {
@@ -65,6 +83,8 @@ class App extends React.Component {
       uid,
       school,
       schoolExists,
+      teacherExists,
+      teacher,
     } = this.state;
 
     return (
@@ -72,7 +92,26 @@ class App extends React.Component {
         <Router>
           <Switch>
             <Route path="/" exact render={(props) => <Home {...props} authed={authed} uid={uid} school={school} />} />
-            <Route path="/register/school" render={(props) => <SchoolForm {...props} authed={authed} uid={uid} school={school} schoolExists={schoolExists} setSchool={this.setSchool}/>} />
+            <Route path="/register/school" exact render={(props) => <SchoolForm {...props} authed={authed}
+              uid={uid}
+              school={school}
+              schoolExists={schoolExists}
+              setSchool={this.setSchool}/>}
+            />
+            <Route path="/register/teacher" exact render={(props) => <TeacherRegistration {...props} authed={authed}
+              uid={uid}
+              school={school}
+              setTeacherExists={this.setTeacherExists}/>}
+            />
+            <Route path="/teacher/login" exact render={(props) => <TeacherLogIn {...props} authed={authed}
+              uid={uid}
+              school={school}
+              teacherExists={teacherExists}
+              teacher={teacher} />}
+            />
+            <Route path="/teacher/dashboard" exact render={(props) => <TeacherDashboard {...props} authed={authed}
+            uid={uid}
+            school={school}/>} />
           </Switch>
         </Router>
       </div>

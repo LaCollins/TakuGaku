@@ -16,7 +16,7 @@ class Home extends React.Component {
                 <h1><div className="title2">宅学</div><div className="title3">TakuGaku</div></h1>
                 <img id="owl" src={owl} alt="owl"/>
                 <div className="row d-flex justify-content-around buttonContainer">
-                    { authed ? (<Button variant="secondary" className="teacherLogIn mainPgButton">Teacher Log In</Button>)
+                    { authed ? (<Link to="/teacher/login" className="btn btn-secondary teacherLogIn mainPgButton">Teacher Log In</Link>)
                       : (<Auth />) }
                     { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton">Student Log In</Button>)
                       : (<Link to="/register/school" className="btn btn-secondary register mainPgButton">Register</Link>)}

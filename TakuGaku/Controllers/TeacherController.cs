@@ -46,6 +46,18 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("schoolId/{schoolId}/username/{userName}/pin/{pin}")]
+        public IActionResult GetTeacherBySchoolUsernameAndPin(int schoolId, string userName, int pin)
+        {
+            var result = _teacherRepository.GetTeacherBySchoolUserNamePin(schoolId, userName, pin);
+            if (result == null)
+            {
+                return Ok("No teacher exists");
+            }
+
+            return Ok(result);
+        }
+
         //Get By School Id
         [HttpGet("schoolId/{schoolId}")]
         public IActionResult GetTeacherBySchoolId(int schoolId)

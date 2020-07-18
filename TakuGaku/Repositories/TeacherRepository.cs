@@ -59,6 +59,20 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public Teacher GetTeacherBySchoolUserNamePin(int schoolId, string userName, int pin)
+        {
+            var sql = @"SELECT *
+                        FROM Teacher
+                        WHERE SchoolId = @schoolId AND UserName = @userName AND pin = @pin";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var teacher = db.QueryFirstOrDefault<Teacher>(sql, new { SchoolId = schoolId, UserName = userName, pin = pin });
+
+                return teacher;
+            }
+        }
+
         public Teacher GetTeacherBySchoolId(int schoolId)
         {
             var sql = @"SELECT *
