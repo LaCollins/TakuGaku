@@ -11,6 +11,7 @@ class TeacherRegistration extends React.Component {
       userName: '',
       pin: 0,
       invalidPin: false,
+      invalidTeacher: false,
     }
 
     firstNameChange = (e) => {
@@ -50,9 +51,14 @@ class TeacherRegistration extends React.Component {
         };
         teacherData.registerTeacher(newTeacher)
           .then((response) => {
-            this.props.setTeacher(response.data);
-            this.props.setTeacherExists();
-            this.props.history.push('/teacher/login');
+            if (response.data === 'That username already exists, teacher not added.') {
+              this.setState({ invalidTeacher: true });
+            } else {
+              sessionStorage.setItem('teacher', JSON.stringify(response.data));
+              this.props.setTeacherExists();
+              this.props.history.push('/teacher/login');
+              this.setState({ invalidTeacher: false });
+            }
           })
           .catch((error) => console.error('err from save profile', error));
       }
@@ -65,6 +71,7 @@ class TeacherRegistration extends React.Component {
         userName,
         pin,
         invalidPin,
+        invalidTeacher,
       } = this.state;
 
       return (
@@ -74,6 +81,8 @@ class TeacherRegistration extends React.Component {
                 <div className="container">
                 <h2>Welcome to TakuGaku!</h2>
                 <p>I see you are a first time user! Please register a teacher to start.</p>
+                { invalidTeacher ? (<div className="warning">User Name already exists. Please choose another.</div>)
+                  : ('')}
                 <form className="formContainer" onSubmit={this.saveTeacherEvent}>
                 <div className="form-inline d-flex justify-content-center">
                   <div className="form-group row justify-content-center">

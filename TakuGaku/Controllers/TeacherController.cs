@@ -52,7 +52,7 @@ namespace TakuGaku.Controllers
             var result = _teacherRepository.GetTeacherBySchoolUserNamePin(schoolId, userName, pin);
             if (result == null)
             {
-                return NotFound("No teacher exists");
+                return Ok("No teacher exists");
             }
 
             return Ok(result);

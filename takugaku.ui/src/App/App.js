@@ -13,6 +13,7 @@ import Home from '../components/pages/Home/Home';
 import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
 import TeacherRegistration from '../components/pages/TeacherRegistration/TeacherRegistration';
 import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
+import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
 import teacherData from '../helpers/data/teacherData';
@@ -64,9 +65,9 @@ class App extends React.Component {
     this.setState({ school: schoolInfo });
   }
 
-  setTeacher = (teacherInfo) => {
-    this.setState({ teacher: teacherInfo });
-  }
+  // setTeacher = (teacherInfo) => {
+  //   this.setState({ teacher: teacherInfo });
+  // }
 
   setTeacherExists = () => {
     this.setState({ teacherExists: true });
@@ -100,16 +101,17 @@ class App extends React.Component {
             <Route path="/register/teacher" exact render={(props) => <TeacherRegistration {...props} authed={authed}
               uid={uid}
               school={school}
-              setTeacher={this.setTeacher}
               setTeacherExists={this.setTeacherExists}/>}
             />
             <Route path="/teacher/login" exact render={(props) => <TeacherLogIn {...props} authed={authed}
               uid={uid}
               school={school}
-              setTeacher={this.setTeacher}
               teacherExists={teacherExists}
               teacher={teacher} />}
             />
+            <Route path="/teacher/dashboard" exact render={(props) => <TeacherDashboard {...props} authed={authed}
+            uid={uid}
+            school={school}/>} />
           </Switch>
         </Router>
       </div>

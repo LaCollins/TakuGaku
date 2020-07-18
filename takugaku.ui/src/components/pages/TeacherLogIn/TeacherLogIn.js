@@ -10,6 +10,7 @@ class TeacherLogIn extends React.Component {
       userName: '',
       pin: '',
       invalidPin: false,
+      invalidTeacher: false,
     }
 
     userNameChange = (e) => {
@@ -32,7 +33,13 @@ class TeacherLogIn extends React.Component {
         const pin = parseInt(this.state.pin, 10);
         teacherData.teacherValidation(schoolId, this.state.userName, pin)
           .then((response) => {
-            console.error(response);
+            if (response === 'No teacher exists') {
+              this.setState({ invalidTeacher: true });
+            } else {
+              this.setState({ invalidTeacher: false });
+              this.props.history.push('/teacher/dashboard');
+              sessionStorage.setItem('teacher', JSON.stringify(response));
+            }
           })
           .catch((error) => console.error(error, 'error from login teacher'));
       }
@@ -40,7 +47,12 @@ class TeacherLogIn extends React.Component {
 
     render() {
       const { teacherExists } = this.props;
-      const { userName, pin, invalidPin } = this.state;
+      const {
+        userName,
+        pin,
+        invalidPin,
+        invalidTeacher,
+      } = this.state;
 
       return (
         <div className="TeacherLogIn">
@@ -50,6 +62,8 @@ class TeacherLogIn extends React.Component {
             <img id="owl" src={owl} alt="owl"/>
             <div className="container">
             <form className="formContainer" onSubmit={this.logInTeacher}>
+            { invalidTeacher ? (<div className="warning">Teacher Account Not Found! Please check your login information.</div>)
+              : ('')}
             <div className="form-inline d-flex justify-content-center">
                 <div className="form-group row">
                 <label htmlFor="userName" className="col-form-label">User Name:</label>
