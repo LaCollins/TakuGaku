@@ -13,10 +13,13 @@ import Home from '../components/pages/Home/Home';
 import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
 import TeacherRegistration from '../components/pages/TeacherRegistration/TeacherRegistration';
 import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
+import StudentLogIn from '../components/pages/StudentLogIn/StudentLogIn';
+import StudentDashboard from '../components/pages/StudentDashboard/StudentDashboard';
 import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
 import teacherData from '../helpers/data/teacherData';
+import studentData from '../helpers/data/studentData';
 
 firebaseApp();
 
@@ -47,6 +50,14 @@ class App extends React.Component {
                   this.setState({ teacherExists: false });
                 }
               });
+            studentData.getStudentBySchoolId(response.schoolId)
+              .then((students) => {
+                if (students.length > 0) {
+                  this.setState({ studentExists: true });
+                } else {
+                  this.setState({ studentExists: false });
+                }
+              });
           })
           .catch(() => {
             this.setState({ school: {} });
@@ -57,6 +68,7 @@ class App extends React.Component {
         this.setState({ school: {} });
         this.setState({ schoolExists: false });
         this.setState({ teacherExists: false });
+        this.setState({ studentExists: false });
       }
     });
   }
@@ -85,6 +97,7 @@ class App extends React.Component {
       schoolExists,
       teacherExists,
       teacher,
+      studentExists,
     } = this.state;
 
     return (
@@ -110,8 +123,17 @@ class App extends React.Component {
               teacher={teacher} />}
             />
             <Route path="/teacher/dashboard" exact render={(props) => <TeacherDashboard {...props} authed={authed}
-            uid={uid}
-            school={school}/>} />
+              uid={uid}
+              school={school}/>} />
+            <Route path="/student/login" exact render={(props) => <StudentLogIn {...props} authed={authed}
+              uid={uid}
+              school={school}
+              studentExists={studentExists}
+               />}
+            />
+          <Route path="/student/dashboard" exact render={(props) => <StudentDashboard {...props} authed={authed}
+              uid={uid}
+              school={school}/>} />
           </Switch>
         </Router>
       </div>

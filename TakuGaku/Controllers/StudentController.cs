@@ -59,6 +59,18 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("schoolId/{schoolId}/username/{userName}/pin/{pin}")]
+        public IActionResult GetStudentBySchoolUsernameAndPin(int schoolId, string userName, int pin)
+        {
+            var result = _studentRepository.GetStudentBySchoolUserNamePin(schoolId, userName, pin);
+            if (result == null)
+            {
+                return Ok("No student exists");
+            }
+
+            return Ok(result);
+        }
+
         //Add Student
         [HttpPost]
         public IActionResult AddStudent(Student studentToAdd)
