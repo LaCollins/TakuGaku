@@ -1,18 +1,29 @@
 @import '../../../styles/variables';
-.TeacherLogIn {
+
+.StudentLogIn{
     h1 {
-        margin-top: 20px;
-        font-family: $titleFont;
+    margin-top: 20px;
+    font-family: $titleFont;
     }
 
     #owl {
         height: 400px;
     }
 
-    .warning {
-        color: red;
+    p {
+        font-family: $buttonFont;
+        font-size: x-large;
+    }
+
+    .btn {
         font-family: $buttonFont;
         font-size: 1.5em;
+        width: 200px;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+
+    .hide {
+        display: none;
     }
 
     .form-control {
@@ -24,11 +35,9 @@
         font-family: $titleFont;
     }
 
-    .btn {
+    .warning {
+        color: red;
         font-family: $buttonFont;
         font-size: 1.5em;
-        width: 200px;
-        box-shadow: 5px 10px 10px rgb(55, 55, 55);
     }
-
 }

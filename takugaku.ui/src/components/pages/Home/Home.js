@@ -11,6 +11,7 @@ class Home extends React.Component {
     e.preventDefault();
     authData.logoutUser();
     sessionStorage.removeItem('teacher');
+    sessionStorage.removeItem('student');
   }
 
   render() {
@@ -24,7 +25,7 @@ class Home extends React.Component {
                 <div className="row d-flex justify-content-around buttonContainer">
                     { authed ? (<Link to="/teacher/login" className="btn btn-secondary teacherLogIn mainPgButton">Teacher Log In</Link>)
                       : (<Auth />) }
-                    { authed ? (<Button variant="secondary" className="studentLogIn mainPgButton">Student Log In</Button>)
+                    { authed ? (<Link to="/student/login" className="btn btn-secondary studentLogIn mainPgButton">Student Log In</Link>)
                       : (<Link to="/register/school" className="btn btn-secondary register mainPgButton">Register</Link>)}
                 </div>
                 <div className="row d-flex justify-content-center buttonContainer mt-5">
