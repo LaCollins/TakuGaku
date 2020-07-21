@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import './Home.scss';
 import Auth from '../Auth/Auth';
 import owl from './images/owl.png';
@@ -19,6 +19,8 @@ class Home extends React.Component {
 
     return (
             <div className="Home container">
+              { this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/teacher/dashboard' }} />)
+                : ('')}
                 <h2 className="title">Welcome to</h2>
                 <h1><div className="title2">宅学</div><div className="title3">TakuGaku</div></h1>
                 <img id="owl" src={owl} alt="owl"/>
