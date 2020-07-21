@@ -1,0 +1,14 @@
+@import '../../../styles/variables';
+
+.ManageStudents {
+    margin-top: 150px;
+
+    h1 {
+        margin-top: 20px;
+        font-family: $titleFont;
+    }
+
+    th {
+        width: 100px;
+    }
+}
