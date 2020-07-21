@@ -39,6 +39,7 @@ class TeacherLogIn extends React.Component {
               this.setState({ invalidTeacher: false });
               this.props.history.push('/teacher/dashboard');
               sessionStorage.setItem('teacher', JSON.stringify(response));
+              this.props.setTeacher(response);
             }
           })
           .catch((error) => console.error(error, 'error from login teacher'));
