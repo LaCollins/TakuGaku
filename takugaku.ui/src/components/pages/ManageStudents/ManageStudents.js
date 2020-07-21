@@ -1,6 +1,7 @@
 import './ManageStudents.scss';
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import StudentTable from '../../shared/StudentTable/StudentTable';
 import studentData from '../../../helpers/data/studentData';
 
@@ -31,6 +32,7 @@ class ManageStudents extends React.Component {
             <div className="ManageStudents">
                 <h1>Manage Students</h1>
                 <div className="container">
+                <Button variant="secondary m-4" className="btn btn-secondary">Add a Student</Button>
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>

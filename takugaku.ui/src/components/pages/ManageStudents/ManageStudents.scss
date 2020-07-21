@@ -11,4 +11,10 @@
     th {
         width: 100px;
     }
+
+    .btn {
+        font-family: $buttonFont;
+        font-size: 1em;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
 }
