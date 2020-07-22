@@ -41,10 +41,13 @@ const deleteStudent = (studentId) => {
 
 const registerStudent = (newStudent) => axios.post(`${baseUrl}/api/takugaku/students`, newStudent);
 
+const updateStudent = (studentId, studentInfo) => axios.put(`${baseUrl}/api/takugaku/students/update/${studentId}`, studentInfo);
+
 export default {
   getStudentBySchoolId,
   studentValidation,
   deleteStudent,
   registerStudent,
   getStudentById,
+  updateStudent,
 };

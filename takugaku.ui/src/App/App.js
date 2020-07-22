@@ -75,12 +75,25 @@ class App extends React.Component {
         this.setState({ teacher: {}, teacherLoggedIn: false });
       }
     });
+    this.toggleNavbar();
+  }
+
+  toggleNavbar = () => {
+    const navbar = document.getElementById('navbar');
+    const { teacherLoggedIn } = this.state;
+    if (teacherLoggedIn) {
+      navbar.classList.remove('hide');
+    } else {
+      navbar.classList.add('hide');
+    }
   }
 
   logTeacherOut = (e) => {
     e.preventDefault();
+    const navbar = document.getElementById('navbar');
     sessionStorage.removeItem('teacher');
     this.setTeacherLogout();
+    navbar.classList.add('hide');
   }
 
   setSchool = (schoolInfo) => {
@@ -97,7 +110,9 @@ class App extends React.Component {
   }
 
   setTeacherLogin = () => {
+    const navbar = document.getElementById('navbar');
     this.setState({ teacherLoggedIn: true });
+    navbar.classList.remove('hide');
   }
 
   setTeacherLogout = () => {
@@ -123,8 +138,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          { teacherLoggedIn ? (<NavBar authed={authed} logTeacherOut={this.logTeacherOut} />)
-            : ('')}
+          <NavBar authed={authed} logTeacherOut={this.logTeacherOut} />
           <Switch>
             <Route path="/" exact render={(props) => <Home {...props} authed={authed} uid={uid} school={school} teacherLoggedIn={teacherLoggedIn}/>} />
             <Route path="/register/school" exact render={(props) => <SchoolForm {...props} authed={authed}
@@ -141,7 +155,8 @@ class App extends React.Component {
               school={school}
               teacherExists={teacherExists}
               teacher={teacher}
-              setTeacher={this.setTeacher} />}
+              setTeacher={this.setTeacher}
+              toggleNavbar={this.toggleNavbar} />}
             />
             <Route path="/teacher/dashboard" exact render={(props) => <TeacherDashboard {...props} authed={authed}
               school={school}

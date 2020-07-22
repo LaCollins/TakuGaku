@@ -104,7 +104,7 @@ namespace TakuGaku.Repositories
         public Student UpdateStudent(int studentId, Student updatedStudent)
         {
             var sql = @"UPDATE Student
-                        SET FirstName = @FirstName, LastName = @LastName, Birthday = @Birthday, Gradeyear = @GradeYear, UserName = @UserName, Pin = @Pin
+                        SET FirstName = @FirstName, LastName = @LastName, Birthday = @Birthday, GradeYear = @GradeYear, UserName = @UserName, Pin = @Pin
                         OUTPUT INSERTED.*
                         WHERE StudentId = @studentId";
 
@@ -114,6 +114,8 @@ namespace TakuGaku.Repositories
                 {
                     updatedStudent.FirstName,
                     updatedStudent.LastName,
+                    updatedStudent.Birthday,
+                    updatedStudent.GradeYear,
                     updatedStudent.UserName,
                     updatedStudent.Pin,
                     StudentId = studentId,

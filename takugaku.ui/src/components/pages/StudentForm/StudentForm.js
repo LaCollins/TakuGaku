@@ -13,14 +13,50 @@ class StudentForm extends React.Component {
       pin: 0,
       invalidPin: false,
       invalidStudent: false,
+      editMode: false,
     }
 
     componentDidMount() {
       const { studentId } = this.props.match.params;
       if (studentId) {
         studentData.getStudentById(studentId)
-          .then((student) => console.error(student))
+          .then((student) => {
+            const birthday = student.birthday.split('T');
+            this.setState({ editMode: true });
+            this.setState({
+              firstName: student.firstName,
+              lastName: student.lastName,
+              birthday: birthday[0],
+              gradeYear: student.gradeYear,
+              userName: student.userName,
+              pin: student.pin,
+            });
+          })
           .catch((error) => console.error(error, 'err from check editMode'));
+      }
+    }
+
+    studentUpdateEvent = () => {
+      const { studentId } = this.props.match.params;
+      const gradeYear = parseInt(this.state.gradeYear, 10);
+      const pinCheck = this.state.pin.toString();
+      if (pinCheck.length !== 4) {
+        this.setState({ invalidPin: true });
+      } else {
+        this.setState({ invalidPin: false });
+        const pin = parseInt(this.state.pin, 10);
+        const updatedStudent = {
+          schoolId: this.props.school.schoolId,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          birthday: this.state.birthday,
+          gradeYear,
+          userName: this.state.userName,
+          pin,
+        };
+        studentData.updateStudent(studentId, updatedStudent)
+          .then(() => this.props.history.push('/manage/students'))
+          .catch((error) => console.error(error, 'err from update student event'));
       }
     }
 
@@ -85,15 +121,27 @@ class StudentForm extends React.Component {
         }
       }
 
+      checkEditOrCreate = (e) => {
+        e.preventDefault();
+        const { studentId } = this.props.match.params;
+        if (studentId) {
+          this.studentUpdateEvent();
+        } else {
+          this.saveStudentEvent();
+        }
+      }
+
       render() {
         const {
           firstName,
           lastName,
           birthday,
           userName,
+          gradeYear,
           pin,
           invalidPin,
           invalidStudent,
+          editMode,
         } = this.state;
 
         return (
@@ -102,7 +150,7 @@ class StudentForm extends React.Component {
                 <div className="container">
                 { invalidStudent ? (<div className="warning">User Name already exists. Please choose another.</div>)
                   : ('')}
-                <form className="formContainer" onSubmit={this.saveStudentEvent}>
+                <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
                     <div className="form-group row justify-content-center">
                     <label htmlFor="firstName" className="col-form-label">First Name:</label>
@@ -152,7 +200,8 @@ class StudentForm extends React.Component {
                 <div className="col-auto my-1">
                 <label htmlFor="gradeYear" className="col-form-label">Grade Year:</label>
                 <select type="select" className="custom-select mr-sm-2" id="gradeYear" onChange={this.gradeYearChange} required>
-                    <option defaultValue>Choose...</option>
+                    {(editMode) ? (<option defaultValue={gradeYear}>{gradeYear}</option>)
+                      : (<option defaultValue="0">Choose...</option>)}
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -200,7 +249,8 @@ class StudentForm extends React.Component {
                 { invalidPin ? (<div className="warning">Please enter a valid PIN!</div>)
                   : ('')}
                 <div className="buttonContainer">
-                <Button variant="secondary" className="formButton" type="submit">Register Student</Button>
+                { editMode ? (<Button variant="secondary" className="formButton" type="submit">Save Changes</Button>)
+                  : (<Button variant="secondary" className="formButton" type="submit">Register Student</Button>)}
                 </div>
                 </form>
                 </div>
