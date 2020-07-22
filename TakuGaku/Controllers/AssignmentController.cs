@@ -46,6 +46,30 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("gpa")]
+        public IActionResult GetAllGradePointAverages()
+        {
+            var result = _assignmentRepository.GetAllGradePointAverages();
+            if (!result.Any())
+            {
+                return NotFound("no GPA");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("studentId/{studentId}/gpa")]
+        public IActionResult GetGradePointAverageById(int studentId)
+        {
+            var result = _assignmentRepository.GetGradePointAverageById(studentId);
+            if (result == null)
+            {
+                return NotFound("no GPA");
+            }
+
+            return Ok(result);
+        }
+
         // Get by subject
         [HttpGet("subject/{subjectId}")]
         public IActionResult GetAssignmentsBySubject(int subjectId)
@@ -93,6 +117,14 @@ namespace TakuGaku.Controllers
         public IActionResult DeleteAssignment(int assignmentId)
         {
             var result = _assignmentRepository.DeleteAssignment(assignmentId);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("delete/studentId/{studentId}")]
+        public IActionResult DeleteAssignmentByStudentId(int studentId)
+        {
+            var result = _assignmentRepository.DeleteAssignmentByStudentId(studentId);
 
             return Ok(result);
         }

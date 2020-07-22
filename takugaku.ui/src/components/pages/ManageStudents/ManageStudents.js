@@ -6,27 +6,31 @@ import StudentTable from '../../shared/StudentTable/StudentTable';
 import studentData from '../../../helpers/data/studentData';
 
 class ManageStudents extends React.Component {
-    state = {
-      students: {},
+  // state = {
+  //   students: {},
+  // }
+
+  // getStudents = () => {
+  //   studentData.getStudentBySchoolId(this.props.school.schoolId)
+  //     .then((students) => {
+  //       if (students.length > 0) {
+  //         this.setState({ students });
+  //       } else {
+  //         this.setState({ students: {} });
+  //       }
+  //     });
+  // }
+
+    deleteStudent = (studentId) => {
+      studentData.deleteStudent(studentId);
     }
 
-    getStudents = () => {
-      studentData.getStudentBySchoolId(this.props.school.schoolId)
-        .then((students) => {
-          if (students.length > 0) {
-            this.setState({ students });
-          } else {
-            this.setState({ students: {} });
-          }
-        });
-    }
-
-    componentDidMount() {
-      this.getStudents();
-    }
+    // componentDidMount() {
+    //   this.getStudents();
+    // }
 
     render() {
-      const { students } = this.state;
+      const { students } = this.props;
 
       return (
             <div className="ManageStudents">
@@ -47,7 +51,7 @@ class ManageStudents extends React.Component {
                     </thead>
                     <tbody>
                         {students.length > 0
-                          ? students.map((student) => <StudentTable key={student.studentId} student={student} />)
+                          ? students.map((student) => <StudentTable key={student.studentId} student={student} deleteStudent={this.deleteStudent} />)
                           : ('No students exist')}
                     </tbody>
                     </Table>
