@@ -15,6 +15,15 @@ class StudentForm extends React.Component {
       invalidStudent: false,
     }
 
+    componentDidMount() {
+      const { studentId } = this.props.match.params;
+      if (studentId) {
+        studentData.getStudentById(studentId)
+          .then((student) => console.error(student))
+          .catch((error) => console.error(error, 'err from check editMode'));
+      }
+    }
+
       firstNameChange = (e) => {
         e.preventDefault();
         this.setState({ firstName: e.target.value });

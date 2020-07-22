@@ -40,7 +40,7 @@ class StudentTable extends React.Component {
                 <td><Link to={`/schedule/${student.studentId}`}>Schedule</Link></td>
                 <td><Link to={`/assignments/${student.studentId}`}>Assignments</Link></td>
                 <td>{gpa.gpa}</td>
-                <td><i className="m-1 fas fa-edit"></i> <Button variant="secondary" className="m-0" onClick={this.deleteStudentEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>
+                <td><Link to={`/manage/edit/${student.studentId}`} className="btn btn-secondary m-0"><i className="m-1 fas fa-edit"></i></Link> <Button variant="secondary" className="m-0" onClick={this.deleteStudentEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>
             </tr>
       );
     }
