@@ -18,7 +18,7 @@ class StudentTable extends React.Component {
         .catch((error) => console.error(error, 'error from get GPA'));
     }
 
-    deleteStudentEvent = (e) => {
+    deleteStudentEvent = () => {
       const { student } = this.props;
       this.props.deleteStudent(student.studentId);
     }

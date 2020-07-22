@@ -14,6 +14,7 @@ import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
 import TeacherRegistration from '../components/pages/TeacherRegistration/TeacherRegistration';
 import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
 import StudentLogIn from '../components/pages/StudentLogIn/StudentLogIn';
+import StudentForm from '../components/pages/StudentForm/StudentForm';
 import StudentDashboard from '../components/pages/StudentDashboard/StudentDashboard';
 import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import ManageStudents from '../components/pages/ManageStudents/ManageStudents';
@@ -29,8 +30,8 @@ class App extends React.Component {
     authed: false,
     uid: '',
     school: {},
-    teacher: {},
     students: {},
+    teacher: {},
     schoolExists: false,
     teacherExists: false,
     teacherLoggedIn: false,
@@ -79,6 +80,17 @@ class App extends React.Component {
     });
   }
 
+  getStudents = () => {
+    studentData.getStudentBySchoolId(this.state.school.schoolId)
+      .then((students) => {
+        if (students.length > 0) {
+          this.setState({ students });
+        } else {
+          this.setState({ students: {} });
+        }
+      }).catch((error) => console.error(error, 'error from getStudents'));
+  }
+
   logTeacherOut = (e) => {
     e.preventDefault();
     sessionStorage.removeItem('teacher');
@@ -118,9 +130,9 @@ class App extends React.Component {
       schoolExists,
       teacherExists,
       teacher,
+      students,
       studentExists,
       teacherLoggedIn,
-      students,
     } = this.state;
 
     return (
@@ -165,7 +177,15 @@ class App extends React.Component {
             <Route path="/manage/students" exact render={(props) => <ManageStudents {...props} authed={authed}
               uid={uid}
               school={school}
+              teacherLoggedIn={teacherLoggedIn}
               studentExists={studentExists}
+              students={students}
+              getStudents={this.getStudents}
+               />}
+            />
+            <Route path="/manage/addstudent" exact render={(props) => <StudentForm {...props} authed={authed}
+              uid={uid}
+              school={school}
               students={students}
                />}
             />
