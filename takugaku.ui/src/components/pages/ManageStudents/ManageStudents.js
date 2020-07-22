@@ -6,32 +6,30 @@ import StudentTable from '../../shared/StudentTable/StudentTable';
 import studentData from '../../../helpers/data/studentData';
 
 class ManageStudents extends React.Component {
-//   state = {
-//     students: {},
-//   }
+    state = {
+      students: [],
+    }
 
-  //     getStudents = () => {
-  //       studentData.getStudentBySchoolId(this.props.school.schoolId)
-  //         .then((students) => {
-  //           if (students.length > 0) {
-  //             this.setState({ students });
-  //           } else {
-  //             this.setState({ students: {} });
-  //           }
-  //         });
-  //     }
+    getStudents = () => {
+      const { schoolId } = this.props.school;
+      studentData.getStudentBySchoolId(schoolId)
+        .then((response) => {
+          this.setState({ students: response });
+        })
+        .catch((error) => console.error(error));
+    }
 
     deleteStudent = (studentId) => {
       studentData.deleteStudent(studentId);
-      this.props.getStudents();
+      this.getStudents();
     }
 
     componentDidMount() {
-      this.props.getStudents();
+      this.getStudents();
     }
 
     render() {
-      const { students } = this.props;
+      const { students } = this.state;
 
       return (
             <div className="ManageStudents">

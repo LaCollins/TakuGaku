@@ -13,6 +13,16 @@ const getStudentBySchoolId = (schoolId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getStudentById = (studentId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/takugaku/students/studentId/${studentId}`)
+    .then((result) => {
+      const student = result.data;
+
+      resolve(student);
+    })
+    .catch((error) => reject(error));
+});
+
 const studentValidation = (schoolId, userName, pin) => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/takugaku/students/schoolId/${schoolId}/username/${userName}/pin/${pin}`)
     .then((result) => {
@@ -31,9 +41,13 @@ const deleteStudent = (studentId) => {
 
 const registerStudent = (newStudent) => axios.post(`${baseUrl}/api/takugaku/students`, newStudent);
 
+const updateStudent = (studentId, studentInfo) => axios.put(`${baseUrl}/api/takugaku/students/update/${studentId}`, studentInfo);
+
 export default {
   getStudentBySchoolId,
   studentValidation,
   deleteStudent,
   registerStudent,
+  getStudentById,
+  updateStudent,
 };

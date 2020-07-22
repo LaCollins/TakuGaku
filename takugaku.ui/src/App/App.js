@@ -30,7 +30,6 @@ class App extends React.Component {
     authed: false,
     uid: '',
     school: {},
-    students: {},
     teacher: {},
     schoolExists: false,
     teacherExists: false,
@@ -58,10 +57,8 @@ class App extends React.Component {
               .then((students) => {
                 if (students.length > 0) {
                   this.setState({ studentExists: true });
-                  this.setState({ students });
                 } else {
                   this.setState({ studentExists: false });
-                  this.setState({ students: {} });
                 }
               });
           })
@@ -78,23 +75,25 @@ class App extends React.Component {
         this.setState({ teacher: {}, teacherLoggedIn: false });
       }
     });
+    this.toggleNavbar();
   }
 
-  getStudents = () => {
-    studentData.getStudentBySchoolId(this.state.school.schoolId)
-      .then((students) => {
-        if (students.length > 0) {
-          this.setState({ students });
-        } else {
-          this.setState({ students: {} });
-        }
-      }).catch((error) => console.error(error, 'error from getStudents'));
+  toggleNavbar = () => {
+    const navbar = document.getElementById('navbar');
+    const { teacherLoggedIn } = this.state;
+    if (teacherLoggedIn) {
+      navbar.classList.remove('hide');
+    } else {
+      navbar.classList.add('hide');
+    }
   }
 
   logTeacherOut = (e) => {
     e.preventDefault();
+    const navbar = document.getElementById('navbar');
     sessionStorage.removeItem('teacher');
     this.setTeacherLogout();
+    navbar.classList.add('hide');
   }
 
   setSchool = (schoolInfo) => {
@@ -111,7 +110,9 @@ class App extends React.Component {
   }
 
   setTeacherLogin = () => {
+    const navbar = document.getElementById('navbar');
     this.setState({ teacherLoggedIn: true });
+    navbar.classList.remove('hide');
   }
 
   setTeacherLogout = () => {
@@ -130,7 +131,6 @@ class App extends React.Component {
       schoolExists,
       teacherExists,
       teacher,
-      students,
       studentExists,
       teacherLoggedIn,
     } = this.state;
@@ -138,8 +138,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-          { teacherLoggedIn ? (<NavBar authed={authed} logTeacherOut={this.logTeacherOut} />)
-            : ('')}
+          <NavBar authed={authed} logTeacherOut={this.logTeacherOut} />
           <Switch>
             <Route path="/" exact render={(props) => <Home {...props} authed={authed} uid={uid} school={school} teacherLoggedIn={teacherLoggedIn}/>} />
             <Route path="/register/school" exact render={(props) => <SchoolForm {...props} authed={authed}
@@ -149,44 +148,40 @@ class App extends React.Component {
               setSchool={this.setSchool}/>}
             />
             <Route path="/register/teacher" exact render={(props) => <TeacherRegistration {...props} authed={authed}
-              uid={uid}
               school={school}
               setTeacherExists={this.setTeacherExists}/>}
             />
             <Route path="/teacher/login" exact render={(props) => <TeacherLogIn {...props} authed={authed}
-              uid={uid}
               school={school}
               teacherExists={teacherExists}
               teacher={teacher}
-              setTeacher={this.setTeacher} />}
+              setTeacher={this.setTeacher}
+              toggleNavbar={this.toggleNavbar} />}
             />
             <Route path="/teacher/dashboard" exact render={(props) => <TeacherDashboard {...props} authed={authed}
-              uid={uid}
               school={school}
               teacherLoggedIn={teacherLoggedIn}
               setTeacherLogin={this.setTeacherLogin} />} />
             <Route path="/student/login" exact render={(props) => <StudentLogIn {...props} authed={authed}
-              uid={uid}
               school={school}
               studentExists={studentExists}
                />}
             />
             <Route path="/student/dashboard" exact render={(props) => <StudentDashboard {...props} authed={authed}
-              uid={uid}
               school={school}/>} />
             <Route path="/manage/students" exact render={(props) => <ManageStudents {...props} authed={authed}
-              uid={uid}
               school={school}
               teacherLoggedIn={teacherLoggedIn}
               studentExists={studentExists}
-              students={students}
               getStudents={this.getStudents}
                />}
             />
             <Route path="/manage/addstudent" exact render={(props) => <StudentForm {...props} authed={authed}
-              uid={uid}
               school={school}
-              students={students}
+               />}
+            />
+            <Route path="/manage/edit/:studentId" exact render={(props) => <StudentForm {...props} authed={authed}
+              school={school}
                />}
             />
           </Switch>
