@@ -2,14 +2,13 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Redirect,
   Switch,
 } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import './App.scss';
 
-import NavBar from '../components/shared/Navbar/NavBar';
+import NavBar from '../components/shared/NavBar/NavBar';
 import Home from '../components/pages/Home/Home';
 import SchoolForm from '../components/pages/SchoolForm/SchoolForm';
 import TeacherRegistration from '../components/pages/TeacherRegistration/TeacherRegistration';
@@ -17,6 +16,7 @@ import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
 import StudentLogIn from '../components/pages/StudentLogIn/StudentLogIn';
 import StudentDashboard from '../components/pages/StudentDashboard/StudentDashboard';
 import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
+import ManageStudents from '../components/pages/ManageStudents/ManageStudents';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
 import teacherData from '../helpers/data/teacherData';
@@ -30,6 +30,7 @@ class App extends React.Component {
     uid: '',
     school: {},
     teacher: {},
+    students: {},
     schoolExists: false,
     teacherExists: false,
     teacherLoggedIn: false,
@@ -56,8 +57,10 @@ class App extends React.Component {
               .then((students) => {
                 if (students.length > 0) {
                   this.setState({ studentExists: true });
+                  this.setState({ students });
                 } else {
                   this.setState({ studentExists: false });
+                  this.setState({ students: {} });
                 }
               });
           })
@@ -117,6 +120,7 @@ class App extends React.Component {
       teacher,
       studentExists,
       teacherLoggedIn,
+      students,
     } = this.state;
 
     return (
@@ -155,9 +159,16 @@ class App extends React.Component {
               studentExists={studentExists}
                />}
             />
-          <Route path="/student/dashboard" exact render={(props) => <StudentDashboard {...props} authed={authed}
+            <Route path="/student/dashboard" exact render={(props) => <StudentDashboard {...props} authed={authed}
               uid={uid}
               school={school}/>} />
+            <Route path="/manage/students" exact render={(props) => <ManageStudents {...props} authed={authed}
+              uid={uid}
+              school={school}
+              studentExists={studentExists}
+              students={students}
+               />}
+            />
           </Switch>
         </Router>
       </div>

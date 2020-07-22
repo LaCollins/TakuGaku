@@ -1,6 +1,6 @@
 import './TeacherDashboard.scss';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 class TeacherDashboard extends React.Component {
@@ -26,7 +26,7 @@ class TeacherDashboard extends React.Component {
                 <h1>Teacher Dashboard</h1>
                 <div className="buttonContainer container">
                   <div className="row d-flex justify-content-center">
-                    <Button variant="secondary" className="teacherButton">Manage Students</Button>
+                    <Link to="/manage/students" className="btn btn-secondary teacherButton">Manage Students</Link>
                     <Button variant="secondary" className="teacherButton">Class Schedules</Button>
                     <Button variant="secondary" className="teacherButton">Assignments</Button>
                     <Button variant="secondary" className="teacherButton">Manage Account</Button>

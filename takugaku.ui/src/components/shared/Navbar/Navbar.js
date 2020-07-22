@@ -11,10 +11,10 @@ class NavBar extends React.Component {
     return (
             <div className="NavBar">
              <Navbar bg="light" expand="lg" variant="light" className="fixed-top">
-                 <Navbar.Brand><div className="container">
+                 <Navbar.Brand><Link to="/teacher/dashboard"><div className="container">
                      <div className="row"><img id="owlLogo" src={owl} alt="owl logo" />
                      <div id="title">TakuGaku - </div><div id="kanji"> 宅学</div>
-                     </div></div>
+                     </div></div></Link>
                  </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">

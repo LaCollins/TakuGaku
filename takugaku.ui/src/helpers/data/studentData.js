@@ -23,4 +23,10 @@ const studentValidation = (schoolId, userName, pin) => new Promise((resolve, rej
     .catch((error) => reject(error));
 });
 
-export default { getStudentBySchoolId, studentValidation };
+const deleteStudent = (studentId) => {
+  axios.delete(`${baseUrl}/api/takugagku/assignments/delete/studentId/${studentId}`);
+  axios.delete(`${baseUrl}/api/takugaku/schedule/delete/studentId/${studentId}`);
+  axios.delete(`${baseUrl}/api/takugaku/students/delete/${studentId}`);
+};
+
+export default { getStudentBySchoolId, studentValidation, deleteStudent };

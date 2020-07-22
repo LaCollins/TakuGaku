@@ -152,5 +152,19 @@ namespace TakuGaku.Repositories
                 return ($"Successfully deleted class with Id #:{classId}");
             }
         }
+
+        public string DeleteClassByStudentId(int studentId)
+        {
+            var sql = @"DELETE
+                        FROM ClassSchedule
+                        WHERE StudentId = @studentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { StudentId = studentId });
+
+                return ($"Successfully deleted class with studentId #:{studentId}");
+            }
+        }
     }
 }

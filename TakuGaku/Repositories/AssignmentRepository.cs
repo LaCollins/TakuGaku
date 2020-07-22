@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,36 @@ namespace TakuGaku.Repositories
                 var assignments = db.Query<Assignment>(sql);
 
                 return assignments;
+            }
+        }
+
+        public IEnumerable<GradePointAverage> GetAllGradePointAverages()
+        {
+            var sql = @"SELECT studentId, avg(grade) as GPA
+                        FROM assignment
+                        WHERE Completed = 1
+                        GROUP BY studentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var GPA = db.Query<GradePointAverage>(sql);
+
+                return GPA;
+            }
+        }
+
+        public GradePointAverage GetGradePointAverageById(int studentId)
+        {
+            var sql = @"SELECT studentId, avg(grade) as GPA
+                        FROM assignment
+                        WHERE Completed = 1 AND StudentId = @studentId
+                        GROUP BY studentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var GPA = db.QueryFirstOrDefault<GradePointAverage>(sql, new { StudentId = studentId });
+
+                return GPA;
             }
         }
 
@@ -130,6 +161,20 @@ namespace TakuGaku.Repositories
                 db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId });
 
                 return ($"Successfully deleted assignment with Id #:{assignmentId}");
+            }
+        }
+
+        public string DeleteAssignmentByStudentId(int studentId)
+        {
+            var sql = @"DELETE
+                        FROM assignment
+                        WHERE StudentId = @studentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { StudentId = studentId });
+
+                return ($"Successfully deleted assignment with studentId #:{studentId}");
             }
         }
     }

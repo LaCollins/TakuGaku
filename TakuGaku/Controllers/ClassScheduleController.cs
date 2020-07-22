@@ -92,5 +92,13 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("delete/studentId/{studentId}")]
+        public IActionResult DeleteClassByStudentId(int studentId)
+        {
+            var result = _classScheduleRepository.DeleteClassByStudentId(studentId);
+
+            return Ok(result);
+        }
+
     }
 }

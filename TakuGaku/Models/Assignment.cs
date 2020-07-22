@@ -20,4 +20,11 @@ namespace TakuGaku.Models
         public DateTime DateComplete { get; set; }
         public string AssignmentTitle { get; set; }
     }
+
+    public class GradePointAverage
+    {
+        public decimal GPA { get; set; }
+        public int StudentId { get; set; }
+
+    }
 }
