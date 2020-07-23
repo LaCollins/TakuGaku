@@ -28,7 +28,9 @@ class Calendar extends React.Component {
 
         this.gapi.client.load('calendar', 'v3', (calendar) => console.error(calendar));
 
-        this.gapi.auth2.getAuthInstance().signIn();
+        this.gapi.auth2.getAuthInstance().signIn()
+          .then(() => console.error(this.gapi.client.calendar.calendars.get()))
+          .catch((error) => console.error(error));
       });
     }
 
