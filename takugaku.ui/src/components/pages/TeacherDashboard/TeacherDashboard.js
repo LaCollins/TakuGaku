@@ -27,7 +27,7 @@ class TeacherDashboard extends React.Component {
                 <div className="buttonContainer container">
                   <div className="row d-flex justify-content-center">
                     <Link to="/manage/students" className="btn btn-secondary teacherButton">Manage Students</Link>
-                    <Button variant="secondary" className="teacherButton">Class Schedules</Button>
+                    <Link to="/manage/schedules" className="btn btn-secondary teacherButton">Class Schedules</Link>
                     <Button variant="secondary" className="teacherButton">Assignments</Button>
                     <Button variant="secondary" className="teacherButton">Manage Account</Button>
                     <Button variant="secondary" className="teacherButton">Report Cards</Button>

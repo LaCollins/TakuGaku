@@ -25,3 +25,5 @@ yarn-error.log*
 serviceWorker.js
 
 apiKeys.json
+credentials.json
+apiGoogleConfig.json
