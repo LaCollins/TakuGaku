@@ -15,6 +15,7 @@ import TeacherRegistration from '../components/pages/TeacherRegistration/Teacher
 import TeacherLogIn from '../components/pages/TeacherLogIn/TeacherLogIn';
 import StudentLogIn from '../components/pages/StudentLogIn/StudentLogIn';
 import StudentForm from '../components/pages/StudentForm/StudentForm';
+import Calendar from '../components/shared/Calendar/Calendar';
 import StudentDashboard from '../components/pages/StudentDashboard/StudentDashboard';
 import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import ManageStudents from '../components/pages/ManageStudents/ManageStudents';
@@ -184,6 +185,7 @@ class App extends React.Component {
               school={school}
                />}
             />
+            <Route path="/manage/schedules" exact render={(props) => <Calendar {...props} authed={authed}/>}/>
           </Switch>
         </Router>
       </div>
