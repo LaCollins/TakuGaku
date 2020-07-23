@@ -1,0 +1,51 @@
+@import '../../../styles/variables';
+
+.Calendar {
+    margin-top: 150px;
+
+    h1, h4 {
+        margin-top: 20px;
+        font-family: $titleFont;
+    }
+
+    .react-calendar {
+        margin: 20px;
+        box-shadow: 5px 5px 25px 10px rgb(143, 143, 143);
+        border-radius: 5px;
+        border: none;
+    }
+
+    .react-calendar__tile--now {
+        background: lightgray;
+    }
+
+    .react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus {
+        background: palevioletred;
+    }
+
+    .react-calendar__tile--active {
+        background: rgb(120, 203, 214);
+        color: white;
+    }
+
+    .col-form-label {
+        font-family: $titleFont;
+    }
+
+    .form-control {
+        width: 400px;
+        font-family: $buttonFont;
+    }
+
+    .buttonContainer {
+        margin-top: 20px;
+        font-family: 'Bubblegum Sans', cursive;
+
+        .scheduleButton {
+            font-size: 1.25;
+            width: 200px;
+            box-shadow: 5px 10px 10px rgb(55, 55, 55);
+        }
+    }
+
+}
