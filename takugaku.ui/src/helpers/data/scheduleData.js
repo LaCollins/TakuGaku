@@ -13,4 +13,6 @@ const getScheduleByStudentId = (studentId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-export default { getScheduleByStudentId };
+const deleteClassById = (classId) => axios.delete(`${baseUrl}/api/takugaku/schedule/delete/${classId}`);
+
+export default { getScheduleByStudentId, deleteClassById };

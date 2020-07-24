@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import { Redirect } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import scheduleData from '../../../helpers/data/scheduleData';
 import studentData from '../../../helpers/data/studentData';
@@ -44,17 +45,35 @@ class ScheduleSingleDay extends React.Component {
     buildSchedule = () => {
       const { selectedDay } = this.state;
       const { studentSchedule } = this.state;
-      const { scheduleArray } = this.state;
+      const newArray = [
+        { timeSlot: '08:00:00' },
+        { timeSlot: '09:00:00' },
+        { timeSlot: '10:00:00' },
+        { timeSlot: '11:00:00' },
+        { timeSlot: '12:00:00' },
+        { timeSlot: '13:00:00' },
+        { timeSlot: '14:00:00' },
+        { timeSlot: '15:00:00' },
+      ];
 
       for (let i = 0; i < studentSchedule.length; i += 1) {
         const time = studentSchedule[i].timeSlot.split('T')[1];
         studentSchedule[i].timeSlot = time;
-        for (let j = 0; j < scheduleArray.length; j += 1) {
-          if (studentSchedule[i].timeSlot === scheduleArray[j].timeSlot && selectedDay === studentSchedule[i].dayOfWeek) {
-            scheduleArray[j] = studentSchedule[i];
+        for (let j = 0; j < newArray.length; j += 1) {
+          if (studentSchedule[i].timeSlot === newArray[j].timeSlot && selectedDay === studentSchedule[i].dayOfWeek) {
+            newArray[j] = studentSchedule[i];
           }
         }
       }
+      this.setState({ scheduleArray: newArray });
+    }
+
+    deleteClass = (classId) => {
+      scheduleData.deleteClassById(classId)
+        .then(() => {
+          this.getScheduleById();
+        })
+        .catch((error) => console.error(error));
     }
 
     setDayOfWeek = () => {
@@ -94,6 +113,8 @@ class ScheduleSingleDay extends React.Component {
       const { student, selectedDay, scheduleArray } = this.state;
       return (
             <div className="ScheduleSingleDay">
+            { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
+              : ('')}
                 <h1>Daily Schedule</h1>
                 <h4>{student.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
                 <div className="container">
@@ -108,7 +129,7 @@ class ScheduleSingleDay extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot} classSlot={classSlot} />)}
+                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot} classSlot={classSlot} deleteClass={this.deleteClass} />)}
                     </tbody>
                     </Table>
                 </div>

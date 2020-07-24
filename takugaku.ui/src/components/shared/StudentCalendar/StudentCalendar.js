@@ -12,6 +12,7 @@ class StudentCalendar extends React.Component {
     weekDay: '',
     students: [],
     selectedStudent: '',
+    singleStudent: [],
   }
 
   studentChange = (e) => {
@@ -36,7 +37,14 @@ class StudentCalendar extends React.Component {
   }
 
   componentDidMount() {
+    const { studentId } = this.props.match.params;
     this.getStudents();
+    if (studentId) {
+      this.setState({ selectedStudent: studentId });
+      studentData.getStudentById(studentId)
+        .then((response) => this.setState({ singleStudent: response }))
+        .catch((error) => console.error(error));
+    }
   }
 
   render() {
@@ -44,7 +52,10 @@ class StudentCalendar extends React.Component {
       students,
       selectedStudent,
       selectedDay,
+      singleStudent,
     } = this.state;
+
+    const { studentId } = this.props.match.params;
 
     return (
             <div className="Calendar container">
@@ -55,7 +66,8 @@ class StudentCalendar extends React.Component {
                 <div className="col-auto my-2">
                 <label htmlFor="student" className="col-form-label">Student:</label>
                 <select type="select" className="custom-select mr-sm-2" id="student" onChange={this.studentChange} required>
-                    <option defaultValue="">Choose...</option>
+                { (studentId) ? (<option defaultValue={studentId}>{singleStudent.firstName}</option>)
+                  : (<option defaultValue="">Choose...</option>)}
                     {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
                 </select>
                 </div>
