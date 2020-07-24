@@ -30,7 +30,8 @@ class StudentCalendar extends React.Component {
 
   selectDate = (date) => {
     const weekDay = date.toDateString().split(' ');
-    this.setState({ selectedDay: date });
+    const selectedDay = date.toDateString();
+    this.setState({ selectedDay });
     this.setState({ weekDay: weekDay[0] });
   }
 
@@ -39,7 +40,11 @@ class StudentCalendar extends React.Component {
   }
 
   render() {
-    const { students, selectedStudent, selectedDay } = this.state;
+    const {
+      students,
+      selectedStudent,
+      selectedDay,
+    } = this.state;
 
     return (
             <div className="Calendar container">
@@ -62,7 +67,8 @@ class StudentCalendar extends React.Component {
                   <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} />
                 </div>
                 <div className="row d-flex justify-content-around mt-4 buttonContainer">
-                  <Link to={`/schedule/${selectedStudent}/${selectedDay}`} className="scheduleButton btn btn-secondary">View Class Schedule</Link>
+                  { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
+                    : (<Link to={{ pathname: `/schedule/${selectedStudent}`, state: { selectedDay } }} className="scheduleButton btn btn-secondary">View Class Schedule</Link>)}
                   <Button variant="secondary" className="scheduleButton">Add a Class</Button>
                 </div>
             </div>
