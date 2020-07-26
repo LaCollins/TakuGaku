@@ -16,7 +16,7 @@ class ClassTable extends React.Component {
             <tr className="ClassTable">
                 <td>{classSlot.timeSlot}</td>
                 <td>{classSlot.classTitle}</td>
-                <td><Link to={''}>Assignments</Link></td>
+                <td><Link to={''}>{classSlot.assignment.assignmentTitle}</Link></td>
                 <td><Link to={''} className="btn btn-secondary m-0"><i className="m-1 fas fa-edit"></i></Link> <Button variant="secondary" className="m-0" onClick={this.deleteClassEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>
             </tr>
       );

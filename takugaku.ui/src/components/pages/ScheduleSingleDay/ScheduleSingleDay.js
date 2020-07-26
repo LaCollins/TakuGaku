@@ -12,16 +12,16 @@ class ScheduleSingleDay extends React.Component {
       studentId: 0,
       student: [],
       selectedDay: '',
-      studentSchedule: [],
+      selectedDate: '',
       scheduleArray: [
-        { timeSlot: '08:00:00' },
-        { timeSlot: '09:00:00' },
-        { timeSlot: '10:00:00' },
-        { timeSlot: '11:00:00' },
-        { timeSlot: '12:00:00' },
-        { timeSlot: '13:00:00' },
-        { timeSlot: '14:00:00' },
-        { timeSlot: '15:00:00' },
+        { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '09:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '10:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '11:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '12:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '13:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '14:00:00', assignment: { assignmentTitle: '' } },
+        { timeSlot: '15:00:00', assignment: { assignmentTitle: '' } },
       ],
     }
 
@@ -32,42 +32,6 @@ class ScheduleSingleDay extends React.Component {
         .catch((error) => console.error(error));
     }
 
-    getScheduleById = () => {
-      const { studentId } = this.props.match.params;
-      scheduleData.getScheduleByStudentId(studentId)
-        .then((response) => {
-          this.setState({ studentSchedule: response });
-          this.buildSchedule();
-        })
-        .catch((error) => console.error(error, 'error from getschedulebyid'));
-    }
-
-    buildSchedule = () => {
-      const { selectedDay } = this.state;
-      const { studentSchedule } = this.state;
-      const newArray = [
-        { timeSlot: '08:00:00' },
-        { timeSlot: '09:00:00' },
-        { timeSlot: '10:00:00' },
-        { timeSlot: '11:00:00' },
-        { timeSlot: '12:00:00' },
-        { timeSlot: '13:00:00' },
-        { timeSlot: '14:00:00' },
-        { timeSlot: '15:00:00' },
-      ];
-
-      for (let i = 0; i < studentSchedule.length; i += 1) {
-        const time = studentSchedule[i].timeSlot.split('T')[1];
-        studentSchedule[i].timeSlot = time;
-        for (let j = 0; j < newArray.length; j += 1) {
-          if (studentSchedule[i].timeSlot === newArray[j].timeSlot && selectedDay === studentSchedule[i].dayOfWeek) {
-            newArray[j] = studentSchedule[i];
-          }
-        }
-      }
-      this.setState({ scheduleArray: newArray });
-    }
-
     deleteClass = (classId) => {
       scheduleData.deleteClassById(classId)
         .then(() => {
@@ -76,41 +40,32 @@ class ScheduleSingleDay extends React.Component {
         .catch((error) => console.error(error));
     }
 
-    setDayOfWeek = () => {
-      const { selectedDay } = this.props.location.state;
-      const dateString = selectedDay.toString().split(' ');
-      const weekDay = dateString[0];
-      if (weekDay === 'Mon') {
-        this.setState({ selectedDay: 'monday' });
-      } else if (weekDay === 'Tue') {
-        this.setState({ selectedDay: 'tuesday' });
-      } else if (weekDay === 'Wed') {
-        this.setState({ selectedDay: 'wednesday' });
-      } else if (weekDay === 'Thu') {
-        this.setState({ selectedDay: 'thursday' });
-      } else if (weekDay === 'Fri') {
-        this.setState({ selectedDay: 'friday' });
-      } else if (weekDay === 'Sat') {
-        this.setState({ selectedDay: 'saturday' });
-      } else if (weekDay === 'Sun') {
-        this.setState({ selectedDay: 'sunday' });
-      }
+    checkDate = () => {
+      const { selectedDate } = this.props.location.state;
+      this.setState({ selectedDate });
     }
 
     componentDidMount() {
       const { studentId } = this.props.match.params;
+      const { scheduleArray } = this.props.location.state;
+      const { selectedDate } = this.props.location.state;
+      this.setState({ selectedDate });
 
       this.setState({ studentId });
-
-      this.setDayOfWeek();
-
-      this.getScheduleById();
+      this.setState({ scheduleArray });
 
       this.getStudentById();
+
+      this.checkDate();
     }
 
     render() {
-      const { student, selectedDay, scheduleArray } = this.state;
+      const {
+        student,
+        selectedDay,
+        scheduleArray,
+        selectedDate,
+      } = this.state;
       return (
             <div className="ScheduleSingleDay">
             { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
@@ -129,7 +84,7 @@ class ScheduleSingleDay extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot} classSlot={classSlot} deleteClass={this.deleteClass} />)}
+                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot} classSlot={classSlot} selectedDate={selectedDate} deleteClass={this.deleteClass} />)}
                     </tbody>
                     </Table>
                 </div>
