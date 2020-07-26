@@ -90,8 +90,7 @@ class StudentForm extends React.Component {
         this.setState({ pin: e.target.value });
       }
 
-      saveStudentEvent = (e) => {
-        e.preventDefault();
+      saveStudentEvent = () => {
         const gradeYear = parseInt(this.state.gradeYear, 10);
         if (this.state.pin.length !== 4) {
           this.setState({ invalidPin: true });

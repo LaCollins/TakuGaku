@@ -1,0 +1,18 @@
+@import '../../../styles/variables';
+
+.ScheduleSingleDay {
+    margin-top: 150px;
+
+    h1, h4 {
+        margin-top: 20px;
+        font-family: $titleFont;
+    }
+
+    .scheduleButton {
+        margin: 20px;
+        font-family: $buttonFont;
+        font-size: 1.25;
+        width: 200px;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+}
