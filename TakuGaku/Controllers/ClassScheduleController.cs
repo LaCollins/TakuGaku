@@ -38,7 +38,7 @@ namespace TakuGaku.Controllers
             var result = _classScheduleRepository.GetClassByStudent(studentId);
             if (!result.Any())
             {
-                return NotFound("no classes found");
+                return Ok("no classes found");
             }
 
             return Ok(result);
@@ -73,7 +73,7 @@ namespace TakuGaku.Controllers
         [HttpPut("update/{classId}")]
         public IActionResult UpdateClass(int classId, ClassSchedule updatedClass)
         {
-            var checkTimeslot = _classScheduleRepository.CheckOpenTimeslot(updatedClass);
+            var checkTimeslot = _classScheduleRepository.CheckOpenTimeslot(updatedClass, classId);
 
             if (checkTimeslot == true)
             {

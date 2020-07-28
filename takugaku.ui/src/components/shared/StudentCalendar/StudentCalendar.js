@@ -16,7 +16,7 @@ class StudentCalendar extends React.Component {
     selectedStudent: '',
     singleStudent: [],
     selectedDate: '',
-    assignments: '',
+    assignments: [],
     scheduleArray: [],
     studentSchedule: [],
   }
@@ -128,9 +128,13 @@ class StudentCalendar extends React.Component {
     const studentId = this.state.selectedStudent;
     scheduleData.getScheduleByStudentId(studentId)
       .then((response) => {
-        const schedule = response;
-        for (let i = 0; i < response.length; i += 1) {
-          schedule[i].assignment = { assignmentTitle: '' };
+        let schedule = response;
+        if (response === 'no classes found') {
+          schedule = [];
+        } else {
+          for (let i = 0; i < response.length; i += 1) {
+            schedule[i].assignment = { assignmentTitle: '' };
+          }
         }
         this.setState({ studentSchedule: schedule });
         this.buildSchedule();

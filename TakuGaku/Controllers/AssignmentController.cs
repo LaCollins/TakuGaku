@@ -46,6 +46,18 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("student/{studentId}/date/{date}/classId/{classId}")]
+        public IActionResult GetAssignmentsByStudentDateClass(int studentId, string date, int classId)
+        {
+            var result = _assignmentRepository.GetAssignmentsByStudentDateClass(studentId, date, classId);
+            if (!result.Any())
+            {
+                return NotFound("no assignments found");
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("gpa")]
         public IActionResult GetAllGradePointAverages()
         {

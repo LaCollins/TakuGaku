@@ -34,7 +34,19 @@ class ClassTable extends React.Component {
                     },
                   }} className="btn btn-secondary scheduleButton">Add a Class</Link></td>)}
                 <td><Link to={''}>{classSlot.assignment.assignmentTitle}</Link></td>
-                <td><Link to={''} className="btn btn-secondary edit m-0"><i className="m-1 fas fa-edit"></i></Link> <Button variant="secondary" className="m-0 delete" onClick={this.deleteClassEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>
+                { classSlot.classTitle ? (<td><Link to={{
+                  pathname: `/schedule/edit/${classSlot.classId}`,
+                  state: {
+                    student,
+                    timeSlot: classSlot.timeSlot,
+                    selectedDay,
+                    selectedDate,
+                    assignments,
+                    classSlot,
+                  },
+                }} className="btn btn-secondary edit m-0 mr-2"><i className="m-1 fas fa-edit"></i></Link>
+                <Button variant="secondary" className="m-0 delete" onClick={this.deleteClassEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>)
+                  : ('') }
             </tr>
       );
     }

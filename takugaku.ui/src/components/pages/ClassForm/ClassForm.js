@@ -8,7 +8,7 @@ import scheduleData from '../../../helpers/data/scheduleData';
 
 class ClassForm extends React.Component {
     state = {
-      subject: '',
+      subjectId: '',
       dayOfWeek: '',
       timeSlot: '',
       classTitle: '',
@@ -18,6 +18,9 @@ class ClassForm extends React.Component {
       studentSchedule: [],
       scheduleArray: [],
       assignments: [],
+      editMode: false,
+      noSubject: false,
+      subjectTitle: '',
     }
 
     classTitleChange = (e) => {
@@ -32,13 +35,21 @@ class ClassForm extends React.Component {
 
     subjectChange = (e) => {
       e.preventDefault();
-      this.setState({ subject: e.target.value });
+      this.setState({ subjectId: e.target.value });
     }
 
     getSubjects = () => {
+      const { classId } = this.props.match.params;
       subjectData.getAllSubjects()
         .then((response) => {
           this.setState({ subjects: response });
+          if (classId) {
+            for (let i = 0; i < response.length; i += 1) {
+              if (this.state.subjectId === response[i].subjectId) {
+                this.setState({ subjectTitle: response[i].subjectType });
+              }
+            }
+          }
         })
         .catch((error) => console.error(error, 'error from getSubjects'));
     }
@@ -104,12 +115,17 @@ class ClassForm extends React.Component {
           }
         }
         this.setState({ scheduleArray: newArray });
-        this.props.history.push({ pathname: `/schedule/${studentId}`, state: { scheduleArray: newArray, selectedDay, selectedDate } });
+        this.props.history.push({
+          pathname: `/schedule/${studentId}`,
+          state: {
+            scheduleArray: newArray, selectedDay, selectedDate: this.props.location.state.selectedDate, assignments,
+          },
+        });
       }
 
     saveClassEvent = (e) => {
       e.preventDefault();
-      const subjectId = parseInt(this.state.subject, 10);
+      const subjectId = parseInt(this.state.subjectId, 10);
       const timeSlot = `1900-01-01T${this.state.timeSlot}`;
       const newClass = {
         studentId: this.state.studentId,
@@ -118,24 +134,65 @@ class ClassForm extends React.Component {
         timeSlot,
         classTitle: this.state.classTitle,
       };
-      scheduleData.addClass(newClass)
-        .then((response) => {
-          if (response.data === 'That class already exists, class not added.') {
-            this.setState({ invalidClass: true });
-          } else {
-            this.getScheduleById();
-            this.setState({ invalidClass: false });
-          }
+      if (this.state.subjectId === 'null' || this.state.subjectId === '') {
+        this.setState({ noSubject: true });
+      } else {
+        scheduleData.addClass(newClass)
+          .then((response) => {
+            if (response.data === 'That class already exists, class not added.') {
+              this.setState({ invalidClass: true });
+            } else {
+              this.getScheduleById();
+              this.setState({ invalidClass: false });
+            }
+          })
+          .catch((error) => console.error('err from save profile', error));
+      }
+    }
+
+    classUpdateEvent = () => {
+      const { classId } = this.props.match.params;
+      const subjectId = parseInt(this.state.subjectId, 10);
+      const timeSlot = `1900-01-01T${this.state.timeSlot}`;
+      const updatedClass = {
+        studentId: this.state.studentId,
+        subjectId,
+        dayOfWeek: this.state.dayOfWeek,
+        timeSlot,
+        classTitle: this.state.classTitle,
+      };
+      scheduleData.updateClass(classId, updatedClass)
+        .then(() => {
+          this.getScheduleById();
+          this.setState({ invalidClass: false });
         })
-        .catch((error) => console.error('err from save profile', error));
+        .catch((error) => console.error(error, 'error from classupdate'));
+    }
+
+    checkEditOrCreate = (e) => {
+      e.preventDefault();
+      const { editMode } = this.state;
+      if (editMode) {
+        this.classUpdateEvent();
+      } else {
+        this.saveClassEvent();
+      }
     }
 
     componentDidMount() {
+      const { classId } = this.props.match.params;
       this.getSubjects();
       this.setState({ timeSlot: this.props.location.state.timeSlot });
       this.setState({ studentId: this.props.location.state.student.studentId });
       this.setState({ dayOfWeek: this.props.location.state.selectedDay });
       this.setState({ assignments: this.props.location.state.assignments });
+
+      if (classId) {
+        this.setState({ timeSlot: this.props.location.state.classSlot.timeSlot });
+        this.setState({ classTitle: this.props.location.state.classSlot.classTitle });
+        this.setState({ subjectId: this.props.location.state.classSlot.subjectId });
+        this.setState({ editMode: true });
+      }
     }
 
     render() {
@@ -145,6 +202,10 @@ class ClassForm extends React.Component {
         subjects,
         timeSlot,
         invalidClass,
+        noSubject,
+        subjectId,
+        subjectTitle,
+        editMode,
       } = this.state;
 
       return (
@@ -153,9 +214,10 @@ class ClassForm extends React.Component {
               : ('')}
             { invalidClass ? (<div className="warning">There is already a class scheduled for that time! Please pick a different day/time.</div>)
               : ('')}
-                <h1>Add a class to {student.firstName}'s {selectedDay} schedule.</h1>
+                {editMode ? (<h1>Edit {student.firstName}'s {selectedDay} schedule.</h1>)
+                  : (<h1>Add a class to {student.firstName}'s {selectedDay} schedule.</h1>)}
                 <div className="container">
-                <form className="formContainer" onSubmit={this.saveClassEvent}>
+                <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
                     <div className="form-group row justify-content-center">
                     <label htmlFor="classTitle" className="col-form-label">Class Title:</label>
@@ -188,18 +250,20 @@ class ClassForm extends React.Component {
                 </div>
                 </div>
                 <div className="form-inline d-flex justify-content-center">
+                  { noSubject ? (<div className="warning">Please choose a subject!</div>)
+                    : ('') }
                 <div className="col-auto my-1">
                 <label htmlFor="subject" className="col-form-label">Subject:</label>
                 <select type="select" className="custom-select mr-sm-2" id="subject" onChange={this.subjectChange} required>
-                    <option defaultValue='null'>Choose...</option>
+                    { editMode ? (<option defaultValue={subjectId}>{subjectTitle}</option>)
+                      : (<option defaultValue='null'>Choose...</option>)}
                     {subjects.map((subject) => (<option key={subject.subjectId} value={subject.subjectId}>{subject.subjectType}</option>))}
                 </select>
                 </div>
                 </div>
                 <div className="buttonContainer">
-                {/* { editMode ? (<Button variant="secondary" className="formButton" type="submit">Save Changes</Button>)
-                  : (<Button variant="secondary" className="formButton" type="submit">Register Student</Button>)} */}
-                  <Button variant="secondary" className="formButton" type="submit">Add Class</Button>
+                { editMode ? (<Button variant="secondary" className="formButton" type="submit">Save Changes</Button>)
+                  : (<Button variant="secondary" className="formButton" type="submit">Add Class</Button>)}
                 </div>
                 </form>
                 </div>

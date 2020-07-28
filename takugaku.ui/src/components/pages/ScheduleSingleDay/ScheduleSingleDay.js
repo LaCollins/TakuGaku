@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import moment from 'moment';
 import { Redirect } from 'react-router-dom';
-// import Button from 'react-bootstrap/Button';
 import scheduleData from '../../../helpers/data/scheduleData';
 import studentData from '../../../helpers/data/studentData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
@@ -13,6 +13,7 @@ class ScheduleSingleDay extends React.Component {
       student: [],
       selectedDay: '',
       selectedDate: '',
+      assignments: [],
       scheduleArray: [
         { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
         { timeSlot: '09:00:00', assignment: { assignmentTitle: '' } },
@@ -33,9 +34,17 @@ class ScheduleSingleDay extends React.Component {
     }
 
     deleteClass = (classId) => {
+      const classArray = this.state.scheduleArray;
+      let timeSlot = '';
       scheduleData.deleteClassById(classId)
         .then(() => {
-          this.getScheduleById();
+          for (let i = 0; i < classArray.length; i += 1) {
+            if (classArray[i].classId === classId) {
+              timeSlot = classArray[i].timeSlot;
+              classArray[i] = { timeSlot, assignment: { assignmentTitle: '' } };
+            }
+          }
+          this.setState({ scheduleArray: classArray });
         })
         .catch((error) => console.error(error));
     }
@@ -70,12 +79,15 @@ class ScheduleSingleDay extends React.Component {
         selectedDate,
         assignments,
       } = this.state;
+
+      const viewingDate = moment(selectedDate).format('MMMM Do YYYY');
       return (
             <div className="ScheduleSingleDay">
             { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
               : ('')}
                 <h1>Daily Schedule</h1>
                 <h4>{student.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
+                <h5 className="mb-4">You are currently viewing assignments for {viewingDate}</h5>
                 <div className="container">
                 <Table striped bordered hover variant="dark">
                     <thead>
