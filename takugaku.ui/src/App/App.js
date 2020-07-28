@@ -199,6 +199,9 @@ class App extends React.Component {
             <Route path="/schedule/add/:studentId" exact render={(props) => <ClassForm {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}
             school={school} />}/>
+            <Route path="/schedule/edit/:classId" exact render={(props) => <ClassForm {...props} authed={authed}
+            teacherLoggedIn={teacherLoggedIn}
+            school={school} />}/>
           </Switch>
         </Router>
       </div>

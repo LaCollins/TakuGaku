@@ -13,6 +13,7 @@ class ScheduleSingleDay extends React.Component {
       student: [],
       selectedDay: '',
       selectedDate: '',
+      assignments: [],
       scheduleArray: [
         { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
         { timeSlot: '09:00:00', assignment: { assignmentTitle: '' } },
@@ -33,9 +34,17 @@ class ScheduleSingleDay extends React.Component {
     }
 
     deleteClass = (classId) => {
+      const classArray = this.state.scheduleArray;
+      let timeSlot = '';
       scheduleData.deleteClassById(classId)
         .then(() => {
-          this.getScheduleById();
+          for (let i = 0; i < classArray.length; i += 1) {
+            if (classArray[i].classId === classId) {
+              timeSlot = classArray[i].timeSlot;
+              classArray[i] = { timeSlot, assignment: { assignmentTitle: '' } };
+            }
+          }
+          this.setState({ scheduleArray: classArray });
         })
         .catch((error) => console.error(error));
     }

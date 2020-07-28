@@ -15,6 +15,10 @@ const getScheduleByStudentId = (studentId) => new Promise((resolve, reject) => {
 
 const addClass = (newClass) => axios.post(`${baseUrl}/api/takugaku/schedule`, newClass);
 
+const updateClass = (classId, classInfo) => axios.put(`${baseUrl}/api/takugaku/schedule/update/${classId}`, classInfo);
+
 const deleteClassById = (classId) => axios.delete(`${baseUrl}/api/takugaku/schedule/delete/${classId}`);
 
-export default { getScheduleByStudentId, deleteClassById, addClass };
+export default {
+  getScheduleByStudentId, deleteClassById, addClass, updateClass,
+};

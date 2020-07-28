@@ -80,7 +80,7 @@ namespace TakuGaku.Repositories
             return classExists;
         }
 
-        public bool CheckOpenTimeslot(ClassSchedule classToAdd)
+        public bool CheckOpenTimeslot(ClassSchedule classToAdd, int classId)
         {
             var classes = GetClassByStudent(classToAdd.StudentId);
             var timeSlotOpen = true;
@@ -91,9 +91,9 @@ namespace TakuGaku.Repositories
                 {
                     if (classItem.DayOfWeek == classToAdd.DayOfWeek
                         && classItem.TimeSlot == classToAdd.TimeSlot
-                        && classItem.ClassId != classToAdd.ClassId)
-                    {
-                        timeSlotOpen = false;
+                        && classItem.ClassId != classId)
+                    { 
+                            timeSlotOpen = false;
                     }
                 }
             }

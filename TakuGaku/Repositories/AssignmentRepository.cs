@@ -76,6 +76,20 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public IEnumerable<Assignment> GetAssignmentsByStudentDateClass(int studentId, string dateAssigned, int classId)
+        {
+            var sql = @"SELECT *
+                        FROM assignment
+                        WHERE StudentId = @studentId AND DateAssigned = @dateAssigned AND ClassId = @classId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var assignments = db.Query<Assignment>(sql, new { StudentId = studentId, DateAssigned = dateAssigned, ClassId = classId });
+
+                return assignments;
+            }
+        }
+
         public IEnumerable<Assignment> GetAssignmentsBySubject(int subjectId)
         {
             var sql = @"SELECT *
