@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { Redirect } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import scheduleData from '../../../helpers/data/scheduleData';
 import studentData from '../../../helpers/data/studentData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
@@ -49,7 +49,10 @@ class ScheduleSingleDay extends React.Component {
       const { studentId } = this.props.match.params;
       const { scheduleArray } = this.props.location.state;
       const { selectedDate } = this.props.location.state;
-      this.setState({ selectedDate });
+      const { selectedDay } = this.props.location.state;
+      const { assignments } = this.props.location.state;
+
+      this.setState({ selectedDate, selectedDay, assignments });
 
       this.setState({ studentId });
       this.setState({ scheduleArray });
@@ -65,6 +68,7 @@ class ScheduleSingleDay extends React.Component {
         selectedDay,
         scheduleArray,
         selectedDate,
+        assignments,
       } = this.state;
       return (
             <div className="ScheduleSingleDay">
@@ -73,7 +77,6 @@ class ScheduleSingleDay extends React.Component {
                 <h1>Daily Schedule</h1>
                 <h4>{student.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
                 <div className="container">
-                <Button variant="secondary" className="scheduleButton">Add a Class</Button>
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
@@ -84,7 +87,13 @@ class ScheduleSingleDay extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot} classSlot={classSlot} selectedDate={selectedDate} deleteClass={this.deleteClass} />)}
+                        {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot}
+                        student={student}
+                        classSlot={classSlot}
+                        selectedDate={selectedDate}
+                        selectedDay={selectedDay}
+                        assignments={assignments}
+                        deleteClass={this.deleteClass} />)}
                     </tbody>
                     </Table>
                 </div>

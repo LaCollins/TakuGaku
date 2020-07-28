@@ -128,7 +128,11 @@ class StudentCalendar extends React.Component {
     const studentId = this.state.selectedStudent;
     scheduleData.getScheduleByStudentId(studentId)
       .then((response) => {
-        this.setState({ studentSchedule: response });
+        const schedule = response;
+        for (let i = 0; i < response.length; i += 1) {
+          schedule[i].assignment = { assignmentTitle: '' };
+        }
+        this.setState({ studentSchedule: schedule });
         this.buildSchedule();
       })
       .catch((error) => console.error(error, 'error from getschedulebyid'));
@@ -176,14 +180,17 @@ class StudentCalendar extends React.Component {
         for (let j = 0; j < newArray.length; j += 1) {
           if (assignments[i].classId === newArray[j].classId) {
             newArray[j].assignment = assignments[i];
-          } else {
-            newArray[j].assignment = { assignmentTitle: '' };
           }
         }
       }
     }
     this.setState({ scheduleArray: newArray });
-    this.props.history.push({ pathname: `/schedule/${selectedStudent}`, state: { scheduleArray: newArray, selectedDay, selectedDate } });
+    this.props.history.push({
+      pathname: `/schedule/${selectedStudent}`,
+      state: {
+        scheduleArray: newArray, selectedDay, selectedDate, assignments,
+      },
+    });
   }
 
   getStudentScheduleEvent = () => {
