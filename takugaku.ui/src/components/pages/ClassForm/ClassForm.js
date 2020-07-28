@@ -214,7 +214,8 @@ class ClassForm extends React.Component {
               : ('')}
             { invalidClass ? (<div className="warning">There is already a class scheduled for that time! Please pick a different day/time.</div>)
               : ('')}
-                <h1>Add a class to {student.firstName}'s {selectedDay} schedule.</h1>
+                {editMode ? (<h1>Edit {student.firstName}'s {selectedDay} schedule.</h1>)
+                  : (<h1>Add a class to {student.firstName}'s {selectedDay} schedule.</h1>)}
                 <div className="container">
                 <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
