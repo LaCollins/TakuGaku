@@ -20,6 +20,7 @@ import StudentDashboard from '../components/pages/StudentDashboard/StudentDashbo
 import TeacherDashboard from '../components/pages/TeacherDashboard/TeacherDashboard';
 import ManageStudents from '../components/pages/ManageStudents/ManageStudents';
 import ScheduleSingleDay from '../components/pages/ScheduleSingleDay/ScheduleSingleDay';
+import ClassForm from '../components/pages/ClassForm/ClassForm';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
 import teacherData from '../helpers/data/teacherData';
@@ -193,6 +194,9 @@ class App extends React.Component {
             teacherLoggedIn={teacherLoggedIn}
             school={school} />}/>
             <Route path="/schedule/:studentId" exact render={(props) => <ScheduleSingleDay {...props} authed={authed}
+            teacherLoggedIn={teacherLoggedIn}
+            school={school} />}/>
+            <Route path="/schedule/add/:studentId" exact render={(props) => <ClassForm {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}
             school={school} />}/>
           </Switch>
