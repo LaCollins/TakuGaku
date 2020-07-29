@@ -42,6 +42,12 @@ const getAssignmentType = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const addAssignment = (newAssignment) => axios.post(`${baseUrl}/api/takugagku/assignments`, newAssignment);
+
 export default {
-  getGpaByStudentId, getAssignmentByStudentId, getAssignmentByStudentDateClass, getAssignmentType,
+  getGpaByStudentId,
+  getAssignmentByStudentId,
+  getAssignmentByStudentDateClass,
+  getAssignmentType,
+  addAssignment,
 };

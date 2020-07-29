@@ -58,6 +58,32 @@ class AssignmentsMain extends React.Component {
         this.setState({ showAdd: true });
       }
 
+      checkAssignment = (classArray, selectedDate, selectedDay) => {
+        const newArray = classArray;
+        const studentId = this.state.selectedStudent;
+
+        assignmentData.getAssignmentByStudentId(studentId)
+          .then((assignments) => {
+            for (let i = 0; i < assignments.length; i += 1) {
+              const assignmentDate = assignments[i].dateAssigned.split('T');
+              if (assignmentDate[0] === selectedDate) {
+                for (let j = 0; j < newArray.length; j += 1) {
+                  if (assignments[i].classId === newArray[j].classId) {
+                    newArray[j].assignment = assignments[i];
+                  }
+                }
+              }
+            }
+            this.props.history.push({
+              pathname: `/schedule/${studentId}`,
+              state: {
+                scheduleArray: newArray, selectedDay, selectedDate, assignments,
+              },
+            });
+          })
+          .catch((error) => console.error(error));
+      }
+
       componentDidMount() {
         this.getStudents();
         this.getAssignmentTypes();
@@ -70,6 +96,7 @@ class AssignmentsMain extends React.Component {
           classes,
           assignmentTypes,
           assignments,
+          selectedStudent,
         } = this.state;
 
         return (
@@ -92,7 +119,7 @@ class AssignmentsMain extends React.Component {
                 </div>
                 </div>
                 </div>
-                { showAdd ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} />)
+                { showAdd ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
                   : ('')}
             </div>
         );

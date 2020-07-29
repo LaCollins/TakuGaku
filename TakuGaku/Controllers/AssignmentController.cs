@@ -112,8 +112,18 @@ namespace TakuGaku.Controllers
         [HttpPost]
         public IActionResult AddAssignment(Assignment assignmentToAdd)
         {
-              var result = _assignmentRepository.AddAssignment(assignmentToAdd);
-              return Ok(result);
+            var dateAssigned = assignmentToAdd.DateAssigned.ToString();
+
+            var checkExistingAssignment = _assignmentRepository.GetAssignmentsByStudentDateClass(assignmentToAdd.StudentId, dateAssigned, assignmentToAdd.ClassId);
+
+            if (checkExistingAssignment.Any())
+            {
+                return Ok("There is already an existing assignment");
+            } else
+            {
+                var result = _assignmentRepository.AddAssignment(assignmentToAdd);
+                return Ok(result);
+            }
         }
 
         // update assignment

@@ -19,6 +19,7 @@ namespace TakuGaku.Models
         public DateTime DateDue { get; set; }
         public DateTime DateComplete { get; set; }
         public string AssignmentTitle { get; set; }
+        public string Link { get; set; }
     }
 
     public class GradePointAverage

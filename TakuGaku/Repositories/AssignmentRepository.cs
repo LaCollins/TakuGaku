@@ -120,9 +120,9 @@ namespace TakuGaku.Repositories
 
         public Assignment AddAssignment(Assignment assignmentToAdd)
         {
-            var sql = @"INSERT INTO assignment(studentId, classId, assignmentTypeId, subjectId, instructions, completed, grade, dateAssigned, dateDue, dateComplete, assignmentTitle)
+            var sql = @"INSERT INTO assignment(studentId, classId, assignmentTypeId, subjectId, instructions, completed, grade, dateAssigned, dateDue, dateComplete, assignmentTitle, link)
                         OUTPUT INSERTED.*
-                        VALUES (@studentId, @classId, @assignmentTypeId, @subjectId, @instructions, @completed, @grade, @dateAssigned, @dateDue, @dateComplete, @assignmentTitle)";
+                        VALUES (@studentId, @classId, @assignmentTypeId, @subjectId, @instructions, @completed, @grade, @dateAssigned, @dateDue, @dateComplete, @assignmentTitle, @link)";
 
             using (var db = new SqlConnection(ConnectionString))
             {
@@ -137,7 +137,7 @@ namespace TakuGaku.Repositories
             var sql = @"UPDATE assignment
                         SET StudentId = @studentId, ClassId = @classId, AssignmentTypeId = @assignmentTypeId,
                             SubjectId = @subjectId, Instructions = @instructions, Completed = @completed, Grade = @grade,
-                            DateAssigned = @dateAssigned, DateDue = @dateDue, DateComplete = @dateComplete, AssignmentTitle = @assignmentTitle
+                            DateAssigned = @dateAssigned, DateDue = @dateDue, DateComplete = @dateComplete, AssignmentTitle = @assignmentTitle, Link = @link,
                         OUTPUT INSERTED.*
                         WHERE AssignmentId = @assignmentId";
 
@@ -156,6 +156,7 @@ namespace TakuGaku.Repositories
                     updatedAssignment.DateDue,
                     updatedAssignment.DateComplete,
                     updatedAssignment.AssignmentTitle,
+                    updatedAssignment.Link,
                     AssignmentId = assignmentId
                 };
 
