@@ -18,6 +18,12 @@
         font-family: $buttonFont;
     }
 
+    .warning {
+        color: red;
+        font-family: $buttonFont;
+        font-size: 1.5em;
+    }
+
     .buttonContainer {
         margin-top: 20px;
         font-family: 'Bubblegum Sans', cursive;
