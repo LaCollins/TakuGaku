@@ -33,4 +33,15 @@ const getAssignmentByStudentDateClass = (studentId, date, classId) => new Promis
     .catch((error) => reject(error));
 });
 
-export default { getGpaByStudentId, getAssignmentByStudentId, getAssignmentByStudentDateClass };
+const getAssignmentType = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/takugaku/assignmenttype`)
+    .then((result) => {
+      const assignmentTypes = result.data;
+      resolve(assignmentTypes);
+    })
+    .catch((error) => reject(error));
+});
+
+export default {
+  getGpaByStudentId, getAssignmentByStudentId, getAssignmentByStudentDateClass, getAssignmentType,
+};
