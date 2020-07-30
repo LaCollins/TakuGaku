@@ -21,6 +21,16 @@ class AssignmentsMain extends React.Component {
       dueAssignments: [],
     }
 
+    deleteAssingment = (assignmentId) => {
+      const { selectedStudent } = this.state;
+      assignmentData.deleteAssignment(assignmentId)
+        .then(() => {
+          this.getDueAssignments(selectedStudent);
+          this.getDueAssignments(selectedStudent);
+        })
+        .catch((error) => console.error(error, 'error from deleteAssignment'));
+    }
+
     studentChange = (e) => {
       e.preventDefault();
       this.setState({ selectedStudent: e.target.value });
@@ -167,9 +177,19 @@ class AssignmentsMain extends React.Component {
                 </div>
                 { noClasses ? (<div className="warning mt-5">This student has no classes! Please add a class to continue.</div>)
                   : ('') }
-                { showAdd && !noClasses ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
+                { showAdd && !noClasses ? (<AssignmentsAdd
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    assignments={assignments}
+                    selectedStudent={selectedStudent}
+                    checkAssignment={this.checkAssignment} />)
                   : ('')}
-                { showDue && !noClasses ? (<AssignmentsDue classes={classes} assignmentTypes={assignmentTypes} dueAssignments={dueAssignments} selectedStudent={selectedStudent} />)
+                { showDue && !noClasses ? (<AssignmentsDue
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    dueAssignments={dueAssignments}
+                    selectedStudent={selectedStudent}
+                    deleteAssignment={this.deleteAssingment} />)
                   : ('')}
             </div>
         );

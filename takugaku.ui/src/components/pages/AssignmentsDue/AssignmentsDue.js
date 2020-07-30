@@ -23,7 +23,7 @@ class AssignmentsDue extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {dueAssignments.map((assignment) => <AssignmentTable key={assignment.assignmentId} assignment={assignment} />)}
+                        {dueAssignments.map((assignment) => <AssignmentTable key={assignment.assignmentId} assignment={assignment} deleteAssignment={this.props.deleteAssignment} />)}
                     </tbody>
                     </Table>
                 </div>

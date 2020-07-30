@@ -54,6 +54,8 @@ const getDueAssignmentsByStudentId = (studentId) => new Promise((resolve, reject
 
 const addAssignment = (newAssignment) => axios.post(`${baseUrl}/api/takugagku/assignments`, newAssignment);
 
+const deleteAssignment = (assignmentId) => axios.delete(`${baseUrl}/api/takugagku/assignments/delete/${assignmentId}`);
+
 export default {
   getGpaByStudentId,
   getAssignmentByStudentId,
@@ -61,4 +63,5 @@ export default {
   getAssignmentType,
   addAssignment,
   getDueAssignmentsByStudentId,
+  deleteAssignment,
 };
