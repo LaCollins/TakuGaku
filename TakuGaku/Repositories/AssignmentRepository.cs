@@ -156,7 +156,7 @@ namespace TakuGaku.Repositories
             var sql = @"UPDATE assignment
                         SET StudentId = @studentId, ClassId = @classId, AssignmentTypeId = @assignmentTypeId,
                             SubjectId = @subjectId, Instructions = @instructions, Completed = @completed, Grade = @grade,
-                            DateAssigned = @dateAssigned, DateDue = @dateDue, DateComplete = @dateComplete, AssignmentTitle = @assignmentTitle, Link = @link,
+                            DateAssigned = @dateAssigned, DateDue = @dateDue, DateComplete = @dateComplete, AssignmentTitle = @assignmentTitle, Link = @link
                         OUTPUT INSERTED.*
                         WHERE AssignmentId = @assignmentId";
 
@@ -183,6 +183,7 @@ namespace TakuGaku.Repositories
                 return result;
             }
         }
+
 
         public string DeleteAssignment(int assignmentId)
         {
