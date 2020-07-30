@@ -42,6 +42,16 @@ const getAssignmentType = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getDueAssignmentsByStudentId = (studentId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/takugagku/assignments/due/studentId/${studentId}`)
+    .then((result) => {
+      const assignments = result.data;
+
+      resolve(assignments);
+    })
+    .catch((error) => reject(error));
+});
+
 const addAssignment = (newAssignment) => axios.post(`${baseUrl}/api/takugagku/assignments`, newAssignment);
 
 export default {
@@ -50,4 +60,5 @@ export default {
   getAssignmentByStudentDateClass,
   getAssignmentType,
   addAssignment,
+  getDueAssignmentsByStudentId,
 };

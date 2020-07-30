@@ -18,6 +18,7 @@ class AssignmentsMain extends React.Component {
       assignmentTypes: [],
       assignments: [],
       noClasses: false,
+      dueAssignments: [],
     }
 
     studentChange = (e) => {
@@ -27,6 +28,7 @@ class AssignmentsMain extends React.Component {
         .then((response) => {
           this.setState({ classes: response });
           this.getAssignments(this.state.selectedStudent);
+          this.getDueAssignments(this.state.selectedStudent);
         })
         .catch((error) => console.error(error, 'error from studentchange'));
     }
@@ -54,6 +56,14 @@ class AssignmentsMain extends React.Component {
             this.setState({ assignments, noClasses: false });
           })
           .catch(() => this.setState({ assignments: [], noClasses: true }));
+      }
+
+      getDueAssignments = (studentId) => {
+        assignmentData.getDueAssignmentsByStudentId(studentId)
+          .then((response) => {
+            this.setState({ dueAssignments: response });
+          })
+          .catch(() => this.setState({ dueAssignments: [], showAdd: false, showDue: true }));
       }
 
       showAddAssignment = (e) => {
@@ -109,6 +119,7 @@ class AssignmentsMain extends React.Component {
           assignments,
           selectedStudent,
           noClasses,
+          dueAssignments,
         } = this.state;
 
         return (
@@ -136,7 +147,7 @@ class AssignmentsMain extends React.Component {
                   : ('') }
                 { showAdd && !noClasses ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
                   : ('')}
-                { showDue && !noClasses ? (<AssignmentsDue classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} />)
+                { showDue && !noClasses ? (<AssignmentsDue classes={classes} assignmentTypes={assignmentTypes} dueAssignments={dueAssignments} selectedStudent={selectedStudent} />)
                   : ('')}
             </div>
         );
