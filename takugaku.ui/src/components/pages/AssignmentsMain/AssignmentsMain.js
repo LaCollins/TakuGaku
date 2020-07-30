@@ -54,10 +54,19 @@ class AssignmentsMain extends React.Component {
           .catch((error) => console.error(error));
       }
 
+      removeArchived = (assignments) => {
+        for (let i = 0; i < assignments.length; i += 1) {
+          if (assignments[i].classId === 53) {
+            assignments.splice(i, 1);
+          }
+        }
+        this.setState({ assignments });
+      }
+
       getAssignments = (studentId) => {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
-            this.setState({ assignments });
+            this.removeArchived(assignments);
           })
           .catch(() => this.setState({ assignments: [] }));
       }
@@ -65,7 +74,13 @@ class AssignmentsMain extends React.Component {
       getDueAssignments = (studentId) => {
         assignmentData.getDueAssignmentsByStudentId(studentId)
           .then((response) => {
-            this.setState({ dueAssignments: response });
+            const assignments = response;
+            for (let i = 0; i < assignments.length; i += 1) {
+              if (assignments[i].className === 'archive') {
+                assignments.splice(i, 1);
+              }
+            }
+            this.setState({ dueAssignments: assignments });
           })
           .catch(() => this.setState({ dueAssignments: [], showAdd: false, showDue: true }));
       }
@@ -89,6 +104,9 @@ class AssignmentsMain extends React.Component {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
             for (let i = 0; i < assignments.length; i += 1) {
+              if (assignments[i].classId === 53) {
+                assignments.splice(i, 1);
+              }
               const assignmentDate = assignments[i].dateAssigned.split('T');
               if (assignmentDate[0] === selectedDate) {
                 for (let j = 0; j < newArray.length; j += 1) {
