@@ -5,16 +5,19 @@ import Button from 'react-bootstrap/Button';
 import studentData from '../../../helpers/data/studentData';
 import assignmentData from '../../../helpers/data/assignmentData';
 import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
+import AssignmentsDue from '../AssignmentsDue/AssignmentsDue';
 import scheduleData from '../../../helpers/data/scheduleData';
 
 class AssignmentsMain extends React.Component {
     state = {
       students: [],
       showAdd: false,
+      showDue: false,
       selectedStudent: '',
       classes: [],
       assignmentTypes: [],
       assignments: [],
+      noClasses: false,
     }
 
     studentChange = (e) => {
@@ -48,14 +51,21 @@ class AssignmentsMain extends React.Component {
       getAssignments = (studentId) => {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
-            this.setState({ assignments });
+            this.setState({ assignments, noClasses: false });
           })
-          .catch((error) => console.error(error));
+          .catch(() => this.setState({ assignments: [], noClasses: true }));
       }
 
       showAddAssignment = (e) => {
         e.preventDefault();
         this.setState({ showAdd: true });
+        this.setState({ showDue: false });
+      }
+
+      showDueAssignment = (e) => {
+        e.preventDefault();
+        this.setState({ showAdd: false });
+        this.setState({ showDue: true });
       }
 
       checkAssignment = (classArray, selectedDate, selectedDay) => {
@@ -93,10 +103,12 @@ class AssignmentsMain extends React.Component {
         const {
           students,
           showAdd,
+          showDue,
           classes,
           assignmentTypes,
           assignments,
           selectedStudent,
+          noClasses,
         } = this.state;
 
         return (
@@ -114,12 +126,17 @@ class AssignmentsMain extends React.Component {
                 <div className="buttonContainer">
                     { showAdd ? ('')
                       : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
-                <Button variant="secondary" className="formButton mr-3">Due</Button>
+                { showDue ? ('')
+                  : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
                 <Button variant="secondary" className="formButton mr-3">Completed</Button>
                 </div>
                 </div>
                 </div>
-                { showAdd ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
+                { noClasses ? (<div className="warning mt-5">This student has no classes! Please add a class to continue.</div>)
+                  : ('') }
+                { showAdd && !noClasses ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
+                  : ('')}
+                { showDue && !noClasses ? (<AssignmentsDue classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} />)
                   : ('')}
             </div>
         );
