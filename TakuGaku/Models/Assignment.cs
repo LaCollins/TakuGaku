@@ -28,4 +28,15 @@ namespace TakuGaku.Models
         public int StudentId { get; set; }
 
     }
+
+    public class AssignmentWithClassname
+    {
+        public int AssignmentId { get; set; }
+        public string ClassName { get; set; }
+        public string AssignmentTitle { get; set; }
+        public string AssignmentType { get; set; }
+        public DateTime DateAssigned { get; set; }
+        public DateTime DateDue { get; set; }
+    }
+
 }

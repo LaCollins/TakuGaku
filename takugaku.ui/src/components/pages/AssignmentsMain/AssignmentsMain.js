@@ -26,11 +26,15 @@ class AssignmentsMain extends React.Component {
       this.setState({ selectedStudent: e.target.value });
       scheduleData.getScheduleByStudentId(e.target.value)
         .then((response) => {
-          this.setState({ classes: response });
-          this.getAssignments(this.state.selectedStudent);
-          this.getDueAssignments(this.state.selectedStudent);
+          if (response === 'no classes found') {
+            this.setState({ noClasses: true, classes: [] });
+          } else {
+            this.setState({ classes: response, noClasses: false });
+            this.getAssignments(this.state.selectedStudent);
+            this.getDueAssignments(this.state.selectedStudent);
+          }
         })
-        .catch((error) => console.error(error, 'error from studentchange'));
+        .catch((error) => console.error(error, 'error from studentChange'));
     }
 
     getAssignmentTypes = () => {
@@ -53,9 +57,9 @@ class AssignmentsMain extends React.Component {
       getAssignments = (studentId) => {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
-            this.setState({ assignments, noClasses: false });
+            this.setState({ assignments });
           })
-          .catch(() => this.setState({ assignments: [], noClasses: true }));
+          .catch(() => this.setState({ assignments: [] }));
       }
 
       getDueAssignments = (studentId) => {

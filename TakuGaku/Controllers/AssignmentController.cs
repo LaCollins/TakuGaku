@@ -94,7 +94,7 @@ namespace TakuGaku.Controllers
 
             return Ok(result);
         }
-        
+
         //get single assignment
         [HttpGet("assignment/{assignmentId}")]
         public IActionResult GetAssignmentById(int assignmentId)
@@ -105,6 +105,18 @@ namespace TakuGaku.Controllers
                 return NotFound("no assignments found");
             }
 
+            return Ok(result);
+        }
+
+        [HttpGet("due/studentId/{studentId}")]
+        public IActionResult GetDueAssignments(int studentId)
+        {
+            var result = _assignmentRepository.GetAssignmentsDue(studentId);
+
+            if (!result.Any())
+            {
+                return NotFound("no assignments found");
+            }
             return Ok(result);
         }
 
