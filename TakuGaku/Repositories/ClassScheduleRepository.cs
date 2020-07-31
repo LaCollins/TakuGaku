@@ -101,6 +101,18 @@ namespace TakuGaku.Repositories
             return timeSlotOpen;
         }
 
+        public void ArchiveAssignments(int classId)
+        {
+            var sql = @"UPDATE assignment
+                        SET ClassId = 53
+                        WHERE classId = @classId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.ExecuteAsync(sql, new { ClassId = classId });
+            }
+        }
+
         public ClassSchedule AddClass(ClassSchedule classToAdd)
         {
             var sql = @"INSERT INTO ClassSchedule(studentId, subjectId, [dayOfWeek], timeSlot, classTitle)
@@ -144,6 +156,8 @@ namespace TakuGaku.Repositories
             var sql = @"DELETE
                         FROM ClassSchedule
                         WHERE ClassId = @classId";
+
+            ArchiveAssignments(classId);
 
             using (var db = new SqlConnection(ConnectionString))
             {

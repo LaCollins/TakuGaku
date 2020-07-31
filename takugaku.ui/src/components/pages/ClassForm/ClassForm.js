@@ -123,8 +123,7 @@ class ClassForm extends React.Component {
         });
       }
 
-    saveClassEvent = (e) => {
-      e.preventDefault();
+    saveClassEvent = () => {
       const subjectId = parseInt(this.state.subjectId, 10);
       const timeSlot = `1900-01-01T${this.state.timeSlot}`;
       const newClass = {

@@ -1,28 +1,13 @@
 @import '../../../styles/variables';
 
-.AssignmentsAdd {
+.AssignmentsDue {
 
     h3 {
         margin-top: 20px;
         font-family: $titleFont;
     }
 
-    .col-form-label {
-        font-family: $titleFont;
-        font-size: large;
-    }
-
-    .form-control {
-        width: 400px;
-        font-family: $buttonFont;
-    }
-
-    .warning {
-        color: red;
-        font-family: $buttonFont;
-        font-size: 1.5em;
-    }
-
+    
     .buttonContainer {
         margin-top: 20px;
         font-family: 'Bubblegum Sans', cursive;

@@ -5,16 +5,30 @@ import Button from 'react-bootstrap/Button';
 import studentData from '../../../helpers/data/studentData';
 import assignmentData from '../../../helpers/data/assignmentData';
 import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
+import AssignmentsDue from '../AssignmentsDue/AssignmentsDue';
 import scheduleData from '../../../helpers/data/scheduleData';
 
 class AssignmentsMain extends React.Component {
     state = {
       students: [],
       showAdd: false,
+      showDue: false,
       selectedStudent: '',
       classes: [],
       assignmentTypes: [],
       assignments: [],
+      noClasses: false,
+      dueAssignments: [],
+    }
+
+    deleteAssingment = (assignmentId) => {
+      const { selectedStudent } = this.state;
+      assignmentData.deleteAssignment(assignmentId)
+        .then(() => {
+          this.getDueAssignments(selectedStudent);
+          this.getDueAssignments(selectedStudent);
+        })
+        .catch((error) => console.error(error, 'error from deleteAssignment'));
     }
 
     studentChange = (e) => {
@@ -22,10 +36,15 @@ class AssignmentsMain extends React.Component {
       this.setState({ selectedStudent: e.target.value });
       scheduleData.getScheduleByStudentId(e.target.value)
         .then((response) => {
-          this.setState({ classes: response });
-          this.getAssignments(this.state.selectedStudent);
+          if (response === 'no classes found') {
+            this.setState({ noClasses: true, classes: [] });
+          } else {
+            this.setState({ classes: response, noClasses: false });
+            this.getAssignments(this.state.selectedStudent);
+            this.getDueAssignments(this.state.selectedStudent);
+          }
         })
-        .catch((error) => console.error(error, 'error from studentchange'));
+        .catch((error) => console.error(error, 'error from studentChange'));
     }
 
     getAssignmentTypes = () => {
@@ -45,17 +64,47 @@ class AssignmentsMain extends React.Component {
           .catch((error) => console.error(error));
       }
 
+      removeArchived = (assignments) => {
+        for (let i = 0; i < assignments.length; i += 1) {
+          if (assignments[i].classId === 53) {
+            assignments.splice(i, 1);
+          }
+        }
+        this.setState({ assignments });
+      }
+
       getAssignments = (studentId) => {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
-            this.setState({ assignments });
+            this.removeArchived(assignments);
           })
-          .catch((error) => console.error(error));
+          .catch(() => this.setState({ assignments: [] }));
+      }
+
+      getDueAssignments = (studentId) => {
+        assignmentData.getDueAssignmentsByStudentId(studentId)
+          .then((response) => {
+            const assignments = response;
+            for (let i = 0; i < assignments.length; i += 1) {
+              if (assignments[i].className === 'archive') {
+                assignments.splice(i, 1);
+              }
+            }
+            this.setState({ dueAssignments: assignments });
+          })
+          .catch(() => this.setState({ dueAssignments: [], showAdd: false, showDue: true }));
       }
 
       showAddAssignment = (e) => {
         e.preventDefault();
         this.setState({ showAdd: true });
+        this.setState({ showDue: false });
+      }
+
+      showDueAssignment = (e) => {
+        e.preventDefault();
+        this.setState({ showAdd: false });
+        this.setState({ showDue: true });
       }
 
       checkAssignment = (classArray, selectedDate, selectedDay) => {
@@ -65,6 +114,9 @@ class AssignmentsMain extends React.Component {
         assignmentData.getAssignmentByStudentId(studentId)
           .then((assignments) => {
             for (let i = 0; i < assignments.length; i += 1) {
+              if (assignments[i].classId === 53) {
+                assignments.splice(i, 1);
+              }
               const assignmentDate = assignments[i].dateAssigned.split('T');
               if (assignmentDate[0] === selectedDate) {
                 for (let j = 0; j < newArray.length; j += 1) {
@@ -93,10 +145,13 @@ class AssignmentsMain extends React.Component {
         const {
           students,
           showAdd,
+          showDue,
           classes,
           assignmentTypes,
           assignments,
           selectedStudent,
+          noClasses,
+          dueAssignments,
         } = this.state;
 
         return (
@@ -114,12 +169,31 @@ class AssignmentsMain extends React.Component {
                 <div className="buttonContainer">
                     { showAdd ? ('')
                       : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
-                <Button variant="secondary" className="formButton mr-3">Due</Button>
+                { showDue ? ('')
+                  : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
                 <Button variant="secondary" className="formButton mr-3">Completed</Button>
                 </div>
                 </div>
                 </div>
-                { showAdd ? (<AssignmentsAdd classes={classes} assignmentTypes={assignmentTypes} assignments={assignments} selectedStudent={selectedStudent} checkAssignment={this.checkAssignment} />)
+                { noClasses ? (<div className="warning mt-5">This student has no classes! Please add a class to continue.</div>)
+                  : ('') }
+                { showAdd && !noClasses ? (<AssignmentsAdd
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    assignments={assignments}
+                    selectedStudent={selectedStudent}
+                    checkAssignment={this.checkAssignment}
+                    editMode={false} />)
+                  : ('')}
+                { showDue && !noClasses ? (<AssignmentsDue
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    assignments={assignments}
+                    dueAssignments={dueAssignments}
+                    selectedStudent={selectedStudent}
+                    checkAssignment={this.checkAssignment}
+                    deleteAssignment={this.deleteAssingment}
+                    getDueAssignments={this.getDueAssignments} />)
                   : ('')}
             </div>
         );
