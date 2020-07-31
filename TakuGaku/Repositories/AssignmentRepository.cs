@@ -36,7 +36,7 @@ namespace TakuGaku.Repositories
         {
             var sql = @"SELECT studentId, avg(grade) as GPA
                         FROM assignment
-                        WHERE Completed = 1
+                        WHERE Completed = 1 AND Grade != 0.00 AND classId != 53
                         GROUP BY studentId";
 
             using (var db = new SqlConnection(ConnectionString))

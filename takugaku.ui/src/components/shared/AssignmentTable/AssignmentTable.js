@@ -52,11 +52,7 @@ class AssignmentTable extends React.Component {
         letterGrade = 'F';
       }
 
-      this.setState({ letterGrade });
-    }
-
-    componentDidMount() {
-      this.setLetterGrade();
+      return (letterGrade);
     }
 
     render() {
@@ -64,7 +60,7 @@ class AssignmentTable extends React.Component {
       const dateAssigned = moment(assignment.dateAssigned).format('MMMM Do YYYY');
       const dateDue = moment(assignment.dateDue).format('MMMM Do YYYY');
       const dateComplete = moment(assignment.dateComplete).format('MMMM Do YYYY');
-      const grade = this.state.letterGrade;
+      const grade = this.setLetterGrade();
 
       return (
             <tr className="AssignmentTable">
