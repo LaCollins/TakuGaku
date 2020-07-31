@@ -1,9 +1,8 @@
 @import '../../../styles/variables';
 
-.AssignmentsMain {
-    margin-top: 150px;
+.AssignmentsComplete {
 
-    h1 {
+    h3 {
         margin-top: 20px;
         font-family: $titleFont;
     }
@@ -24,10 +23,6 @@
         font-size: 1.5em;
     }
 
-    td {
-        width: 170px;
-    }
-
     .buttonContainer {
         margin-top: 20px;
         font-family: 'Bubblegum Sans', cursive;
@@ -37,5 +32,16 @@
             width: 150px;
             box-shadow: 5px 10px 10px rgb(55, 55, 55);
         }
+    }
+}
+
+.buttonContainer {
+    margin-top: 20px;
+    font-family: 'Bubblegum Sans', cursive;
+
+    .formButton {
+        font-size: 1.5em;
+        width: 150px;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
     }
 }

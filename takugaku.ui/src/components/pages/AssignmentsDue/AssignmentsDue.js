@@ -83,6 +83,7 @@ class AssignmentsDue extends React.Component {
                             assignment={assignment}
                             deleteAssignment={this.props.deleteAssignment}
                             setAssignmentToEdit={this.setAssignmentToEdit}
+                            complete={false}
                              />)}
                     </tbody>
                     </Table>

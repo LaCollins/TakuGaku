@@ -36,7 +36,7 @@ namespace TakuGaku.Repositories
         {
             var sql = @"SELECT studentId, avg(grade) as GPA
                         FROM assignment
-                        WHERE Completed = 1
+                        WHERE Completed = 1 AND Grade != 0.00 AND classId != 53
                         GROUP BY studentId";
 
             using (var db = new SqlConnection(ConnectionString))
@@ -123,6 +123,27 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public IEnumerable<CompletedAssignment> GetCompletedAssignments(int studentId)
+        {
+            var sql = @"SELECT assignment.assignmentId, classSchedule.classTitle as className, 
+                        assignment.assignmentTitle, assignmentType.assignmentType, assignment.dateAssigned,
+                        assignment.dateDue, assignment.dateComplete, assignment.grade
+                        FROM assignment
+                        JOIN classSchedule
+                        ON assignment.classId = classSchedule.classId
+                        JOIN assignmentType
+                        ON assignment.assignmentTypeId = assignmentType.assignmentTypeId
+                        WHERE assignment.completed = 1 AND assignment.StudentId = @studentId
+                        ORDER BY dateAssigned";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var assignments = db.Query<CompletedAssignment>(sql, new { StudentId = studentId });
+
+                return assignments;
+            }
+        }
+
         public Assignment GetAssignmentById(int assignmentId)
         {
             var sql = @"SELECT *
@@ -148,6 +169,19 @@ namespace TakuGaku.Repositories
                 var result = db.QueryFirstOrDefault<Assignment>(sql, assignmentToAdd);
 
                 return result;
+            }
+        }
+
+        public string UpdateGrade(int assignmentId, decimal grade)
+        {
+            var sql = @"UPDATE assignment
+                        SET grade = @grade
+                        WHERE assignmentId = @assignmentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId, Grade = grade });
+                return ("Successfully added grade");
             }
         }
 

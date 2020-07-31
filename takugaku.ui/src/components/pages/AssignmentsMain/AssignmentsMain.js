@@ -7,18 +7,21 @@ import assignmentData from '../../../helpers/data/assignmentData';
 import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
 import AssignmentsDue from '../AssignmentsDue/AssignmentsDue';
 import scheduleData from '../../../helpers/data/scheduleData';
+import AssignmentsComplete from '../AssignmentsComplete/AssignmentsComplete';
 
 class AssignmentsMain extends React.Component {
     state = {
       students: [],
       showAdd: false,
       showDue: false,
+      showComplete: false,
       selectedStudent: '',
       classes: [],
       assignmentTypes: [],
       assignments: [],
       noClasses: false,
       dueAssignments: [],
+      completedAssignments: [],
     }
 
     deleteAssingment = (assignmentId) => {
@@ -42,6 +45,7 @@ class AssignmentsMain extends React.Component {
             this.setState({ classes: response, noClasses: false });
             this.getAssignments(this.state.selectedStudent);
             this.getDueAssignments(this.state.selectedStudent);
+            this.getCompleteAssignments(this.state.selectedStudent);
           }
         })
         .catch((error) => console.error(error, 'error from studentChange'));
@@ -85,26 +89,43 @@ class AssignmentsMain extends React.Component {
         assignmentData.getDueAssignmentsByStudentId(studentId)
           .then((response) => {
             const assignments = response;
-            for (let i = 0; i < assignments.length; i += 1) {
-              if (assignments[i].className === 'archive') {
-                assignments.splice(i, 1);
-              }
-            }
-            this.setState({ dueAssignments: assignments });
+            const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
+            this.setState({ dueAssignments: filteredAssignments });
           })
-          .catch(() => this.setState({ dueAssignments: [], showAdd: false, showDue: true }));
+          .catch(() => this.setState({ dueAssignments: [] }));
+      }
+
+      getCompleteAssignments = (studentId) => {
+        assignmentData.getCompletedAssignmentsByStudentId(studentId)
+          .then((response) => {
+            const assignments = response;
+            const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
+            this.setState({ completedAssignments: filteredAssignments });
+          })
+          .catch(() => this.setState({
+            completedAssignments: [],
+          }));
       }
 
       showAddAssignment = (e) => {
         e.preventDefault();
         this.setState({ showAdd: true });
         this.setState({ showDue: false });
+        this.setState({ showComplete: false });
       }
 
       showDueAssignment = (e) => {
         e.preventDefault();
         this.setState({ showAdd: false });
         this.setState({ showDue: true });
+        this.setState({ showComplete: false });
+      }
+
+      showCompleteAssignment = (e) => {
+        e.preventDefault();
+        this.setState({ showAdd: false });
+        this.setState({ showDue: false });
+        this.setState({ showComplete: true });
       }
 
       checkAssignment = (classArray, selectedDate, selectedDay) => {
@@ -152,6 +173,8 @@ class AssignmentsMain extends React.Component {
           selectedStudent,
           noClasses,
           dueAssignments,
+          showComplete,
+          completedAssignments,
         } = this.state;
 
         return (
@@ -167,11 +190,22 @@ class AssignmentsMain extends React.Component {
                   {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
                 </select>
                 <div className="buttonContainer">
-                    { showAdd ? ('')
-                      : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
-                { showDue ? ('')
-                  : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
-                <Button variant="secondary" className="formButton mr-3">Completed</Button>
+                <table>
+                    <tr>
+                        <td>
+                        { showAdd ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
+                        </td>
+                        <td>
+                        { showDue ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
+                        </td>
+                        <td>
+                        { showComplete ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showCompleteAssignment}>Completed</Button>) }
+                        </td>
+                    </tr>
+                </table>
                 </div>
                 </div>
                 </div>
@@ -194,6 +228,14 @@ class AssignmentsMain extends React.Component {
                     checkAssignment={this.checkAssignment}
                     deleteAssignment={this.deleteAssingment}
                     getDueAssignments={this.getDueAssignments} />)
+                  : ('')}
+                { showComplete && !noClasses ? (<AssignmentsComplete
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    assignments={assignments}
+                    completedAssignments={completedAssignments}
+                    selectedStudent={selectedStudent}
+                    getCompleteAssignments={this.getCompleteAssignments} />)
                   : ('')}
             </div>
         );

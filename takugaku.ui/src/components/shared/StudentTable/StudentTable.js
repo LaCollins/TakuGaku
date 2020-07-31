@@ -6,14 +6,14 @@ import assignmentData from '../../../helpers/data/assignmentData';
 
 class StudentTable extends React.Component {
     state = {
-      gpa: {},
+      gpa: 0,
     }
 
     getGPA = () => {
       const { studentId } = this.props.student;
       assignmentData.getGpaByStudentId(studentId)
         .then((response) => {
-          this.setState({ gpa: response });
+          this.setState({ gpa: response.gpa.toFixed(2) });
         })
         .catch((error) => console.error(error, 'error from get GPA'));
     }
@@ -38,8 +38,8 @@ class StudentTable extends React.Component {
                 <td>{birthday[0]}</td>
                 <td>{student.gradeYear}</td>
                 <td><Link to={`/manage/schedules/${student.studentId}`}>Schedule</Link></td>
-                <td><Link to={`/assignments/${student.studentId}`}>Assignments</Link></td>
-                <td>{gpa.gpa}</td>
+                <td><Link to={'/manage/assignments'}>Assignments</Link></td>
+                <td>{gpa}</td>
                 <td><Link to={`/manage/edit/${student.studentId}`} className="btn btn-secondary m-0">
                   <i className="m-1 fas fa-edit"></i></Link> <Button variant="secondary" className="m-0" onClick={this.deleteStudentEvent}>
                     <i className="m-1 fas fa-trash-alt"></i></Button></td>
