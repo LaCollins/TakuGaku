@@ -143,7 +143,6 @@ class AssignmentsAdd extends React.Component {
       };
       assignmentData.updateAssignment(assignmentId, updatedAssignment)
         .then(() => {
-        //   this.getSchedule();
           this.props.setModalHide();
           this.setState({ invalidAssignment: false });
         })

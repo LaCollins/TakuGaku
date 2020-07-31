@@ -4,9 +4,9 @@ import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 
 class AssignmentTable extends React.Component {
-    state = {
-      needsGrade: false,
-    }
+   state = {
+     letterGrade: '',
+   }
 
     deleteAssignmentEvent = () => {
       const { assignmentId } = this.props.assignment;
@@ -18,22 +18,54 @@ class AssignmentTable extends React.Component {
       this.props.setAssignmentToEdit(assignmentId);
     }
 
-    checkGrade = () => {
-      if (this.props.assignment.grade === 0) {
-        this.setState({ needsGrade: true });
+    addGrade = () => {
+      const { assignmentId } = this.props.assignment;
+      this.props.setGradeModalShow(assignmentId);
+    }
+
+    setLetterGrade = () => {
+      const { grade } = this.props.assignment;
+      let letterGrade = '';
+      if (grade >= 3.9) {
+        letterGrade = 'A+';
+      } else if (grade >= 3.7 && grade < 3.9) {
+        letterGrade = 'A';
+      } else if (grade >= 3.5 && grade < 3.7) {
+        letterGrade = 'A-';
+      } else if (grade >= 3.3 && grade < 3.5) {
+        letterGrade = 'B+';
+      } else if (grade >= 3.0 && grade < 3.3) {
+        letterGrade = 'B';
+      } else if (grade >= 2.7 && grade < 3.0) {
+        letterGrade = 'B-';
+      } else if (grade >= 2.3 && grade < 2.7) {
+        letterGrade = 'C+';
+      } else if (grade >= 2.0 && grade < 2.3) {
+        letterGrade = 'C';
+      } else if (grade >= 1.7 && grade < 2.0) {
+        letterGrade = 'C-';
+      } else if (grade >= 1.3 && grade < 1.7) {
+        letterGrade = 'D+';
+      } else if (grade >= 1.0 && grade < 1.3) {
+        letterGrade = 'D';
+      } else if (grade < 1.0) {
+        letterGrade = 'F';
       }
+
+      this.setState({ letterGrade });
     }
 
     componentDidMount() {
-      this.checkGrade();
+      this.setLetterGrade();
     }
 
     render() {
-      const { needsGrade } = this.state;
       const { assignment, complete } = this.props;
       const dateAssigned = moment(assignment.dateAssigned).format('MMMM Do YYYY');
       const dateDue = moment(assignment.dateDue).format('MMMM Do YYYY');
       const dateComplete = moment(assignment.dateComplete).format('MMMM Do YYYY');
+      const grade = this.state.letterGrade;
+
       return (
             <tr className="AssignmentTable">
             <td>{assignment.className}</td>
@@ -42,9 +74,7 @@ class AssignmentTable extends React.Component {
             <td>{dateAssigned}</td>
             { complete ? (<td>{dateComplete}</td>)
               : (<td>{dateDue}</td>)}
-            { complete && !needsGrade ? (<td>{assignment.grade}</td>)
-              : ('') }
-            { complete && needsGrade ? (<td><Button variant="secondary" className="edit m-0 mr-2" onClick={this.editAssignmentEvent}><i className="m-1 fas fa-edit"></i></Button></td>)
+            { complete ? (<td>{grade} <Button variant="secondary" className="edit m-0 mr-0 ml-2" onClick={this.addGrade}><i className="m-1 fas fa-edit"></i></Button></td>)
               : ('') }
             { complete ? ('')
               : (<td><Button variant="secondary" className="edit m-0 mr-2" onClick={this.editAssignmentEvent}><i className="m-1 fas fa-edit"></i></Button>

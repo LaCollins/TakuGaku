@@ -150,6 +150,14 @@ namespace TakuGaku.Controllers
             }
         }
 
+        [HttpPut("updategrade/{assignmentId}/{grade}")]
+        public IActionResult updateGrade(int assignmentId, decimal grade)
+        {
+            var updatedAssignment = _assignmentRepository.UpdateGrade(assignmentId, grade);
+            return Ok(updatedAssignment);
+        }
+
+
         // update assignment
         [HttpPut("update/{assignmentId}")]
         public IActionResult UpdateAssignment(int assignmentId, Assignment updatedAssignment)

@@ -100,7 +100,6 @@ class AssignmentsMain extends React.Component {
           .then((response) => {
             const assignments = response;
             const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
-
             this.setState({ completedAssignments: filteredAssignments });
           })
           .catch(() => this.setState({
@@ -235,7 +234,8 @@ class AssignmentsMain extends React.Component {
                     assignmentTypes={assignmentTypes}
                     assignments={assignments}
                     completedAssignments={completedAssignments}
-                    selectedStudent={selectedStudent}/>)
+                    selectedStudent={selectedStudent}
+                    getCompleteAssignments={this.getCompleteAssignments} />)
                   : ('')}
             </div>
         );

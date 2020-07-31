@@ -172,6 +172,19 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public string UpdateGrade(int assignmentId, decimal grade)
+        {
+            var sql = @"UPDATE assignment
+                        SET grade = @grade
+                        WHERE assignmentId = @assignmentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId, Grade = grade });
+                return ("Successfully added grade");
+            }
+        }
+
         public Assignment UpdateAssignment(int assignmentId, Assignment updatedAssignment)
         {
             var sql = @"UPDATE assignment
