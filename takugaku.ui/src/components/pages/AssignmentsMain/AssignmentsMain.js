@@ -182,14 +182,18 @@ class AssignmentsMain extends React.Component {
                     assignmentTypes={assignmentTypes}
                     assignments={assignments}
                     selectedStudent={selectedStudent}
-                    checkAssignment={this.checkAssignment} />)
+                    checkAssignment={this.checkAssignment}
+                    editMode={false} />)
                   : ('')}
                 { showDue && !noClasses ? (<AssignmentsDue
                     classes={classes}
                     assignmentTypes={assignmentTypes}
+                    assignments={assignments}
                     dueAssignments={dueAssignments}
                     selectedStudent={selectedStudent}
-                    deleteAssignment={this.deleteAssingment} />)
+                    checkAssignment={this.checkAssignment}
+                    deleteAssignment={this.deleteAssingment}
+                    getDueAssignments={this.getDueAssignments} />)
                   : ('')}
             </div>
         );

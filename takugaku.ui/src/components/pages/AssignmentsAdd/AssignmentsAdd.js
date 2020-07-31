@@ -22,6 +22,9 @@ class AssignmentsAdd extends React.Component {
       title: '',
       studentId: '',
       invalidAssignment: false,
+      editMode: false,
+      classTitle: '',
+      assignmentTypeLabel: '',
     }
 
     classChange = (e) => {
@@ -32,9 +35,12 @@ class AssignmentsAdd extends React.Component {
     }
 
     weekdayChange = (e) => {
-      e.preventDefault();
+      const { classes } = this.state;
       this.setState({ dayOfWeek: e.target.value });
-      this.checkClassDay(e.target.value);
+      this.checkClassDay(e.target.value, classes);
+      if (this.state.assignedDate !== '') {
+        this.checkSelectedDateDay(this.state.assignedDate, e.target.value);
+      }
     }
 
     assignmentTypeChange = (e) => {
@@ -60,7 +66,7 @@ class AssignmentsAdd extends React.Component {
     assginedDateChange = (e) => {
       e.preventDefault();
       this.setState({ assignedDate: e.target.value });
-      this.checkSelectedDateDay(e.target.value);
+      this.checkSelectedDateDay(e.target.value, this.state.dayOfWeek);
     }
 
     dueDateChange = (e) => {
@@ -68,8 +74,7 @@ class AssignmentsAdd extends React.Component {
       this.setState({ dueDate: e.target.value });
     }
 
-    checkClassDay = (dayOfWeek) => {
-      const { classes } = this.state;
+    checkClassDay = (dayOfWeek, classes) => {
       const filteredClasses = [];
       for (let i = 0; i < classes.length; i += 1) {
         if (dayOfWeek === classes[i].dayOfWeek) {
@@ -79,10 +84,9 @@ class AssignmentsAdd extends React.Component {
       this.setState({ filteredClasses });
     }
 
-    checkSelectedDateDay = (day) => {
-      const { dayOfWeek } = this.state;
+    checkSelectedDateDay = (day, weekday) => {
       const selectedDay = moment(day).format('dddd').toLowerCase();
-      if (selectedDay === dayOfWeek) {
+      if (selectedDay === weekday) {
         this.setState({ daysMatch: true });
       } else {
         this.setState({ daysMatch: false });
@@ -112,6 +116,38 @@ class AssignmentsAdd extends React.Component {
         return 0;
       });
       this.setState({ classes });
+    }
+
+    assignmentUpdateEvent = () => {
+      const { assignmentId } = this.props.singleAssignment;
+      const {
+        details, assignedDate, dueDate, url, title,
+      } = this.state;
+      const studentId = parseInt(this.state.studentId, 10);
+      const subjectId = parseInt(this.state.subjectId, 10);
+      const classId = parseInt(this.state.classId, 10);
+      const assignmentTypeId = parseInt(this.state.assignmentTypeId, 10);
+      const updatedAssignment = {
+        studentId,
+        classId,
+        assignmentTypeId,
+        subjectId,
+        instructions: details,
+        completed: false,
+        grade: 0,
+        dateAssigned: assignedDate,
+        dateDue: dueDate,
+        dateComplete: '1900-01-01T00:00:00',
+        assignmentTitle: title,
+        link: url,
+      };
+      assignmentData.updateAssignment(assignmentId, updatedAssignment)
+        .then(() => {
+        //   this.getSchedule();
+          this.props.setModalHide();
+          this.setState({ invalidAssignment: false });
+        })
+        .catch((error) => console.error(error, 'error from assignmentupdate'));
     }
 
     saveAssignmentEvent = (e) => {
@@ -183,10 +219,49 @@ class AssignmentsAdd extends React.Component {
           this.props.checkAssignment(newArray, this.state.assignedDate, this.state.dayOfWeek);
         }
 
+        checkEditOrCreate = (e) => {
+          e.preventDefault();
+          const { editMode } = this.state;
+          if (editMode) {
+            this.assignmentUpdateEvent();
+          } else {
+            this.saveAssignmentEvent();
+          }
+        }
+
         componentDidMount() {
           this.removeLunch();
           this.setState({ assignments: this.props.assignments });
           this.setState({ studentId: this.props.selectedStudent });
+          this.setState({ editMode: this.props.editMode });
+          this.setState({ classes: this.props.classes });
+          if (this.props.editMode) {
+            const dayOfWeek = moment(this.props.singleAssignment.dateAssigned.split('T')[0]).format('dddd').toLowerCase();
+            this.setState({
+              studentId: this.props.selectedStudent,
+              classId: this.props.singleAssignment.classId,
+              assignmentTypeId: this.props.singleAssignment.assignmentTypeId,
+              subjectId: this.props.singleAssignment.subjectId,
+              details: this.props.singleAssignment.instructions,
+              completed: false,
+              assignedDate: this.props.singleAssignment.dateAssigned.split('T')[0],
+              dueDate: this.props.singleAssignment.dateDue.split('T')[0],
+              title: this.props.singleAssignment.assignmentTitle,
+              url: this.props.singleAssignment.link,
+              dayOfWeek,
+            });
+            this.checkClassDay(dayOfWeek, this.props.classes);
+            for (let i = 0; i < this.props.classes.length; i += 1) {
+              if (this.props.classes[i].classId === this.props.singleAssignment.classId) {
+                this.setState({ classTitle: this.props.classes[i].classTitle });
+              }
+            }
+            for (let j = 0; j < this.props.assignmentTypes.length; j += 1) {
+              if (this.props.assignmentTypes[j].assignmentTypeId === this.props.singleAssignment.assignmentTypeId) {
+                this.setState({ assignmentTypeLabel: this.props.assignmentTypes[j].assignmentType });
+              }
+            }
+          }
         }
 
         render() {
@@ -201,29 +276,36 @@ class AssignmentsAdd extends React.Component {
             url,
             title,
             invalidAssignment,
+            editMode,
+            classTitle,
+            classId,
+            assignmentTypeLabel,
           } = this.state;
           const { assignmentTypes } = this.props;
 
           return (
             <div className="AssignmentsAdd container">
                 <h3>Add Assignment</h3>
-                <form className="formContainer" onSubmit={this.saveAssignmentEvent}>
+                <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
                 <div className="col-auto ml-2">
-                <label htmlFor="class" className="col-form-label">Day of the Week:</label>
-                <select type="class" className="custom-select mr-sm-2" id="class" onChange={this.weekdayChange} required>
-                  <option defaultValue="">Choose...</option>
+                <label htmlFor="weekday" className="col-form-label">Day of the Week:</label>
+                <select type="class" className="custom-select mr-sm-2" id="weekday" onChange={this.weekdayChange} required>
+                 {editMode ? (<option defaultValue={dayOfWeek}>{dayOfWeek}</option>)
+                   : (<option defaultValue="">Choose...</option>)}
                   {weekDayArray.map((weekday) => (<option key={weekday} value={weekday}>{weekday}</option>))}
                 </select>
                 { dayOfWeek === '' ? ('')
                   : (<div className="classSelector"><label htmlFor="class" className="col-form-label">Class:</label>
-                 <select type="class" className="custom-select mr-sm-2" id="class" onChange={this.classChange} required>
-                  <option defaultValue="">Choose...</option>
+                 <select className="custom-select mr-sm-2" id="class" onChange={this.classChange} required>
+                {editMode ? (<option defaultValue={classId}>{classTitle}</option>)
+                  : (<option defaultValue="">Choose...</option>) }
                   {filteredClasses.map((classSlot) => (<option key={classSlot.classId} value={`${classSlot.classId} ${classSlot.subjectId}`}>{classSlot.classTitle}</option>))}
                 </select></div>)}
                 <label htmlFor="assignmentType" className="col-form-label">Assignment Type:</label>
                 <select type="assignmentType" className="custom-select mr-sm-2" id="assignmentType" onChange={this.assignmentTypeChange} required>
-                  <option defaultValue="">Choose...</option>
+                {editMode ? (<option defaultValue={this.state.assignmentTypeId}>{assignmentTypeLabel}</option>)
+                  : (<option defaultValue="">Choose...</option>)}
                   {assignmentTypes.map((at) => (<option key={at.assignmentTypeId} value={at.assignmentTypeId}>{at.assignmentType}</option>))}
                 </select>
                 { daysMatch ? ('')
@@ -259,8 +341,14 @@ class AssignmentsAdd extends React.Component {
                 <div className="buttonContainer">
                     {invalidAssignment ? (<div className="warning">There is already an assignment for that class day.</div>)
                       : ('')}
-                { daysMatch ? (<Button variant="secondary" className="formButton" type="submit">Add Assignment</Button>)
-                  : (<Button variant="secondary" disabled className="formButton" type="submit">Add Assignment</Button>)}
+                { daysMatch && !editMode ? (<Button variant="secondary" className="formButton" type="submit">Add Assignment</Button>)
+                  : ('') }
+                { !daysMatch && !editMode ? (<Button variant="secondary" disabled className="formButton" type="submit">Add Assignment</Button>)
+                  : ('')}
+                { daysMatch && editMode ? (<Button variant="secondary" className="formButton" type="submit">Save Changes</Button>)
+                  : ('') }
+                { !daysMatch && editMode ? (<Button variant="secondary" disabled className="formButton" type="submit">Save Changes</Button>)
+                  : ('')}
                 </div>
                 </div>
                 </div>

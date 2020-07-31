@@ -6,4 +6,31 @@
         margin-top: 20px;
         font-family: $titleFont;
     }
+
+    .col-form-label {
+        font-family: $titleFont;
+        font-size: large;
+    }
+
+    .form-control {
+        width: 400px;
+        font-family: $buttonFont;
+    }
+
+    .warning {
+        color: red;
+        font-family: $buttonFont;
+        font-size: 1.5em;
+    }
+
+    .buttonContainer {
+        margin-top: 20px;
+        font-family: 'Bubblegum Sans', cursive;
+
+        .formButton {
+            font-size: 1.5em;
+            width: 150px;
+            box-shadow: 5px 10px 10px rgb(55, 55, 55);
+        }
+    }
 }

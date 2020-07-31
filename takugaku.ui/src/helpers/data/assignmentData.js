@@ -23,6 +23,16 @@ const getAssignmentByStudentId = (studentId) => new Promise((resolve, reject) =>
     .catch((error) => reject(error));
 });
 
+const getSingleAssignment = (assignmentId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/takugagku/assignments/assignment/${assignmentId}`)
+    .then((result) => {
+      const assignment = result.data;
+
+      resolve(assignment);
+    })
+    .catch((error) => reject(error));
+});
+
 const getAssignmentByStudentDateClass = (studentId, date, classId) => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/takugagku/assignments/student/${studentId}/date/${date}/classId/${classId}`)
     .then((result) => {
@@ -52,6 +62,8 @@ const getDueAssignmentsByStudentId = (studentId) => new Promise((resolve, reject
     .catch((error) => reject(error));
 });
 
+const updateAssignment = (assignmentId, assignmentInfo) => axios.put(`${baseUrl}/api/takugagku/assignments/update/${assignmentId}`, assignmentInfo);
+
 const addAssignment = (newAssignment) => axios.post(`${baseUrl}/api/takugagku/assignments`, newAssignment);
 
 const deleteAssignment = (assignmentId) => axios.delete(`${baseUrl}/api/takugagku/assignments/delete/${assignmentId}`);
@@ -64,4 +76,6 @@ export default {
   addAssignment,
   getDueAssignmentsByStudentId,
   deleteAssignment,
+  getSingleAssignment,
+  updateAssignment,
 };
