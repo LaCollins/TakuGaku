@@ -7,12 +7,14 @@ import assignmentData from '../../../helpers/data/assignmentData';
 import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
 import AssignmentsDue from '../AssignmentsDue/AssignmentsDue';
 import scheduleData from '../../../helpers/data/scheduleData';
+import AssignmentsComplete from '../AssignmentsComplete/AssignmentsComplete';
 
 class AssignmentsMain extends React.Component {
     state = {
       students: [],
       showAdd: false,
       showDue: false,
+      showComplete: false,
       selectedStudent: '',
       classes: [],
       assignmentTypes: [],
@@ -99,12 +101,21 @@ class AssignmentsMain extends React.Component {
         e.preventDefault();
         this.setState({ showAdd: true });
         this.setState({ showDue: false });
+        this.setState({ showComplete: false });
       }
 
       showDueAssignment = (e) => {
         e.preventDefault();
         this.setState({ showAdd: false });
         this.setState({ showDue: true });
+        this.setState({ showComplete: false });
+      }
+
+      showCompleteAssignment = (e) => {
+        e.preventDefault();
+        this.setState({ showAdd: false });
+        this.setState({ showDue: false });
+        this.setState({ showComplete: true });
       }
 
       checkAssignment = (classArray, selectedDate, selectedDay) => {
@@ -152,6 +163,7 @@ class AssignmentsMain extends React.Component {
           selectedStudent,
           noClasses,
           dueAssignments,
+          showComplete,
         } = this.state;
 
         return (
@@ -167,11 +179,22 @@ class AssignmentsMain extends React.Component {
                   {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
                 </select>
                 <div className="buttonContainer">
-                    { showAdd ? ('')
-                      : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
-                { showDue ? ('')
-                  : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
-                <Button variant="secondary" className="formButton mr-3">Completed</Button>
+                <table>
+                    <tr>
+                        <td>
+                        { showAdd ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
+                        </td>
+                        <td>
+                        { showDue ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
+                        </td>
+                        <td>
+                        { showComplete ? ('')
+                          : (<Button variant="secondary" className="formButton mr-3" onClick={this.showCompleteAssignment}>Completed</Button>) }
+                        </td>
+                    </tr>
+                </table>
                 </div>
                 </div>
                 </div>
@@ -194,6 +217,8 @@ class AssignmentsMain extends React.Component {
                     checkAssignment={this.checkAssignment}
                     deleteAssignment={this.deleteAssingment}
                     getDueAssignments={this.getDueAssignments} />)
+                  : ('')}
+                { showComplete && !noClasses ? (<AssignmentsComplete />)
                   : ('')}
             </div>
         );

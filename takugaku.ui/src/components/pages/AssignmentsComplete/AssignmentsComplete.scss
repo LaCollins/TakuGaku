@@ -1,9 +1,8 @@
 @import '../../../styles/variables';
 
-.AssignmentsMain {
-    margin-top: 150px;
+.AssignmentsComplete {
 
-    h1 {
+    h3 {
         margin-top: 20px;
         font-family: $titleFont;
     }
@@ -22,10 +21,6 @@
         color: red;
         font-family: $buttonFont;
         font-size: 1.5em;
-    }
-
-    td {
-        width: 170px;
     }
 
     .buttonContainer {

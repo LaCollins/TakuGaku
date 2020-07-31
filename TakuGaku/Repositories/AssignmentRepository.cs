@@ -123,6 +123,27 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public IEnumerable<CompletedAssignment> GetCompletedAssignments(int studentId)
+        {
+            var sql = @"SELECT assignment.assignmentId, classSchedule.classTitle as className, 
+                        assignment.assignmentTitle, assignmentType.assignmentType, assignment.dateAssigned,
+                        assignment.dateDue, assignment.dateComplete, assignment.grade
+                        FROM assignment
+                        JOIN classSchedule
+                        ON assignment.classId = classSchedule.classId
+                        JOIN assignmentType
+                        ON assignment.assignmentTypeId = assignmentType.assignmentTypeId
+                        WHERE assignment.completed = 1 AND assignment.StudentId = @studentId
+                        ORDER BY dateAssigned";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var assignments = db.Query<CompletedAssignment>(sql, new { StudentId = studentId });
+
+                return assignments;
+            }
+        }
+
         public Assignment GetAssignmentById(int assignmentId)
         {
             var sql = @"SELECT *

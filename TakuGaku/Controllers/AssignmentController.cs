@@ -120,6 +120,18 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("complete/studentId/{studentId}")]
+        public IActionResult GetCompletedAssignments(int studentId)
+        {
+            var result = _assignmentRepository.GetCompletedAssignments(studentId);
+
+            if (!result.Any())
+            {
+                return NotFound("no assignments found");
+            }
+            return Ok(result);
+        }
+
         //Add assignment
         [HttpPost]
         public IActionResult AddAssignment(Assignment assignmentToAdd)

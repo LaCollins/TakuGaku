@@ -39,4 +39,16 @@ namespace TakuGaku.Models
         public DateTime DateDue { get; set; }
     }
 
+    public class CompletedAssignment
+    {
+        public int AssignmentId { get; set; }
+        public string ClassName { get; set; }
+        public string AssignmentTitle { get; set; }
+        public string AssignmentType { get; set; }
+        public DateTime DateAssigned { get; set; }
+        public DateTime DateDue { get; set; }
+        public DateTime DateComplete { get; set; }
+        public decimal Grade { get; set; }
+    }
+
 }
