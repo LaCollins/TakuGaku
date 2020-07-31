@@ -21,6 +21,7 @@ class AssignmentsMain extends React.Component {
       assignments: [],
       noClasses: false,
       dueAssignments: [],
+      completedAssignments: [],
     }
 
     deleteAssingment = (assignmentId) => {
@@ -44,6 +45,7 @@ class AssignmentsMain extends React.Component {
             this.setState({ classes: response, noClasses: false });
             this.getAssignments(this.state.selectedStudent);
             this.getDueAssignments(this.state.selectedStudent);
+            this.getCompleteAssignments(this.state.selectedStudent);
           }
         })
         .catch((error) => console.error(error, 'error from studentChange'));
@@ -87,14 +89,23 @@ class AssignmentsMain extends React.Component {
         assignmentData.getDueAssignmentsByStudentId(studentId)
           .then((response) => {
             const assignments = response;
-            for (let i = 0; i < assignments.length; i += 1) {
-              if (assignments[i].className === 'archive') {
-                assignments.splice(i, 1);
-              }
-            }
-            this.setState({ dueAssignments: assignments });
+            const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
+            this.setState({ dueAssignments: filteredAssignments });
           })
-          .catch(() => this.setState({ dueAssignments: [], showAdd: false, showDue: true }));
+          .catch(() => this.setState({ dueAssignments: [] }));
+      }
+
+      getCompleteAssignments = (studentId) => {
+        assignmentData.getCompletedAssignmentsByStudentId(studentId)
+          .then((response) => {
+            const assignments = response;
+            const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
+
+            this.setState({ completedAssignments: filteredAssignments });
+          })
+          .catch(() => this.setState({
+            completedAssignments: [],
+          }));
       }
 
       showAddAssignment = (e) => {
@@ -164,6 +175,7 @@ class AssignmentsMain extends React.Component {
           noClasses,
           dueAssignments,
           showComplete,
+          completedAssignments,
         } = this.state;
 
         return (
@@ -218,7 +230,12 @@ class AssignmentsMain extends React.Component {
                     deleteAssignment={this.deleteAssingment}
                     getDueAssignments={this.getDueAssignments} />)
                   : ('')}
-                { showComplete && !noClasses ? (<AssignmentsComplete />)
+                { showComplete && !noClasses ? (<AssignmentsComplete
+                    classes={classes}
+                    assignmentTypes={assignmentTypes}
+                    assignments={assignments}
+                    completedAssignments={completedAssignments}
+                    selectedStudent={selectedStudent}/>)
                   : ('')}
             </div>
         );
