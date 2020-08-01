@@ -51,6 +51,7 @@ class ReportCardTable extends React.Component {
               <td>{report.classTitle}</td>
               <td>{report.subjectType}</td>
               <td>{grade}</td>
+              <td>{report.grade}</td>
               </tr>
     );
   }

@@ -1,11 +1,13 @@
 import './ReportCards.scss';
 import { Redirect } from 'react-router-dom';
-import React from 'react';
+import React, { useRef } from 'react';
 import Table from 'react-bootstrap/Table';
 import moment from 'moment';
+import ReactToPrint from 'react-to-print';
 import studentData from '../../../helpers/data/studentData';
 import assignmentData from '../../../helpers/data/assignmentData';
 import ReportCardTable from '../../shared/ReportCardTable/ReportCardTable';
+import ComponentToPrint from './PrintComponent';
 
 class ReportCards extends React.Component {
     state = {
@@ -18,6 +20,7 @@ class ReportCards extends React.Component {
       selectedSemester: '',
       year: '',
       gpa: 0,
+      selectedStudentData: [],
     }
 
     semesterChange = (e) => {
@@ -99,6 +102,12 @@ class ReportCards extends React.Component {
 
     studentChange = (e) => {
       e.preventDefault();
+      const { students } = this.state;
+      for (let i = 0; i < students.length; i += 1) {
+        if (students[i].studentId === parseInt(e.target.value, 10)) {
+          this.setState({ selectedStudentData: students[i] });
+        }
+      }
       this.setState({ selectedStudent: e.target.value }, () => {
         if (this.state.selectedSemester !== '' && this.state.year !== '') {
           this.getReportCards();
@@ -143,15 +152,34 @@ class ReportCards extends React.Component {
                             report={report}
                              />)}
                       <tr>
-                        <td>Total:</td>
+                        <td>Total GPA:</td>
                         <td></td>
                         <td></td>
                         <td>{this.state.gpa}</td>
                       </tr>
                     </tbody>
         </Table>
+        <this.Printer />
         </div>
     )
+
+    Printer = () => {
+      const componentRef = useRef();
+      const student = this.state.selectedStudentData;
+      const { selectedSemester, year, reportCards, gpa } = this.state;
+
+      return (
+        <div>
+        <ReactToPrint
+          trigger={() => <button className="btn btn-secondary formButton">Print this out!</button>}
+          content={() => componentRef.current}
+        />
+        <div style={{ display: 'none' }}>
+          <ComponentToPrint ref={componentRef} student={student} semester={selectedSemester} year={year} reportCards={reportCards} gpa={gpa}/>
+        </div>
+        </div>
+      );
+    }
 
     componentDidMount() {
       this.getStudents();
