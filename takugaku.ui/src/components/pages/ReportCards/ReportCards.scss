@@ -3,8 +3,22 @@
 .ReportCards {
     margin-top: 150px;
 
-    h1 {
+    h1, h3 {
         margin-top: 20px;
         font-family: $titleFont;
+    }
+
+    .col-form-label {
+        font-family: $titleFont;
+        font-size: large;
+    }
+
+    .form-control {
+        width: 400px;
+        font-family: $buttonFont;
+    }
+
+    td {
+        width: 100px;
     }
 }

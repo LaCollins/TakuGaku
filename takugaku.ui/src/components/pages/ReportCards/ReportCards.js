@@ -15,32 +15,92 @@ class ReportCards extends React.Component {
       reportCards: [],
       selectedStudent: '',
       reportCardsRetrieved: false,
+      selectedSemester: '',
+      year: '',
+      gpa: 0,
     }
 
-    startDateChange = (e) => {
+    semesterChange = (e) => {
       e.preventDefault();
-      this.setState({ startDate: e.target.value }, () => {
-        if (this.state.endDate !== '' && this.state.selectedStudent !== '') {
-          this.getReportCards();
-          this.setState({ reportCardsRetrieved: true });
+      this.setState({ selectedSemester: e.target.value }, () => {
+        let startDate = '';
+        let endDate = '';
+        const { selectedSemester } = this.state;
+        if (this.state.year !== '' && selectedSemester === 'fall') {
+          const selectedYear = this.state.year.split('-')[0];
+          startDate = `08-01-${selectedYear}`;
+          endDate = `12-31-${selectedYear}`;
+        } else if (this.state.year !== '' && selectedSemester === 'spring') {
+          const selectedYear = this.state.year.split('-')[1];
+          startDate = `01-01-${selectedYear}`;
+          endDate = `05-31-${selectedYear}`;
+        } else if (this.state.year !== '' && selectedSemester === 'summer') {
+          const selectedYear = this.state.year.split('-')[1];
+          startDate = `06-01-${selectedYear}`;
+          endDate = `07-31-${selectedYear}`;
+        } else if (this.state.year !== '' && selectedSemester === 'fullYear') {
+          const selectedYear = this.state.year.split('-');
+          startDate = `08-01-${selectedYear[0]}`;
+          endDate = `07-31-${selectedYear[1]}`;
         }
+        this.setState({ startDate, endDate }, () => {
+          if (this.state.year !== '' && this.state.selectedStudent !== '') {
+            this.getReportCards();
+            assignmentData.getGpaByStudentId(this.state.selectedStudent)
+              .then((response) => {
+                this.setState({ reportCardsRetrieved: true, gpa: response.gpa.toFixed(2) });
+              })
+              .catch((error) => console.error(error));
+          }
+        });
       });
     }
 
-    endDateChange = (e) => {
+    yearChange = (e) => {
       e.preventDefault();
-      this.setState({ endDate: e.target.value }, () => {
-        if (this.state.endDate !== '' && this.state.selectedStudent !== '') {
-          this.getReportCards();
-          this.setState({ reportCardsRetrieved: true });
+      this.setState({ year: e.target.value }, () => {
+        let startDate = '';
+        let endDate = '';
+        const semester = this.state.selectedSemester;
+        const { year } = this.state;
+        if (semester !== '' && semester === 'fall') {
+          const selectedYear = year.split('-')[0];
+          startDate = `08-01-${selectedYear}`;
+          endDate = `12-31-${selectedYear}`;
+        } else if (semester !== '' && semester === 'spring') {
+          const selectedYear = year.split('-')[1];
+          startDate = `01-01-${selectedYear}`;
+          endDate = `05-31-${selectedYear}`;
+        } else if (semester !== '' && semester === 'summer') {
+          const selectedYear = year.split('-')[1];
+          startDate = `06-01-${selectedYear}`;
+          endDate = `07-31-${selectedYear}`;
+        } else if (semester !== '' && semester === 'fullYear') {
+          const selectedYear = year.split('-');
+          startDate = `08-01-${selectedYear[0]}`;
+          endDate = `07-31-${selectedYear[1]}`;
         }
+
+        this.setState({ startDate, endDate }, () => {
+          if (this.state.selectedSemester !== '' && this.state.selectedStudent !== '') {
+            this.getReportCards();
+            if (this.state.year !== '' && this.state.selectedStudent !== '') {
+              this.getReportCards();
+              assignmentData.getGpaByStudentId(this.state.selectedStudent)
+                .then((response) => {
+                  this.setState({ reportCardsRetrieved: true, gpa: response.gpa.toFixed(2) });
+                })
+                .catch((error) => console.error(error));
+            }
+          }
+        });
       });
     }
 
     studentChange = (e) => {
       e.preventDefault();
       this.setState({ selectedStudent: e.target.value }, () => {
-        if (this.state.endDate !== '' && this.state.startDate !== '') {
+        if (this.state.selectedSemester !== '' && this.state.year !== '') {
           this.getReportCards();
           this.setState({ reportCardsRetrieved: true });
         }
@@ -57,7 +117,7 @@ class ReportCards extends React.Component {
     }
 
     getReportCards = () => {
-      const { startDate, endDate, selectedStudent } = this.state;
+      const { selectedStudent, startDate, endDate } = this.state;
       assignmentData.getReportCards(startDate, endDate, selectedStudent)
         .then((response) => {
           this.setState({ reportCards: response });
@@ -66,7 +126,7 @@ class ReportCards extends React.Component {
     }
 
     ReportCardHolder = () => (
-        <div className="reportCard container">
+        <div className="reportCard container mt-5">
         <h3>Grades for {moment(this.state.startDate).format('MMMM Do YYYY')} - {moment(this.state.endDate).format('MMMM Do YYYY')}</h3>
         <Table striped bordered hover variant="dark">
                     <thead>
@@ -74,6 +134,7 @@ class ReportCards extends React.Component {
                         <th>Class Name</th>
                         <th>Subject</th>
                         <th>Grade</th>
+                        <th>Overall GPA</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,6 +142,12 @@ class ReportCards extends React.Component {
                             key={report.classTitle}
                             report={report}
                              />)}
+                      <tr>
+                        <td>Total:</td>
+                        <td></td>
+                        <td></td>
+                        <td>{this.state.gpa}</td>
+                      </tr>
                     </tbody>
         </Table>
         </div>
@@ -92,7 +159,7 @@ class ReportCards extends React.Component {
 
     render() {
       const {
-        students, startDate, endDate, reportCardsRetrieved,
+        students, reportCardsRetrieved,
       } = this.state;
       return (
             <div className="ReportCards">
@@ -106,28 +173,26 @@ class ReportCards extends React.Component {
                   <option defaultValue="">Choose...</option>
                   {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
                 </select>
-                <label htmlFor="startDate" className="col-form-label">Start Date:</label>
-                <input
-                    type="date"
-                    className="form-control m-2"
-                    id="startDate"
-                    value={startDate}
-                    onChange={this.startDateChange}
-                    placeholder="Select A Date"
-                    required
-                    >
-                </input>
-                <label htmlFor="endDate" className="col-form-label">End Date:</label>
-                <input
-                    type="date"
-                    className="form-control m-2"
-                    id="endDage"
-                    value={endDate}
-                    onChange={this.endDateChange}
-                    placeholder="Select A Date"
-                    required
-                    >
-                </input>
+                <label htmlFor="semester" className="col-form-label">Semester:</label>
+                <select type="select" className="custom-select mr-sm-2" id="semester" onChange={this.semesterChange} required>
+                    <option defaultValue="">Choose...</option>
+                    <option value="fall">Fall</option>
+                    <option value="spring">Spring</option>
+                    <option value="summer">Summer</option>
+                    <option value="fullYear">Entire School Year</option>
+                </select>
+                <label htmlFor="year" className="col-form-label">School Year:</label>
+                <select type="select" className="custom-select mr-sm-2" id="year" onChange={this.yearChange} required>
+                    <option defaultValue="">Choose...</option>
+                    <option value="2020-2021">2020-2021</option>
+                    <option value="2021-2022">2021-2022</option>
+                    <option value="2022-2023">2022-2023</option>
+                    <option value="2022-2023">2023-2024</option>
+                    <option value="2022-2023">2024-2025</option>
+                    <option value="2022-2023">2025-2026</option>
+                    <option value="2022-2023">2026-2027</option>
+                    <option value="2022-2023">2027-2028</option>
+                </select>
                 </div>
                 </div>
             { reportCardsRetrieved ? (<this.ReportCardHolder />)
