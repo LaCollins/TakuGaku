@@ -1,39 +1,21 @@
 import React from 'react';
 import Calendar from 'react-calendar';
-import { Redirect } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import './StudentCalendar.scss';
+import './StudentClassSchedule.scss';
 import 'react-calendar/dist/Calendar.css';
-import studentData from '../../../helpers/data/studentData';
 import assignmentData from '../../../helpers/data/assignmentData';
 import scheduleData from '../../../helpers/data/scheduleData';
 
-class StudentCalendar extends React.Component {
+class CalendarComponent extends React.Component {
   state = {
     selectedDay: new Date(),
     weekDay: '',
-    students: [],
     selectedStudent: '',
     singleStudent: [],
     selectedDate: '',
     assignments: [],
     scheduleArray: [],
     studentSchedule: [],
-  }
-
-  studentChange = (e) => {
-    e.preventDefault();
-    this.setState({ selectedStudent: e.target.value });
-    this.getAssignment(e.target.value);
-  }
-
-  getStudents = () => {
-    const { schoolId } = this.props.school;
-    studentData.getStudentBySchoolId(schoolId)
-      .then((response) => {
-        this.setState({ students: response });
-      })
-      .catch((error) => console.error(error));
   }
 
   selectDate = (date) => {
@@ -124,8 +106,7 @@ class StudentCalendar extends React.Component {
       .catch((error) => console.error(error));
   }
 
-  getScheduleById = () => {
-    const studentId = this.state.selectedStudent;
+  getScheduleById = (studentId) => {
     scheduleData.getScheduleByStudentId(studentId)
       .then((response) => {
         let schedule = response;
@@ -165,81 +146,28 @@ class StudentCalendar extends React.Component {
         }
       }
     }
-    this.setState({ scheduleArray: newArray });
-    this.checkAssignment();
-  }
-
-  checkAssignment = () => {
-    const newArray = this.state.scheduleArray;
-    const { assignments } = this.state;
-    const {
-      selectedStudent,
-      selectedDay,
-      selectedDate,
-    } = this.state;
-
-    for (let i = 0; i < assignments.length; i += 1) {
-      const assignmentDate = assignments[i].dateAssigned.split('T');
-      if (assignmentDate[0] === selectedDate) {
-        for (let j = 0; j < newArray.length; j += 1) {
-          if (assignments[i].classId === newArray[j].classId) {
-            newArray[j].assignment = assignments[i];
-          }
-        }
-      }
-    }
-    this.setState({ scheduleArray: newArray });
-    this.props.history.push({
-      pathname: `/schedule/${selectedStudent}`,
-      state: {
-        scheduleArray: newArray, selectedDay, selectedDate, assignments, studentView: false,
-      },
+    this.setState({ scheduleArray: newArray }, () => {
+      this.props.checkAssignment(this.state.scheduleArray, this.state.selectedDay, this.state.selectedDate, this.state.assignments);
     });
   }
 
   getStudentScheduleEvent = () => {
-    this.getScheduleById();
+    this.getScheduleById(this.state.selectedStudent);
   }
 
   componentDidMount() {
-    const { studentId } = this.props.match.params;
-    this.getStudents();
-    if (studentId) {
-      this.getAssignment(studentId);
-      this.setState({ selectedStudent: studentId });
-      studentData.getStudentById(studentId)
-        .then((response) => {
-          this.setState({ singleStudent: response });
-        })
-        .catch((error) => console.error(error));
+    if (this.props.student !== 'undefined') {
+      this.getAssignment(this.props.student.studentId);
+      this.setState({ selectedStudent: this.props.student.studentId, singleStudent: this.props.student }, () => {
+        this.getScheduleById(this.state.selectedStudent);
+      });
+      this.getCurrentDay();
     }
-    this.getCurrentDay();
   }
 
   render() {
-    const {
-      students,
-      selectedStudent,
-      singleStudent,
-    } = this.state;
-
-    const { studentId } = this.props.match.params;
-
     return (
-            <div className="Calendar container">
-              { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
-                : ('')}
-                <h1>Class Schedule</h1>
-                <div className="form-inline d-flex justify-content-around">
-                <div className="col-auto my-2">
-                <label htmlFor="student" className="col-form-label">Student:</label>
-                <select type="select" className="custom-select mr-sm-2" id="student" onChange={this.studentChange} required>
-                { (studentId) ? (<option defaultValue={studentId}>{singleStudent.firstName}</option>)
-                  : (<option defaultValue="">Choose...</option>)}
-                    {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
-                </select>
-                </div>
-                </div>
+            <div className="CalendarComponent container">
                 <div className="row d-flex justify-content-center">
                   <h4>Select a Day</h4>
                 </div>
@@ -247,13 +175,11 @@ class StudentCalendar extends React.Component {
                   <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} formatLongDate={this.formatDate}/>
                 </div>
                 <div className="row d-flex justify-content-around mt-4 buttonContainer">
-                  { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
-                    : (<Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>)}
-                  <Button variant="secondary" className="scheduleButton">Add a Class</Button>
+                <Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>
                 </div>
             </div>
     );
   }
 }
 
-export default StudentCalendar;
+export default CalendarComponent;
