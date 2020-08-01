@@ -72,6 +72,16 @@ const getCompletedAssignmentsByStudentId = (studentId) => new Promise((resolve, 
     .catch((error) => reject(error));
 });
 
+const getReportCards = (startDate, endDate, studentId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/takugagku/assignments/reportcards/startdate/${startDate}/enddate/${endDate}/student/${studentId}`)
+    .then((result) => {
+      const assignments = result.data;
+
+      resolve(assignments);
+    })
+    .catch((error) => reject(error));
+});
+
 const updateAssignment = (assignmentId, assignmentInfo) => axios.put(`${baseUrl}/api/takugagku/assignments/update/${assignmentId}`, assignmentInfo);
 
 const updateGrade = (assignmentId, grade) => axios.put(`${baseUrl}/api/takugagku/assignments/updategrade/${assignmentId}/${grade}`);
@@ -92,4 +102,5 @@ export default {
   updateAssignment,
   getCompletedAssignmentsByStudentId,
   updateGrade,
+  getReportCards,
 };

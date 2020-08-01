@@ -51,4 +51,12 @@ namespace TakuGaku.Models
         public decimal Grade { get; set; }
     }
 
+    public class ReportCardWithClasses
+    {
+        public int StudentId { get; set; }
+        public string ClassTitle { get; set; }
+        public string SubjectType { get; set; }
+        public decimal Grade { get; set; }
+    }
+
 }

@@ -62,6 +62,25 @@ namespace TakuGaku.Repositories
             }
         }
 
+        public IEnumerable<ReportCardWithClasses> GetAllReportCards(string startDate, string endDate, int studentId)
+        {
+            var sql = @"select assignment.studentId, classSchedule.classTitle, [subject].subjectType, AVG(grade) AS grade
+                        from assignment
+                        join classSchedule
+                        on assignment.classId = classSchedule.classId
+                        join [subject]
+                        on assignment.subjectId = [subject].subjectId
+                        where assignment.dateAssigned BETWEEN @startDate AND @endDate AND assignment.classId != 53 AND assignment.completed = 1 AND assignment.studentId = @studentId
+                        group by assignment.classId, assignment.studentId, classSchedule.classTitle, [subject].subjectType";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var reportCards = db.Query<ReportCardWithClasses>(sql, new { StartDate = startDate, EndDate = endDate, StudentId = studentId });
+
+                return reportCards;
+            }
+        }
+
         public IEnumerable<Assignment> GetAssignmentsByStudent(int studentId)
         {
             var sql = @"SELECT *
