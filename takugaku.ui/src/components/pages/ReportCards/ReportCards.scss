@@ -1,0 +1,44 @@
+@import '../../../styles/variables';
+
+.ReportCards {
+    margin-top: 150px;
+
+    h1, h3 {
+        margin-top: 20px;
+        font-family: $titleFont;
+    }
+
+    .col-form-label {
+        font-family: $titleFont;
+        font-size: large;
+    }
+
+    .form-control {
+        width: 400px;
+        font-family: $buttonFont;
+    }
+
+    td {
+        width: 100px;
+    }
+
+    .btn {
+        font-family: $buttonFont;
+        font-size: 1em;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+}
+
+.PrintComponent {
+    .card {
+        width: 80%;
+    }
+
+    th {
+        width: 250px;
+    }
+
+    td {
+        width: 250px;
+    }
+}

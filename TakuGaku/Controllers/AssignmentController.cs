@@ -70,6 +70,19 @@ namespace TakuGaku.Controllers
             return Ok(result);
         }
 
+        [HttpGet("reportcards/startdate/{startDate}/enddate/{endDate}/student/{studentId}")]
+        public IActionResult GetAllReportCards(string startDate, string endDate, int studentId)
+        {
+            var result = _assignmentRepository.GetAllReportCards(startDate, endDate, studentId);
+
+            if (!result.Any())
+            {
+                return NotFound("Nothing to report");
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("studentId/{studentId}/gpa")]
         public IActionResult GetGradePointAverageById(int studentId)
         {

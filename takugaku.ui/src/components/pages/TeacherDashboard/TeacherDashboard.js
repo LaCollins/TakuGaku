@@ -30,7 +30,7 @@ class TeacherDashboard extends React.Component {
                     <Link to="/manage/schedules" className="btn btn-secondary teacherButton">Class Schedules</Link>
                     <Link to="/manage/assignments" className="btn btn-secondary teacherButton">Assignments</Link>
                     <Button variant="secondary" className="teacherButton">Manage Account</Button>
-                    <Button variant="secondary" className="teacherButton">Report Cards</Button>
+                    <Link to="/manage/report_cards" className="teacherButton btn btn-secondary">Report Cards</Link>
                   </div>
                 </div>
             </div>
