@@ -17,12 +17,13 @@ class ClassTable extends React.Component {
         selectedDay,
         selectedDate,
         assignments,
+        studentView,
       } = this.props;
 
       return (
             <tr className="ClassTable">
                 <td>{moment(classSlot.timeSlot, 'HH:mm:ss').format('h:mm:ss A')}</td>
-                { classSlot.classTitle ? (<td>{classSlot.classTitle}</td>)
+                { classSlot.classTitle || studentView ? (<td>{classSlot.classTitle}</td>)
                   : (<td><Link to={{
                     pathname: `/schedule/add/${student.studentId}`,
                     state: {
@@ -34,7 +35,7 @@ class ClassTable extends React.Component {
                     },
                   }} className="btn btn-secondary scheduleButton">Add a Class</Link></td>)}
                 <td><Link to={''}>{classSlot.assignment.assignmentTitle}</Link></td>
-                { classSlot.classTitle ? (<td><Link to={{
+                { classSlot.classTitle && !studentView ? (<td><Link to={{
                   pathname: `/schedule/edit/${classSlot.classId}`,
                   state: {
                     student,
