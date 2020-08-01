@@ -21,6 +21,8 @@ class Home extends React.Component {
             <div className="Home container">
               { this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/teacher/dashboard' }} />)
                 : ('')}
+              { this.props.studentLoggedIn ? (<Redirect push to={{ pathname: '/student/dashboard' }} />)
+                : ('')}
                 <h2 className="title">Welcome to</h2>
                 <h1><div className="title2">宅学</div><div className="title3">TakuGaku</div></h1>
                 <img id="owl" src={owl} alt="owl"/>

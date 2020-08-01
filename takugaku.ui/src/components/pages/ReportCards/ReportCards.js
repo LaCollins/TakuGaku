@@ -166,7 +166,12 @@ class ReportCards extends React.Component {
     Printer = () => {
       const componentRef = useRef();
       const student = this.state.selectedStudentData;
-      const { selectedSemester, year, reportCards, gpa } = this.state;
+      const {
+        selectedSemester,
+        year,
+        reportCards,
+        gpa,
+      } = this.state;
 
       return (
         <div>
