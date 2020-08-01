@@ -1,2 +1,2 @@
 # TakuGaku
-An Homeschool Companion Application for managing Scheduling, Assignments, and Grades.
+A Homeschool Companion Application for managing Scheduling, Assignments, and Grades.
