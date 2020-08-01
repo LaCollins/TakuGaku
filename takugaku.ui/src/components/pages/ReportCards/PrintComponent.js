@@ -2,7 +2,6 @@ import React from 'react';
 import './ReportCards.scss';
 import ReportCardTable from '../../shared/ReportCardTable/ReportCardTable';
 
-
 class ComponentToPrint extends React.Component {
   render() {
     const { year, student, gpa } = this.props;

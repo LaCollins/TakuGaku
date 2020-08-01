@@ -39,6 +39,7 @@ class App extends React.Component {
     schoolExists: false,
     teacherExists: false,
     teacherLoggedIn: false,
+    studentLoggedIn: false,
   }
 
   componentDidMount() {
@@ -86,7 +87,10 @@ class App extends React.Component {
   toggleNavbar = () => {
     const navbar = document.getElementById('navbar');
     const { teacherLoggedIn } = this.state;
+    const { studentLoggedIn } = this.state;
     if (teacherLoggedIn) {
+      navbar.classList.remove('hide');
+    } else if (studentLoggedIn) {
       navbar.classList.remove('hide');
     } else {
       navbar.classList.add('hide');
@@ -124,6 +128,28 @@ class App extends React.Component {
     this.setState({ teacherLoggedIn: false });
   }
 
+  setStudent = (studentInfo) => {
+    this.setState({ student: studentInfo });
+    this.setStudentLogin();
+  }
+
+  setStudentLogin = () => {
+    const navbar = document.getElementById('navbar');
+    this.setState({ studentLoggedIn: true }, () => navbar.classList.remove('hide'));
+  }
+
+  setStudentLogout = () => {
+    this.setState({ studentLoggedIn: false });
+  }
+
+  logStudentOut = (e) => {
+    e.preventDefault();
+    const navbar = document.getElementById('navbar');
+    sessionStorage.removeItem('student');
+    this.setStudentLogout();
+    navbar.classList.add('hide');
+  }
+
   componentWillUnmount() {
     this.removeListener();
   }
@@ -138,14 +164,24 @@ class App extends React.Component {
       teacher,
       studentExists,
       teacherLoggedIn,
+      student,
+      studentLoggedIn,
     } = this.state;
 
     return (
       <div className="App">
         <Router>
-          <NavBar authed={authed} logTeacherOut={this.logTeacherOut} />
+          <NavBar authed={authed}
+            logTeacherOut={this.logTeacherOut}
+            logStudentOut={this.logStudentOut}
+            teacherLoggedIn={teacherLoggedIn}
+            studentLoggedIn={studentLoggedIn}/>
           <Switch>
-            <Route path="/" exact render={(props) => <Home {...props} authed={authed} uid={uid} school={school} teacherLoggedIn={teacherLoggedIn}/>} />
+            <Route path="/" exact render={(props) => <Home {...props} authed={authed}
+            uid={uid}
+            school={school}
+            teacherLoggedIn={teacherLoggedIn}
+            studentLoggedIn={studentLoggedIn} />} />
             <Route path="/register/school" exact render={(props) => <SchoolForm {...props} authed={authed}
               uid={uid}
               school={school}
@@ -170,10 +206,15 @@ class App extends React.Component {
             <Route path="/student/login" exact render={(props) => <StudentLogIn {...props} authed={authed}
               school={school}
               studentExists={studentExists}
+              student={student}
+              setStudent={this.setStudent}
+              toggleNavbar={this.toggleNavbar}
                />}
             />
             <Route path="/student/dashboard" exact render={(props) => <StudentDashboard {...props} authed={authed}
-              school={school}/>} />
+              school={school}
+              studentLoggedIn={studentLoggedIn}
+              setStudentLogin={this.setStudentLogin} />} />
             <Route path="/manage/students" exact render={(props) => <ManageStudents {...props} authed={authed}
               school={school}
               teacherLoggedIn={teacherLoggedIn}

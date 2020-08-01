@@ -1,0 +1,22 @@
+@import '../../../styles/variables';
+
+.StudentDashboard {
+    margin-top: 150px;
+
+    h1 {
+        margin-top: 20px;
+        font-family: $titleFont;
+    }
+
+    .buttonContainer {
+        margin-top: 20px;
+        font-family: 'Bubblegum Sans', cursive;
+
+        .studentButton {
+            font-size: 1.25em;
+            width: 200px;
+            box-shadow: 5px 10px 10px rgb(55, 55, 55);
+            margin: 20px;
+        }
+    }
+}
