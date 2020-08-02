@@ -26,7 +26,7 @@ class StudentDashboard extends React.Component {
                 <div className="buttonContainer container">
                   <div className="row d-flex justify-content-center">
                     <Link to="/viewschedule" className="btn btn-secondary studentButton">Class Schedule</Link>
-                    <Link to="/assignments" className="btn btn-secondary studentButton">Assignments</Link>
+                    <Link to={`/assignments/student/${this.state.student.studentId}`} className="btn btn-secondary studentButton">Assignments</Link>
                   </div>
                 </div>
             </div>

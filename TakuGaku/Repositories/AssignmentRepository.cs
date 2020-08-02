@@ -36,7 +36,7 @@ namespace TakuGaku.Repositories
         {
             var sql = @"SELECT studentId, avg(grade) as GPA
                         FROM assignment
-                        WHERE Completed = 1 AND Grade != 0.00 AND classId != 53
+                        WHERE Completed = 1 AND Grade != -1 AND classId != 53
                         GROUP BY studentId";
 
             using (var db = new SqlConnection(ConnectionString))
@@ -51,7 +51,7 @@ namespace TakuGaku.Repositories
         {
             var sql = @"SELECT studentId, avg(grade) as GPA
                         FROM assignment
-                        WHERE Completed = 1 AND StudentId = @studentId
+                        WHERE Completed = 1 AND Grade != -1 AND classId != 53 AND StudentId = @studentId
                         GROUP BY studentId";
 
             using (var db = new SqlConnection(ConnectionString))
@@ -201,6 +201,19 @@ namespace TakuGaku.Repositories
             {
                 db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId, Grade = grade });
                 return ("Successfully added grade");
+            }
+        }
+
+        public string CompleteAssignment(int assignmentId)
+        {
+            var sql = @"UPDATE assignment
+                        SET completed = 1
+                        WHERE assignmentId = @assignmentId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.QueryFirstOrDefault(sql, new { AssignmentId = assignmentId});
+                return ("Successfully completed");
             }
         }
 

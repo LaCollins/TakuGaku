@@ -58,7 +58,9 @@ class AssignmentsDue extends React.Component {
     );
 
     render() {
-      const { dueAssignments } = this.props;
+      const {
+        dueAssignments, studentView,
+      } = this.props;
       const { modalShow } = this.state;
 
       return (
@@ -74,7 +76,8 @@ class AssignmentsDue extends React.Component {
                         <th>Assignment Type</th>
                         <th>Date Assigned</th>
                         <th>Date Due</th>
-                        <th>Actions</th>
+                      { studentView ? ('')
+                        : (<th>Actions</th>) }
                         </tr>
                     </thead>
                     <tbody>
@@ -84,6 +87,8 @@ class AssignmentsDue extends React.Component {
                             deleteAssignment={this.props.deleteAssignment}
                             setAssignmentToEdit={this.setAssignmentToEdit}
                             complete={false}
+                            studentView={studentView}
+                            setViewAssignment={this.setViewAssignment}
                              />)}
                     </tbody>
                     </Table>

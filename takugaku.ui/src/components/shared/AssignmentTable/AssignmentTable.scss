@@ -11,4 +11,12 @@
     .edit, .delete {
         box-shadow: 5px 10px 10px rgb(55, 55, 55);
     }
+
+    .assignmentButton {
+        font-family: $buttonFont;
+        font-size: 1.25;
+        width: 200px;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+
 }

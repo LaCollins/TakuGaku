@@ -1,0 +1,34 @@
+@import '../../../styles/variables';
+
+.SingleAssignment {
+    margin-top: 150px;
+
+    h1, h4, h5 {
+        font-family: $titleFont;
+    }
+
+    .card {
+        text-align: left;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+
+    .buttonContainer {
+        margin-top: -20px;
+        text-align: right;
+
+        .complete {
+            box-shadow: 5px 10px 10px rgb(55, 55, 55);
+        }
+
+    }
+
+    .backButton {
+        margin-top: 20px;
+        font-family: $buttonFont;
+        font-size: 1.25em;
+        margin: 15px;
+        width: 200px;
+        box-shadow: 5px 10px 10px rgb(55, 55, 55);
+    }
+
+}

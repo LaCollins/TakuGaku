@@ -51,9 +51,9 @@ class StudentLogIn extends React.Component {
                 this.setState({ invalidStudent: true });
               } else {
                 this.setState({ invalidStudent: false });
-                this.props.history.push('/student/dashboard');
                 sessionStorage.setItem('student', JSON.stringify(response));
                 this.props.setStudent(response);
+                this.props.history.push('/student/dashboard');
                 this.props.toggleNavbar();
               }
             })

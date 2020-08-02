@@ -34,7 +34,7 @@ class ClassTable extends React.Component {
                       assignments,
                     },
                   }} className="btn btn-secondary scheduleButton">Add a Class</Link></td>)}
-                <td><Link to={''}>{classSlot.assignment.assignmentTitle}</Link></td>
+                <td><Link to={{ pathname: `/assignments/singleassignment/${classSlot.assignment.assignmentId}`, state: { assignment: classSlot.assignment } }}>{classSlot.assignment.assignmentTitle}</Link></td>
                 { classSlot.classTitle && !studentView ? (<td><Link to={{
                   pathname: `/schedule/edit/${classSlot.classId}`,
                   state: {

@@ -23,6 +23,7 @@ import ScheduleSingleDay from '../components/pages/ScheduleSingleDay/ScheduleSin
 import AssignmentsMain from '../components/pages/AssignmentsMain/AssignmentsMain';
 import StudentClassSchedule from '../components/pages/StudentClassSchedule/StudentClassSchedule';
 import ReportCards from '../components/pages/ReportCards/ReportCards';
+import SingleAssignment from '../components/shared/SingleAssignment/SingleAssignment';
 import ClassForm from '../components/pages/ClassForm/ClassForm';
 import firebaseApp from '../helpers/data/connection';
 import schoolData from '../helpers/data/schoolData';
@@ -123,6 +124,7 @@ class App extends React.Component {
   setTeacherLogin = () => {
     const navbar = document.getElementById('navbar');
     this.setState({ teacherLoggedIn: true });
+    sessionStorage.removeItem('student');
     navbar.classList.remove('hide');
   }
 
@@ -137,6 +139,7 @@ class App extends React.Component {
 
   setStudentLogin = () => {
     const navbar = document.getElementById('navbar');
+    sessionStorage.removeItem('teacher');
     this.setState({ studentLoggedIn: true }, () => navbar.classList.remove('hide'));
   }
 
@@ -177,7 +180,8 @@ class App extends React.Component {
             logTeacherOut={this.logTeacherOut}
             logStudentOut={this.logStudentOut}
             teacherLoggedIn={teacherLoggedIn}
-            studentLoggedIn={studentLoggedIn}/>
+            studentLoggedIn={studentLoggedIn}
+            student={student} />
           <Switch>
             <Route path="/" exact render={(props) => <Home {...props} authed={authed}
             uid={uid}
@@ -249,11 +253,22 @@ class App extends React.Component {
             school={school} />}/>
             <Route path="/manage/assignments" exact render={(props) => <AssignmentsMain {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}
+            studentLoggedIn={studentLoggedIn}
             school={school} />}/>
             <Route path="/manage/report_cards" exact render={(props) => <ReportCards {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}
             school={school} />}/>
             <Route path="/viewschedule" exact render={(props) => <StudentClassSchedule {...props} authed={authed}
+            studentLoggedIn={studentLoggedIn}
+            student={student}
+            school={school} />}/>
+            <Route path="/assignments/singleassignment/:assignmentId" exact render={(props) => <SingleAssignment {...props} authed={authed}
+            studentLoggedIn={studentLoggedIn}
+            teacherLoggedIn={teacherLoggedIn}
+            student={student}
+            school={school} />}/>
+            <Route path="/assignments/student/:studentId" exact render={(props) => <AssignmentsMain {...props} authed={authed}
+            teacherLoggedIn={teacherLoggedIn}
             studentLoggedIn={studentLoggedIn}
             student={student}
             school={school} />}/>

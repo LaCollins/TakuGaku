@@ -165,7 +165,7 @@ class AssignmentsAdd extends React.Component {
         subjectId,
         instructions: details,
         completed: false,
-        grade: 0,
+        grade: -1,
         dateAssigned: assignedDate,
         dateDue: dueDate,
         dateComplete: '1900-01-01T00:00:00',

@@ -170,6 +170,13 @@ namespace TakuGaku.Controllers
             return Ok(updatedAssignment);
         }
 
+        [HttpPut("complete/assignment/{assignmentId}")]
+        public IActionResult CompleteAssignment(int assignmentId)
+        {
+            var updatedAssignment = _assignmentRepository.CompleteAssignment(assignmentId);
+            return Ok(updatedAssignment);
+        }
+
 
         // update assignment
         [HttpPut("update/{assignmentId}")]
