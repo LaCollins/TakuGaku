@@ -49,8 +49,10 @@ class AssignmentTable extends React.Component {
         letterGrade = 'D+';
       } else if (grade >= 1.0 && grade < 1.3) {
         letterGrade = 'D';
-      } else if (grade < 1.0) {
+      } else if (grade < 1.0 && grade >= 0) {
         letterGrade = 'F';
+      } else if (grade < 0) {
+        letterGrade = 'N/A';
       }
 
       return (letterGrade);

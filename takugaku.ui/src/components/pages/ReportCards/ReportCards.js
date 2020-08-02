@@ -78,7 +78,7 @@ class ReportCards extends React.Component {
           const selectedYear = year.split('-')[1];
           startDate = `06-01-${selectedYear}`;
           endDate = `07-31-${selectedYear}`;
-        } else if (semester !== '' && semester === 'fullYear') {
+        } else if (semester !== '' && semester === 'schoolYear') {
           const selectedYear = year.split('-');
           startDate = `08-01-${selectedYear[0]}`;
           endDate = `07-31-${selectedYear[1]}`;
@@ -212,7 +212,7 @@ class ReportCards extends React.Component {
                     <option value="fall">Fall</option>
                     <option value="spring">Spring</option>
                     <option value="summer">Summer</option>
-                    <option value="fullYear">Entire School Year</option>
+                    <option value="schoolYear">Entire School Year</option>
                 </select>
                 <label htmlFor="year" className="col-form-label">School Year:</label>
                 <select type="select" className="custom-select mr-sm-2" id="year" onChange={this.yearChange} required>
