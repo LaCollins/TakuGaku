@@ -15,4 +15,6 @@ const getSchoolByUid = (uid) => new Promise((resolve, reject) => {
 
 const registerSchool = (newSchool) => axios.post(`${baseUrl}/api/takugaku/school`, newSchool);
 
-export default { getSchoolByUid, registerSchool };
+const updateSchool = (schoolId, updatedSchool) => axios.put(`${baseUrl}/api/takugaku/school/update/${schoolId}`, updatedSchool);
+
+export default { getSchoolByUid, registerSchool, updateSchool };

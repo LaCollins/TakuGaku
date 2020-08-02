@@ -12,9 +12,15 @@ class SchoolForm extends React.Component {
   state = {
     schoolName: '',
     email: '',
+    editMode: false,
   }
 
   componentDidMount() {
+    if (this.props.editMode) {
+      this.setState({ editMode: true });
+      this.setState({ schoolName: this.props.school.schoolName });
+      this.setState({ email: this.props.school.email });
+    }
     if (this.props.authed === false) {
       authData.loginUser();
     }
@@ -38,8 +44,7 @@ class SchoolForm extends React.Component {
     this.setState({ email: e.target.value });
   }
 
-  saveSchoolEvent = (e) => {
-    e.preventDefault();
+  saveSchoolEvent = () => {
     const newSchool = {
       schoolName: this.state.schoolName,
       uid: this.props.uid,
@@ -54,17 +59,47 @@ class SchoolForm extends React.Component {
       .catch((error) => console.error('err from save profile', error));
   }
 
+  updateSchoolEvent = () => {
+    const { schoolId } = this.props.school;
+    const updatedSchool = {
+      schoolName: this.state.schoolName,
+      uid: this.props.school.uid,
+      email: this.state.email,
+      active: true,
+    };
+    schoolData.updateSchool(schoolId, updatedSchool)
+      .then((response) => {
+        this.props.setSchool(response.data);
+        this.props.setSuccessfullUpdate();
+        this.props.setSchoolModalHide();
+      })
+      .catch((error) => console.error('err from save profile', error));
+  }
+
+  checkEditOrCreate = (e) => {
+    e.preventDefault();
+    if (this.state.editMode) {
+      this.updateSchoolEvent();
+    } else {
+      this.saveSchoolEvent();
+    }
+  }
+
+
   render() {
     const { schoolExists } = this.props;
-    const { schoolName, email } = this.state;
+    const { schoolName, email, editMode } = this.state;
 
     return (
             <div className="SchoolForm">
-              {(schoolExists) ? (<Redirect push to={{ pathname: '/' }} />)
+              {schoolExists && !editMode ? (<Redirect push to={{ pathname: '/' }} />)
                 : ('')}
+              {editMode ? ('')
+                : (<div>
                 <h1 className="title">Register Your School</h1>
                 <img id="owl" src={owl} alt="owl"/>
-                <form className="formContainer" onSubmit={this.saveSchoolEvent}>
+              </div>)}
+                <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
                   <div className="form-group row justify-content-center">
                     <label htmlFor="schoolName" className="col-form-label">School Name:</label>
@@ -95,9 +130,13 @@ class SchoolForm extends React.Component {
                   </input>
                 </div>
               </div>
-              <div className="buttonContainer">
+              { editMode ? (<div className="buttonContainer d-flex justify-content-between">
+                <Button variant="secondary" className="formButton" onClick={this.props.setSchoolModalHide}>Close</Button>
+                <Button variant="secondary" className="formButton" type="submit">Save Changes</Button>
+              </div>)
+                : (<div className="buttonContainer">
                 <Button variant="secondary" className="formButton" type="submit">Register School</Button>
-              </div>
+                </div>)}
               </form>
             </div>
     );

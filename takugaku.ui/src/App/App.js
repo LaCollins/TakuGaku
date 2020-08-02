@@ -277,6 +277,7 @@ class App extends React.Component {
             teacherLoggedIn={teacherLoggedIn}
             teacher={teacher}
             school={school}
+            setSchool={this.setSchool}
             setTeacherExists={this.setTeacherExists} />}/>
           </Switch>
         </Router>
