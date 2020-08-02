@@ -32,7 +32,11 @@ class SingleAssignment extends React.Component {
     markComplete = () => {
       assignmentData.completeAssignment(this.props.location.state.assignment.assignmentId)
         .then(() => {
-          this.props.history.push(`/assignments/student/${this.props.student.studentId}`);
+          if (this.props.teacherLoggedIn) {
+            this.props.history.push('/manage/assignments');
+          } else {
+            this.props.history.push(`/assignments/student/${this.props.student.studentId}`);
+          }
         })
         .catch((error) => console.error(error));
     }
@@ -56,7 +60,7 @@ class SingleAssignment extends React.Component {
                 <Card.Footer>
                         <strong>Due Date: </strong>{moment(assignment.dueDate).format('MMMM Do YYYY')}
                         <div className="buttonContainer">
-                            <Button variant="secondary" className="complete" onClick={this.markComplete}>Mark Complete</Button>
+                        <Button variant="secondary" className="complete" onClick={this.markComplete}>Mark Complete</Button>
                         </div>
                 </Card.Footer>
                 </Card>

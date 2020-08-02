@@ -1,9 +1,9 @@
 @import '../../../styles/variables';
 
-.ScheduleSingleDay {
+.AccountManagement {
     margin-top: 150px;
 
-    h1, h4, h5 {
+    h1 {
         margin-top: 20px;
         font-family: $titleFont;
     }
@@ -12,10 +12,23 @@
         margin-top: 20px;
         font-family: 'Bubblegum Sans', cursive;
 
-        .btn {
-            font-size: 1.25;
+        .formButton {
+            font-size: 1.5em;
             width: 200px;
             box-shadow: 5px 10px 10px rgb(55, 55, 55);
         }
     }
+
+    p {
+        font-size: x-large;
+        font-family: $buttonFont;
+    }
+
+
+    .warning {
+        color: red;
+        font-family: $buttonFont;
+        font-size: 1.5em;
+    }
+
 }

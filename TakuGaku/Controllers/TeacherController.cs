@@ -90,12 +90,15 @@ namespace TakuGaku.Controllers
         public IActionResult UpdateTeacher(int teacherId, Teacher updatedTeacher)
         {
             var checkUsername = _teacherRepository.GetTeacherByUserName(updatedTeacher.UserName);
-            if (checkUsername == null)
+            if (checkUsername.UserName == updatedTeacher.UserName && checkUsername.TeacherId == teacherId)
+            {
+                var newTeacher = _teacherRepository.UpdateTeacher(teacherId, updatedTeacher);
+                return Ok(newTeacher);
+            } else if (checkUsername == null)
             {
                 var newTeacher = _teacherRepository.UpdateTeacher(teacherId, updatedTeacher);
                 return Ok(newTeacher);
             }
-
             return Ok("That username already exists, teacher not added.");
         }
 

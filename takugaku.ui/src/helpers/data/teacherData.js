@@ -25,4 +25,11 @@ const teacherValidation = (schoolId, userName, pin) => new Promise((resolve, rej
 
 const registerTeacher = (newTeacher) => axios.post(`${baseUrl}/api/takugaku/teacher`, newTeacher);
 
-export default { getTeacherBySchoolId, registerTeacher, teacherValidation };
+const updateTeacher = (teacherId, updatedTeacher) => axios.put(`${baseUrl}/api/takugaku/teacher/update/${teacherId}`, updatedTeacher);
+
+export default {
+  getTeacherBySchoolId,
+  registerTeacher,
+  teacherValidation,
+  updateTeacher,
+};

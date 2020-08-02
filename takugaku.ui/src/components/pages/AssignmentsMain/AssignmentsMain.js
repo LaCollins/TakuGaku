@@ -55,6 +55,11 @@ class AssignmentsMain extends React.Component {
     getAssignmentTypes = () => {
       assignmentData.getAssignmentType()
         .then((response) => {
+          response.sort((a, b) => {
+            if (a.assignmentType < b.assignmentType) return -1;
+            if (a.assignmentType > b.assignmentType) return 1;
+            return 0;
+          });
           this.setState({ assignmentTypes: response });
         })
         .catch((error) => console.error(error));

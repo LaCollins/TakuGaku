@@ -23,6 +23,7 @@ import ScheduleSingleDay from '../components/pages/ScheduleSingleDay/ScheduleSin
 import AssignmentsMain from '../components/pages/AssignmentsMain/AssignmentsMain';
 import StudentClassSchedule from '../components/pages/StudentClassSchedule/StudentClassSchedule';
 import ReportCards from '../components/pages/ReportCards/ReportCards';
+import AccountManagement from '../components/pages/AccountManagement/AccountManagement';
 import SingleAssignment from '../components/shared/SingleAssignment/SingleAssignment';
 import ClassForm from '../components/pages/ClassForm/ClassForm';
 import firebaseApp from '../helpers/data/connection';
@@ -272,6 +273,12 @@ class App extends React.Component {
             studentLoggedIn={studentLoggedIn}
             student={student}
             school={school} />}/>
+            <Route path="/manage/account" exact render={(props) => <AccountManagement {...props} authed={authed}
+            teacherLoggedIn={teacherLoggedIn}
+            teacher={teacher}
+            school={school}
+            setSchool={this.setSchool}
+            setTeacherExists={this.setTeacherExists} />}/>
           </Switch>
         </Router>
       </div>

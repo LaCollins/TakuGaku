@@ -99,5 +99,28 @@ namespace TakuGaku.Repositories
                 return db.QueryFirstOrDefault<School>(sql, new { SchoolId = schoolId });
             }
         }
+
+        public School UpdateSchool(int schoolid, School updatedSchool)
+        {
+            var sql = @"UPDATE School
+                    SET SchoolName = @schoolName, [UID] = @uid, Email = @email, Active = @active
+                    OUTPUT INSERTED.*
+                    WHERE SchoolId = @schoolId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new
+                {
+                    updatedSchool.SchoolName,
+                    updatedSchool.UID,
+                    updatedSchool.Email,
+                    updatedSchool.active,
+                    SchoolId = schoolid
+                };
+
+                var result = db.QueryFirstOrDefault<School>(sql, parameters);
+                return result;
+            }
+        }
     }
 }

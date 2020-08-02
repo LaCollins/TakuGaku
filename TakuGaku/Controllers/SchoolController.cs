@@ -72,6 +72,13 @@ namespace TakuGaku.Controllers
             return Ok("School already exists for this account");
         }
 
+        [HttpPut("update/{schoolId}")]
+        public IActionResult UpdateSchool(int schoolId, School updatedSchool)
+        {
+            var result = _schoolRepository.UpdateSchool(schoolId, updatedSchool);
+            return Ok(result);
+        }
+
         //Close A School
         [HttpPut("close/{schoolId}")]
         public IActionResult CloseSchool(int schoolId)
