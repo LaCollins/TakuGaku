@@ -2,6 +2,7 @@ import './AssignmentTable.scss';
 import React from 'react';
 import moment from 'moment';
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
 class AssignmentTable extends React.Component {
    state = {
@@ -55,8 +56,12 @@ class AssignmentTable extends React.Component {
       return (letterGrade);
     }
 
+    viewAssignment = () => {
+      this.props.setViewAssignment(this.props.assignment);
+    }
+
     render() {
-      const { assignment, complete } = this.props;
+      const { assignment, complete, studentView } = this.props;
       const dateAssigned = moment(assignment.dateAssigned).format('MMMM Do YYYY');
       const dateDue = moment(assignment.dateDue).format('MMMM Do YYYY');
       const dateComplete = moment(assignment.dateComplete).format('MMMM Do YYYY');
@@ -65,16 +70,19 @@ class AssignmentTable extends React.Component {
       return (
             <tr className="AssignmentTable">
             <td>{assignment.className}</td>
-            <td>{assignment.assignmentTitle}</td>
+            { studentView && !complete ? (<td><Link to={{ pathname: `/assignments/singleassignment/${assignment.assignmentId}`, state: { assignment } }}>{assignment.assignmentTitle}</Link></td>)
+              : (<td>{assignment.assignmentTitle}</td>)}
             <td>{assignment.assignmentType}</td>
             <td>{dateAssigned}</td>
             { complete ? (<td>{dateComplete}</td>)
               : (<td>{dateDue}</td>)}
-            { complete ? (<td>{grade} <Button variant="secondary" className="edit m-0 mr-0 ml-2" onClick={this.addGrade}><i className="m-1 fas fa-edit"></i></Button></td>)
+            { complete && !studentView ? (<td>{grade} <Button variant="secondary" className="edit m-0 mr-0 ml-2" onClick={this.addGrade}><i className="m-1 fas fa-edit"></i></Button></td>)
               : ('') }
-            { complete ? ('')
-              : (<td><Button variant="secondary" className="edit m-0 mr-2" onClick={this.editAssignmentEvent}><i className="m-1 fas fa-edit"></i></Button>
-              <Button variant="secondary" className="m-0 delete" onClick={this.deleteAssignmentEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>)}
+            { complete && studentView ? (<td>{grade}</td>)
+              : ('')}
+            { !complete && !studentView ? (<td><Button variant="secondary" className="edit m-0 mr-2" onClick={this.editAssignmentEvent}><i className="m-1 fas fa-edit"></i></Button>
+              <Button variant="secondary" className="m-0 delete" onClick={this.deleteAssignmentEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>)
+              : ('') }
         </tr>
       );
     }

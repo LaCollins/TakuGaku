@@ -38,7 +38,7 @@ class NavBar extends React.Component {
                           : ('')
                           }
                         {studentLoggedIn ? (<Nav className="ml-auto"><Link to="/viewschedule/" className="nav-link">Class Schedule</Link>
-                          <Link to="/assignments/" className="nav-link">Assignments</Link>
+                          <Link to={`/assignments/student/${this.props.student.studentId}`} className="nav-link">Assignments</Link>
                           <Button variant="secondary" onClick={this.props.logStudentOut} className="logOutButton">Log Out</Button>
                           </Nav>)
                           : ('')}

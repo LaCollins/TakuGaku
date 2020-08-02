@@ -22,6 +22,7 @@ class AssignmentsMain extends React.Component {
       noClasses: false,
       dueAssignments: [],
       completedAssignments: [],
+      studentView: false,
     }
 
     deleteAssingment = (assignmentId) => {
@@ -158,8 +159,18 @@ class AssignmentsMain extends React.Component {
       }
 
       componentDidMount() {
-        this.getStudents();
-        this.getAssignmentTypes();
+        const { studentId } = this.props.match.params;
+        if (studentId) {
+          this.getAssignmentTypes();
+          this.getAssignments(studentId);
+          this.getDueAssignments(studentId);
+          this.getCompleteAssignments(studentId);
+          this.setState({ studentView: true });
+        } else {
+          this.getStudents();
+          this.getAssignmentTypes();
+          this.setState({ studentView: false });
+        }
       }
 
       render() {
@@ -175,27 +186,30 @@ class AssignmentsMain extends React.Component {
           dueAssignments,
           showComplete,
           completedAssignments,
+          studentView,
         } = this.state;
 
         return (
             <div className="AssignmentsMain">
-                { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
+                { !this.props.teacherLoggedIn && !this.props.studentLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
                   : ('')}
                 <h1>Assignments</h1>
                 <div className="form-inline d-flex justify-content-around">
                 <div className="col-auto ml-2">
-                <label htmlFor="student" className="col-form-label">Student:</label>
+                { this.props.teacherLoggedIn ? (<div><label htmlFor="student" className="col-form-label">Student:</label>
                 <select type="select" className="custom-select mr-sm-2" id="student" onChange={this.studentChange} required>
                   <option defaultValue="">Choose...</option>
                   {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
-                </select>
+                </select></div>)
+                  : ('')}
                 <div className="buttonContainer">
                 <table>
                     <tr>
-                        <td>
+                      { !this.props.studentLoggedIn ? (<td>
                         { showAdd ? ('')
                           : (<Button variant="secondary" className="formButton mr-3" onClick={this.showAddAssignment}>Add</Button>)}
-                        </td>
+                        </td>)
+                        : ('')}
                         <td>
                         { showDue ? ('')
                           : (<Button variant="secondary" className="formButton mr-3" onClick={this.showDueAssignment}>Due</Button>)}
@@ -217,7 +231,8 @@ class AssignmentsMain extends React.Component {
                     assignments={assignments}
                     selectedStudent={selectedStudent}
                     checkAssignment={this.checkAssignment}
-                    editMode={false} />)
+                    editMode={false}
+                    />)
                   : ('')}
                 { showDue && !noClasses ? (<AssignmentsDue
                     classes={classes}
@@ -227,7 +242,8 @@ class AssignmentsMain extends React.Component {
                     selectedStudent={selectedStudent}
                     checkAssignment={this.checkAssignment}
                     deleteAssignment={this.deleteAssingment}
-                    getDueAssignments={this.getDueAssignments} />)
+                    getDueAssignments={this.getDueAssignments}
+                    studentView={studentView} />)
                   : ('')}
                 { showComplete && !noClasses ? (<AssignmentsComplete
                     classes={classes}
@@ -235,6 +251,7 @@ class AssignmentsMain extends React.Component {
                     assignments={assignments}
                     completedAssignments={completedAssignments}
                     selectedStudent={selectedStudent}
+                    studentView={studentView}
                     getCompleteAssignments={this.getCompleteAssignments} />)
                   : ('')}
             </div>

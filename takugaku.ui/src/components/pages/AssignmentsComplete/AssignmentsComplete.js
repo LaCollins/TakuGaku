@@ -146,7 +146,7 @@ class AssignmentsComplete extends React.Component {
   );
 
   render() {
-    const { completedAssignments } = this.props;
+    const { completedAssignments, studentView } = this.props;
     const { gradeModalShow } = this.state;
     return (
             <div className="AssignmentsComplete">
@@ -169,6 +169,7 @@ class AssignmentsComplete extends React.Component {
                             key={assignment.assignmentId}
                             assignment={assignment}
                             complete={true}
+                            studentView={studentView}
                             setGradeModalShow={this.setGradeModalShow}
                              />)}
                     </tbody>
