@@ -56,10 +56,6 @@ class AssignmentTable extends React.Component {
       return (letterGrade);
     }
 
-    viewAssignment = () => {
-      this.props.setViewAssignment(this.props.assignment);
-    }
-
     render() {
       const { assignment, complete, studentView } = this.props;
       const dateAssigned = moment(assignment.dateAssigned).format('MMMM Do YYYY');

@@ -5,7 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import AssignmentTable from '../../shared/AssignmentTable/AssignmentTable';
 import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
 import assignmentData from '../../../helpers/data/assignmentData';
-import SingleAssignment from '../../shared/SingleAssignment/SingleAssignment';
 
 class AssignmentsDue extends React.Component {
     state = {

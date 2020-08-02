@@ -26,13 +26,18 @@ class SingleAssignment extends React.Component {
     }
 
     componentDidMount() {
-      if (this.props.location.state !== null) {
-        this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
-      }
+      this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
+    }
+
+    markComplete = () => {
+      assignmentData.completeAssignment(this.props.location.state.assignment.assignmentId)
+        .then(() => {
+          this.props.history.push(`/assignments/student/${this.props.student.studentId}`);
+        })
+        .catch((error) => console.error(error));
     }
 
     render() {
-    // const { assignmentId } = this.props.match.params;
       const { assignment } = this.props.location.state;
       const { assignmentType } = this.state;
       return (
@@ -51,7 +56,7 @@ class SingleAssignment extends React.Component {
                 <Card.Footer>
                         <strong>Due Date: </strong>{moment(assignment.dueDate).format('MMMM Do YYYY')}
                         <div className="buttonContainer">
-                            <Button variant="secondary" className="complete">Mark Complete</Button>
+                            <Button variant="secondary" className="complete" onClick={this.markComplete}>Mark Complete</Button>
                         </div>
                 </Card.Footer>
                 </Card>
