@@ -42,6 +42,11 @@ class ClassForm extends React.Component {
       const { classId } = this.props.match.params;
       subjectData.getAllSubjects()
         .then((response) => {
+          response.sort((a, b) => {
+            if (a.subjectType < b.subjectType) return -1;
+            if (a.subjectType > b.subjectType) return 1;
+            return 0;
+          });
           this.setState({ subjects: response });
           if (classId) {
             for (let i = 0; i < response.length; i += 1) {

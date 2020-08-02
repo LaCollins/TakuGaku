@@ -41,7 +41,7 @@ class ReportCards extends React.Component {
           const selectedYear = this.state.year.split('-')[1];
           startDate = `06-01-${selectedYear}`;
           endDate = `07-31-${selectedYear}`;
-        } else if (this.state.year !== '' && selectedSemester === 'fullYear') {
+        } else if (this.state.year !== '' && selectedSemester === 'schoolYear') {
           const selectedYear = this.state.year.split('-');
           startDate = `08-01-${selectedYear[0]}`;
           endDate = `07-31-${selectedYear[1]}`;

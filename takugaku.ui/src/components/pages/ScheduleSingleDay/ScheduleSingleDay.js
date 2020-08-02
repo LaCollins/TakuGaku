@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import moment from 'moment';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import scheduleData from '../../../helpers/data/scheduleData';
 import studentData from '../../../helpers/data/studentData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
@@ -109,6 +109,8 @@ class ScheduleSingleDay extends React.Component {
                     </tbody>
                     </Table>
                 </div>
+                { this.props.teacherLoggedIn ? (<div className="buttonContainer"><Link to="/manage/schedules" className="btn btn-secondary">Back</Link></div>)
+                  : ('')}
             </div>
       );
     }

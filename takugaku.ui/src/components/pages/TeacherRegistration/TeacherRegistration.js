@@ -12,6 +12,7 @@ class TeacherRegistration extends React.Component {
       pin: 0,
       invalidPin: false,
       invalidTeacher: false,
+      editMode: false,
     }
 
     firstNameChange = (e) => {
@@ -34,8 +35,7 @@ class TeacherRegistration extends React.Component {
       this.setState({ pin: e.target.value });
     }
 
-    saveTeacherEvent = (e) => {
-      e.preventDefault();
+    saveTeacherEvent = () => {
       if (this.state.pin.length !== 4) {
         this.setState({ invalidPin: true });
       } else {
@@ -64,6 +64,56 @@ class TeacherRegistration extends React.Component {
       }
     }
 
+    updateTeacherEvent = () => {
+      const { teacherId } = this.props.teacher;
+      if (this.state.pin.length !== 4) {
+        this.setState({ invalidPin: true });
+      } else {
+        this.setState({ invalidPin: false });
+        const pin = parseInt(this.state.pin, 10);
+
+        const updatedTeacher = {
+          schoolId: this.props.school.schoolId,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          userName: this.state.userName,
+          pin,
+        };
+        teacherData.updateTeacher(teacherId, updatedTeacher)
+          .then((response) => {
+            if (response.data === 'That username already exists, teacher not added.') {
+              this.setState({ invalidTeacher: true });
+            } else {
+              sessionStorage.setItem('teacher', JSON.stringify(response.data));
+              this.props.setTeacherExists();
+              this.props.setTeacherModalHide();
+              this.props.setSuccessfullUpdate();
+              this.setState({ invalidTeacher: false });
+            }
+          })
+          .catch((error) => console.error('err from save profile', error));
+      }
+    }
+
+    checkEditOrCreate = (e) => {
+      e.preventDefault();
+      if (this.state.editMode) {
+        this.updateTeacherEvent();
+      } else {
+        this.saveTeacherEvent();
+      }
+    }
+
+    componentDidMount() {
+      if (this.props.editMode) {
+        this.setState({ editMode: true });
+        this.setState({ firstName: this.props.teacher.firstName });
+        this.setState({ lastName: this.props.teacher.lastName });
+        this.setState({ userName: this.props.teacher.userName });
+        this.setState({ pin: this.props.teacher.pin });
+      }
+    }
+
     render() {
       const {
         firstName,
@@ -72,18 +122,22 @@ class TeacherRegistration extends React.Component {
         pin,
         invalidPin,
         invalidTeacher,
+        editMode,
       } = this.state;
 
       return (
             <div className="TeacherRegistration">
-                <h1>Register A Teacher</h1>
+              { editMode ? ('')
+                : (<div><h1>Register A Teacher</h1>
                 <img id="owl" src={owl} alt="owl"/>
+                </div>)}
                 <div className="container">
-                <h2>Welcome to TakuGaku!</h2>
-                <p>I see you are a first time user! Please register a teacher to start.</p>
+              { editMode ? ('')
+                : (<div><h2>Welcome to TakuGaku!</h2>
+                <p>I see you are a first time user! Please register a teacher to start.</p></div>)}
                 { invalidTeacher ? (<div className="warning">User Name already exists. Please choose another.</div>)
                   : ('')}
-                <form className="formContainer" onSubmit={this.saveTeacherEvent}>
+                <form className="formContainer" onSubmit={this.checkEditOrCreate}>
                 <div className="form-inline d-flex justify-content-center">
                   <div className="form-group row justify-content-center">
                     <label htmlFor="firstName" className="col-form-label">First Name:</label>
@@ -145,9 +199,13 @@ class TeacherRegistration extends React.Component {
               </div>
               { invalidPin ? (<div className="warning">Please enter a valid PIN!</div>)
                 : ('')}
-              <div className="buttonContainer">
-                <Button variant="secondary" className="formButton" type="submit">Register Teacher</Button>
-              </div>
+                { editMode ? (<div className="buttonContainer d-flex justify-content-between">
+                              <Button variant="secondary" className="formButton" onClick={this.props.setTeacherModalHide}>Close</Button>
+                              <Button variant="secondary" className="formButton" type="submit">Save Changes</Button>
+                              </div>)
+                  : (<div className="buttonContainer">
+                    <Button variant="secondary" className="formButton" type="submit">Register Teacher</Button>
+                    </div>)}
               </form>
                 </div>
             </div>

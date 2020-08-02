@@ -249,7 +249,6 @@ class StudentCalendar extends React.Component {
                 <div className="row d-flex justify-content-around mt-4 buttonContainer">
                   { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
                     : (<Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>)}
-                  <Button variant="secondary" className="scheduleButton">Add a Class</Button>
                 </div>
             </div>
     );
