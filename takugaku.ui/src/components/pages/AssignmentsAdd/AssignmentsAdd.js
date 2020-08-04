@@ -6,7 +6,6 @@ import assignmentData from '../../../helpers/data/assignmentData';
 
 class AssignmentsAdd extends React.Component {
     state = {
-      classes: [],
       classId: '',
       assignmentTypeId: '',
       subjectId: '',
@@ -35,7 +34,7 @@ class AssignmentsAdd extends React.Component {
     }
 
     weekdayChange = (e) => {
-      const { classes } = this.state;
+      const { classes } = this.props;
       this.setState({ dayOfWeek: e.target.value });
       this.checkClassDay(e.target.value, classes);
       if (this.state.assignedDate !== '') {
@@ -134,7 +133,7 @@ class AssignmentsAdd extends React.Component {
         subjectId,
         instructions: details,
         completed: false,
-        grade: 0,
+        grade: -1,
         dateAssigned: assignedDate,
         dateDue: dueDate,
         dateComplete: '1900-01-01T00:00:00',
@@ -232,7 +231,6 @@ class AssignmentsAdd extends React.Component {
           this.setState({ assignments: this.props.assignments });
           this.setState({ studentId: this.props.selectedStudent });
           this.setState({ editMode: this.props.editMode });
-          this.setState({ classes: this.props.classes });
           if (this.props.editMode) {
             const dayOfWeek = moment(this.props.singleAssignment.dateAssigned.split('T')[0]).format('dddd').toLowerCase();
             this.setState({
@@ -259,6 +257,12 @@ class AssignmentsAdd extends React.Component {
                 this.setState({ assignmentTypeLabel: this.props.assignmentTypes[j].assignmentType });
               }
             }
+          }
+        }
+
+        componentWillReceiveProps(newProps) {
+          if (newProps.classes !== this.props.classes && this.state.dayOfWeek !== '') {
+            this.checkClassDay(this.state.dayOfWeek, newProps.classes);
           }
         }
 
