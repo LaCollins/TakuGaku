@@ -90,7 +90,11 @@ namespace TakuGaku.Controllers
         public IActionResult UpdateStudent(int studentId, Student updatedStudent)
         {
             var checkUsername = _studentRepository.GetStudentByUserName(updatedStudent.UserName);
-            if (checkUsername == null)
+            if (checkUsername.UserName == updatedStudent.UserName && checkUsername.StudentId == studentId)
+            {
+                var newStudent= _studentRepository.UpdateStudent(studentId, updatedStudent);
+                return Ok(newStudent);
+            } else if (checkUsername == null)
             {
                 var newStudent = _studentRepository.UpdateStudent(studentId, updatedStudent);
                 return Ok(newStudent);

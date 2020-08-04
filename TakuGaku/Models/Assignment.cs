@@ -37,6 +37,8 @@ namespace TakuGaku.Models
         public string AssignmentType { get; set; }
         public DateTime DateAssigned { get; set; }
         public DateTime DateDue { get; set; }
+        public string Instructions { get; set; }
+        public string Link { get; set; }
     }
 
     public class CompletedAssignment

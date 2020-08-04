@@ -17,7 +17,6 @@ class SingleAssignment extends React.Component {
         .then((response) => {
           for (let i = 0; i < response.length; i += 1) {
             if (response[i].assignmentTypeId === this.props.location.state.assignment.assignmentTypeId) {
-              console.error(response[i]);
               this.setState({ assignmentType: response[i].assignmentType });
             }
           }
@@ -26,7 +25,11 @@ class SingleAssignment extends React.Component {
     }
 
     componentDidMount() {
-      this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
+      if (!this.props.location.state.fromTable) {
+        this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
+      } else {
+        this.setState({ assignmentType: this.props.location.state.assignment.assignmentType, assignment: this.props.location.state });
+      }
     }
 
     markComplete = () => {
@@ -54,14 +57,17 @@ class SingleAssignment extends React.Component {
                     <Card.Text>
                      <strong>Instructions:</strong> {assignment.instructions}
                      <div className="mt-2">
-                     <strong>URL: </strong>{assignment.link}</div>
+                     <strong>URL: </strong><a href={assignment.link} target="_blank" rel="noopener noreferrer">{assignment.link}</a></div>
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                        <strong>Due Date: </strong>{moment(assignment.dueDate).format('MMMM Do YYYY')}
+                      <div className="footerContainer">
+                      <strong>Due Date: </strong>{moment(assignment.dueDate).format('MMMM Do YYYY')}
                         <div className="buttonContainer">
-                        <Button variant="secondary" className="complete" onClick={this.markComplete}>Mark Complete</Button>
-                        </div>
+                        { assignment.completed ? ('')
+                          : (<Button variant="secondary" className="complete" onClick={this.markComplete}>Mark Complete</Button>)}
+                      </div>
+                      </div>
                 </Card.Footer>
                 </Card>
                 {this.props.studentLoggedIn ? (<div><Link to="/viewschedule" className="btn btn-secondary backButton">Back To Schedule</Link>

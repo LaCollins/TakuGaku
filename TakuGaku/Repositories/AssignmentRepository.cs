@@ -125,7 +125,7 @@ namespace TakuGaku.Repositories
 
         public IEnumerable<AssignmentWithClassname> GetAssignmentsDue(int studentId)
         {
-            var sql = @"SELECT assignment.assignmentId, classSchedule.classTitle as className, assignment.assignmentTitle, assignmentType.assignmentType, assignment.dateAssigned, assignment.dateDue
+            var sql = @"SELECT assignment.assignmentId, classSchedule.classTitle as className, assignment.assignmentTitle, assignmentType.assignmentType, assignment.instructions, assignment.link, assignment.dateAssigned, assignment.dateDue
                         FROM assignment
                         JOIN classSchedule
                         ON assignment.classId = classSchedule.classId
