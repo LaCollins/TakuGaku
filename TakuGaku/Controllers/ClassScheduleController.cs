@@ -67,7 +67,7 @@ namespace TakuGaku.Controllers
                 return Ok(result);
             }
 
-            return Ok("That class already exists, class not added.");
+            return Ok("A class already exists at that time, class not added.");
         }
 
         [HttpPut("update/{classId}")]
@@ -87,6 +87,8 @@ namespace TakuGaku.Controllers
         [HttpDelete("delete/{classId}")]
         public IActionResult DeleteClass(int classId)
         {
+            _classScheduleRepository.ArchiveAssignments(classId);
+
             var result = _classScheduleRepository.DeleteClass(classId);
 
             return Ok(result);

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -69,8 +70,7 @@ namespace TakuGaku.Repositories
                 foreach (var classItem in classes)
                 {
                     if (classItem.DayOfWeek == classToAdd.DayOfWeek 
-                        && classItem.TimeSlot == classToAdd.TimeSlot 
-                        && classItem.SubjectId == classToAdd.SubjectId)
+                        && classItem.TimeSlot == classToAdd.TimeSlot)
                     {
                         classExists = true;
                     }
@@ -101,7 +101,7 @@ namespace TakuGaku.Repositories
             return timeSlotOpen;
         }
 
-        public void ArchiveAssignments(int classId)
+        public string ArchiveAssignments(int classId)
         {
             var sql = @"UPDATE assignment
                         SET ClassId = 53
@@ -109,7 +109,9 @@ namespace TakuGaku.Repositories
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var result = db.ExecuteAsync(sql, new { ClassId = classId });
+                var result = db.Query(sql, new { ClassId = classId });
+
+                return ("complete");
             }
         }
 
@@ -156,8 +158,6 @@ namespace TakuGaku.Repositories
             var sql = @"DELETE
                         FROM ClassSchedule
                         WHERE ClassId = @classId";
-
-            ArchiveAssignments(classId);
 
             using (var db = new SqlConnection(ConnectionString))
             {
