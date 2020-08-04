@@ -149,8 +149,7 @@ class AssignmentsAdd extends React.Component {
         .catch((error) => console.error(error, 'error from assignmentupdate'));
     }
 
-    saveAssignmentEvent = (e) => {
-      e.preventDefault();
+    saveAssignmentEvent = () => {
       const {
         details, assignedDate, dueDate, url, title,
       } = this.state;

@@ -143,7 +143,7 @@ class ClassForm extends React.Component {
       } else {
         scheduleData.addClass(newClass)
           .then((response) => {
-            if (response.data === 'That class already exists, class not added.') {
+            if (response.data === 'A class already exists at that time, class not added.') {
               this.setState({ invalidClass: true });
             } else {
               this.getScheduleById();
