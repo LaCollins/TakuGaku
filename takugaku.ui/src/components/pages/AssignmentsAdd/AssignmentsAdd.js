@@ -152,7 +152,7 @@ class AssignmentsAdd extends React.Component {
       const {
         details, assignedDate, dueDate, url, title,
       } = this.state;
-      const studentId = parseInt(this.state.studentId, 10);
+      const studentId = parseInt(this.props.selectedStudent, 10);
       const subjectId = parseInt(this.state.subjectId, 10);
       const classId = parseInt(this.state.classId, 10);
       const assignmentTypeId = parseInt(this.state.assignmentTypeId, 10);

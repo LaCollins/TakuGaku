@@ -25,7 +25,11 @@ class SingleAssignment extends React.Component {
     }
 
     componentDidMount() {
-      this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
+      if (!this.props.location.state.fromTable) {
+        this.setState({ assignment: this.props.location.state }, () => this.getAssignmentTypes());
+      } else {
+        this.setState({ assignmentType: this.props.location.state.assignment.assignmentType, assignment: this.props.location.state });
+      }
     }
 
     markComplete = () => {
@@ -53,7 +57,7 @@ class SingleAssignment extends React.Component {
                     <Card.Text>
                      <strong>Instructions:</strong> {assignment.instructions}
                      <div className="mt-2">
-                     <strong>URL: </strong>{assignment.link}</div>
+                     <strong>URL: </strong><a href={assignment.link} target="_blank" rel="noopener noreferrer">{assignment.link}</a></div>
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer>
