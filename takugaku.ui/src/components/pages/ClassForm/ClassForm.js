@@ -222,7 +222,7 @@ class ClassForm extends React.Component {
                     { editMode ? (<option defaultValue={subjectId}>{subjectTitle}</option>)
                       : (<option defaultValue='null'>Choose...</option>)}
                     {subjects.map((subject) => (<option key={subject.subjectId} value={subject.subjectId}>{subject.subjectType}</option>))}
-                </select>\
+                </select>
                 { editMode ? ('')
                   : (<div class="form-check">
                 <input type="checkbox" class="form-check-input" id="weekly" checked={weekly} onChange={this.changeWeekly} />
