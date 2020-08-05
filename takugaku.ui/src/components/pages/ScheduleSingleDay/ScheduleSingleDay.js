@@ -1,18 +1,16 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import moment from 'moment';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import scheduleData from '../../../helpers/data/scheduleData';
-import studentData from '../../../helpers/data/studentData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
 import './ScheduleSingleDay.scss';
 
 class ScheduleSingleDay extends React.Component {
     state = {
-      studentId: 0,
-      student: [],
       selectedDay: '',
       selectedDate: '',
+      singleStudent: [],
       assignments: [],
       scheduleArray: [
         { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
@@ -24,13 +22,6 @@ class ScheduleSingleDay extends React.Component {
         { timeSlot: '14:00:00', assignment: { assignmentTitle: '' } },
         { timeSlot: '15:00:00', assignment: { assignmentTitle: '' } },
       ],
-    }
-
-    getStudentById = () => {
-      const { studentId } = this.props.match.params;
-      studentData.getStudentById(studentId)
-        .then((response) => this.setState({ student: response }))
-        .catch((error) => console.error(error));
     }
 
     deleteClass = (classId) => {
@@ -50,45 +41,38 @@ class ScheduleSingleDay extends React.Component {
     }
 
     checkDate = () => {
-      const { selectedDate } = this.props.location.state;
+      const { selectedDate } = this.props;
       this.setState({ selectedDate });
     }
 
     componentDidMount() {
-      const { studentId } = this.props.match.params;
-      const { scheduleArray } = this.props.location.state;
-      const { selectedDate } = this.props.location.state;
-      const { selectedDay } = this.props.location.state;
-      const { assignments } = this.props.location.state;
+      const { scheduleArray } = this.props;
+      const { selectedDate } = this.props;
+      const { selectedDay } = this.props;
+      const { assignments } = this.props;
+      const { singleStudent } = this.props;
 
       this.setState({ selectedDate, selectedDay, assignments });
 
-      this.setState({ studentId });
-      this.setState({ scheduleArray });
-
-      this.getStudentById();
+      this.setState({ scheduleArray, singleStudent });
 
       this.checkDate();
     }
 
     render() {
       const {
-        student,
+        singleStudent,
         selectedDay,
         scheduleArray,
         selectedDate,
         assignments,
-      } = this.state;
+      } = this.props;
 
       const viewingDate = moment(selectedDate).format('MMMM Do YYYY');
       return (
             <div className="ScheduleSingleDay">
-            { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
-              : ('')}
-                <h1>Daily Schedule</h1>
-                <h4>{student.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
+                <h4>{singleStudent.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
                 <h5 className="mb-4">You are currently viewing assignments for {viewingDate}</h5>
-                <div className="container">
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
@@ -100,7 +84,7 @@ class ScheduleSingleDay extends React.Component {
                     </thead>
                     <tbody>
                         {scheduleArray.map((classSlot) => <ClassTable key={classSlot.timeSlot}
-                        student={student}
+                        student={singleStudent}
                         classSlot={classSlot}
                         selectedDate={selectedDate}
                         selectedDay={selectedDay}
@@ -108,9 +92,6 @@ class ScheduleSingleDay extends React.Component {
                         deleteClass={this.deleteClass} />)}
                     </tbody>
                     </Table>
-                </div>
-                { this.props.teacherLoggedIn ? (<div className="buttonContainer"><Link to="/manage/schedules" className="btn btn-secondary">Back</Link></div>)
-                  : ('')}
             </div>
       );
     }

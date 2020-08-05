@@ -156,7 +156,7 @@ class CalendarComponent extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.student !== 'undefined') {
+    if (this.props.student) {
       this.getAssignment(this.props.student.studentId);
       this.setState({ selectedStudent: this.props.student.studentId, singleStudent: this.props.student }, () => {
         this.getScheduleById(this.state.selectedStudent);

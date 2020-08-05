@@ -34,7 +34,10 @@ class ClassTable extends React.Component {
                       assignments,
                     },
                   }} className="btn btn-secondary scheduleButton">Add a Class</Link></td>)}
-                <td><Link to={{ pathname: `/assignments/singleassignment/${classSlot.assignment.assignmentId}`, state: { assignment: classSlot.assignment, fromTable: false } }}>{classSlot.assignment.assignmentTitle}</Link></td>
+                <td><Link to={{
+                  pathname: `/assignments/singleassignment/${classSlot.assignment.assignmentId}`,
+                  state: { assignment: classSlot.assignment, fromTable: false },
+                }}>{classSlot.assignment.assignmentTitle}</Link></td>
                 { classSlot.classTitle && !studentView ? (<td><Link to={{
                   pathname: `/schedule/edit/${classSlot.classId}`,
                   state: {
@@ -45,7 +48,7 @@ class ClassTable extends React.Component {
                     assignments,
                     classSlot,
                   },
-                }} className="btn btn-secondary edit m-0 mr-2"><i className="m-1 fas fa-edit"></i></Link>
+                }} className="btn btn-secondary edit m-0"><i className="m-1 fas fa-edit"></i></Link>
                 <Button variant="secondary" className="m-0 delete" onClick={this.deleteClassEvent}><i className="m-1 fas fa-trash-alt"></i></Button></td>)
                   : ('') }
             </tr>

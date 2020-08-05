@@ -192,7 +192,6 @@ class AssignmentsMain extends React.Component {
           showComplete,
           completedAssignments,
           studentView,
-          studentSelected,
         } = this.state;
 
         return (
