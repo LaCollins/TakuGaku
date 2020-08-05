@@ -6,11 +6,16 @@ import scheduleData from '../../../helpers/data/scheduleData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
 import './ScheduleSingleDay.scss';
 import ClassForm from '../ClassForm/ClassForm';
+import AssignmentsAdd from '../AssignmentsAdd/AssignmentsAdd';
+import assignmentData from '../../../helpers/data/assignmentData';
 
 class ScheduleSingleDay extends React.Component {
     state = {
       classModalShow: false,
       editClassModalShow: false,
+      addAssignmentModalShow: false,
+      selectedClass: '',
+      assignmentTypes: [],
       selectedTimeSlot: '',
       selectedDay: '',
       selectedDate: '',
@@ -73,6 +78,45 @@ class ScheduleSingleDay extends React.Component {
           </Modal>
     )
 
+    AddAssignmentModal = (props) => (
+      <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered>
+          <Modal.Header closeButton>
+              </Modal.Header>
+              <Modal.Body>
+                  <AssignmentsAdd
+                    classes={this.props.scheduleArray}
+                    assignmentTypes={this.state.assignmentTypes}
+                    assignments={this.props.assignments}
+                    selectedStudent={this.props.selectedStudent}
+                    checkAssignment={this.props.checkAssignment}
+                    selectedDay={this.props.selectedDay}
+                    selectedDate={this.props.selectedDate}
+                    classSlot={this.state.classSlot}
+                    fromSchedule={true}
+                    editMode={false}
+                    setAddAssignmentModalHide={this.setAddAssignmentModalHide}
+                    />
+              </Modal.Body>
+          </Modal>
+    )
+
+    getAssignmentTypes = () => {
+      assignmentData.getAssignmentType()
+        .then((response) => {
+          response.sort((a, b) => {
+            if (a.assignmentType < b.assignmentType) return -1;
+            if (a.assignmentType > b.assignmentType) return 1;
+            return 0;
+          });
+          this.setState({ assignmentTypes: response });
+        })
+        .catch((error) => console.error(error));
+    }
+
     deleteClass = (classId) => {
       scheduleData.deleteClassById(classId)
         .then(() => {
@@ -102,6 +146,16 @@ class ScheduleSingleDay extends React.Component {
       this.setState({ editClassModalShow: false });
     }
 
+    setAddAssignmentModalShow = (classSlot) => {
+      this.setState({ classSlot, addAssignmentModalShow: true });
+    }
+
+    setAddAssignmentModalHide = () => {
+      this.setState({ addAssignmentModalShow: false });
+      this.props.getAssignment(this.props.singleStudent.studentId);
+      this.props.getScheduleById();
+    }
+
     componentDidMount() {
       const { scheduleArray } = this.props;
       const { selectedDate } = this.props;
@@ -114,6 +168,7 @@ class ScheduleSingleDay extends React.Component {
       this.setState({ scheduleArray, singleStudent });
 
       this.checkDate();
+      this.getAssignmentTypes();
     }
 
     render() {
@@ -125,7 +180,7 @@ class ScheduleSingleDay extends React.Component {
         assignments,
       } = this.props;
 
-      const { classModalShow, editClassModalShow } = this.state;
+      const { classModalShow, editClassModalShow, addAssignmentModalShow } = this.state;
 
       const viewingDate = moment(selectedDate).format('MMMM Do YYYY');
       return (
@@ -134,6 +189,7 @@ class ScheduleSingleDay extends React.Component {
                 <h5 className="mb-4">You are currently viewing assignments for {viewingDate}</h5>
                 <this.AddClassModal show={classModalShow} onHide={() => this.setState({ classModalShow: false })} />
                 <this.EditClassModal show={editClassModalShow} onHide={() => this.setState({ editClassModalShow: false })} />
+                <this.AddAssignmentModal show={addAssignmentModalShow} onHide={() => this.setState({ addAssignmentModalShow: false })} />
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
@@ -152,7 +208,8 @@ class ScheduleSingleDay extends React.Component {
                         assignments={assignments}
                         deleteClass={this.deleteClass}
                         setEditClassModalShow={this.setEditClassModalShow}
-                        setClassModalShow={this.setClassModalShow} />)}
+                        setClassModalShow={this.setClassModalShow}
+                        setAddAssignmentModalShow={this.setAddAssignmentModalShow} />)}
                     </tbody>
                     </Table>
             </div>

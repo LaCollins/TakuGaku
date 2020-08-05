@@ -1,7 +1,6 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import { Redirect } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import './StudentCalendar.scss';
 import 'react-calendar/dist/Calendar.css';
 import studentData from '../../../helpers/data/studentData';
@@ -254,7 +253,7 @@ class StudentCalendar extends React.Component {
                       </select>
                       </div>
                       </div>
-                      <div className="row d-flex justify-content-center">
+                      <div className="row d-flex justify-content-center calendar-container">
                         <h4>Select a Day</h4>
                       </div>
                       <div className="row d-flex justify-content-center">
@@ -269,7 +268,9 @@ class StudentCalendar extends React.Component {
                     studentView={false}
                     selectedStudent={selectedStudent}
                     singleStudent={singleStudent}
-                    getScheduleById={this.getScheduleById} />)
+                    getScheduleById={this.getScheduleById}
+                    checkAssignment={this.checkAssignment}
+                    getAssignment={this.getAssignment} />)
                       : ('')}
                   </div>
                 </div>

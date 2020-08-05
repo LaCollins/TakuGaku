@@ -7,12 +7,24 @@
         margin-top: 20px;
         font-family: $titleFont;
     }
+
+    .block1 {
+        width: 50%;
+        margin-left: -140px;
+    }
+
+    .block2 {
+        width: 50%;
+
+    }
+
     
     .react-calendar {
         margin: 20px;
         box-shadow: 5px 5px 25px 10px rgb(143, 143, 143);
         border-radius: 5px;
         border: none;
+        width: 50vw;
     }
 
     .react-calendar__tile--now {
