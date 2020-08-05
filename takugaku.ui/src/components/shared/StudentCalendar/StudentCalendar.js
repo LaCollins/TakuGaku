@@ -61,6 +61,9 @@ class StudentCalendar extends React.Component {
       this.setState({ selectedDay: 'sunday' });
     }
     this.convertDateToNumbers(date);
+    if (this.state.selectedStudent !== '') {
+      this.getScheduleById();
+    }
   }
 
   getCurrentDay = () => {
@@ -256,10 +259,6 @@ class StudentCalendar extends React.Component {
                       </div>
                       <div className="row d-flex justify-content-center">
                         <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} formatLongDate={this.formatDate}/>
-                      </div>
-                      <div className="row d-flex justify-content-around mt-4 buttonContainer">
-                        { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
-                          : (<Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>)}
                       </div>
                   </div>
                   <div className="block2 container w-50">
