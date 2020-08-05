@@ -154,7 +154,7 @@ class AssignmentsMain extends React.Component {
               }
             }
             this.props.history.push({
-              pathname: `/schedule/${studentId}`,
+              pathname: `/manage/schedules/${studentId}`,
               state: {
                 scheduleArray: newArray, selectedDay, selectedDate, assignments,
               },
@@ -192,7 +192,6 @@ class AssignmentsMain extends React.Component {
           showComplete,
           completedAssignments,
           studentView,
-          studentSelected,
         } = this.state;
 
         return (

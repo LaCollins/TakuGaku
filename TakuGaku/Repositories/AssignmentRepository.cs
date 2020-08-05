@@ -70,7 +70,7 @@ namespace TakuGaku.Repositories
                         on assignment.classId = classSchedule.classId
                         join [subject]
                         on assignment.subjectId = [subject].subjectId
-                        where assignment.dateAssigned BETWEEN @startDate AND @endDate AND assignment.classId != 53 AND assignment.completed = 1 AND assignment.studentId = @studentId
+                        where assignment.dateAssigned BETWEEN @startDate AND @endDate AND assignment.classId != 53 AND assignment.completed = 1 AND assignment.studentId = @studentId AND assignment.grade > -1
                         group by assignment.classId, assignment.studentId, classSchedule.classTitle, [subject].subjectType";
 
             using (var db = new SqlConnection(ConnectionString))

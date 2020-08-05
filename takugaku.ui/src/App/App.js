@@ -239,6 +239,7 @@ class App extends React.Component {
             />
             <Route path="/manage/schedules" exact render={(props) => <StudentCalendar {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}
+            teacher={teacher}
             school={school} />}/>
             <Route path="/manage/schedules/:studentId" exact render={(props) => <StudentCalendar {...props} authed={authed}
             teacherLoggedIn={teacherLoggedIn}

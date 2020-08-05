@@ -1,10 +1,12 @@
 @import '../../../styles/variables';
 
 .ScheduleSingleDay {
-    margin-top: 150px;
+
+    margin-right: 40px;
+    margin-left: -60px;
+    width: 50vw;
 
     h1, h4, h5 {
-        margin-top: 20px;
         font-family: $titleFont;
     }
 

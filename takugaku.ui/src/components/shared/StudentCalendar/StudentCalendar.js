@@ -7,6 +7,7 @@ import 'react-calendar/dist/Calendar.css';
 import studentData from '../../../helpers/data/studentData';
 import assignmentData from '../../../helpers/data/assignmentData';
 import scheduleData from '../../../helpers/data/scheduleData';
+import ScheduleSingleDay from '../../pages/ScheduleSingleDay/ScheduleSingleDay';
 
 class StudentCalendar extends React.Component {
   state = {
@@ -23,8 +24,13 @@ class StudentCalendar extends React.Component {
 
   studentChange = (e) => {
     e.preventDefault();
-    this.setState({ selectedStudent: e.target.value });
-    this.getAssignment(e.target.value);
+    studentData.getStudentById(e.target.value)
+      .then((response) => {
+        this.setState({ selectedStudent: response.studentId });
+        this.getAssignment(response.studentId);
+        this.setState({ singleStudent: response }, () => this.getScheduleById());
+      })
+      .catch((error) => console.error(error));
   }
 
   getStudents = () => {
@@ -121,7 +127,7 @@ class StudentCalendar extends React.Component {
       .then((assignments) => {
         this.setState({ assignments });
       })
-      .catch((error) => console.error(error));
+      .catch(() => this.setState({ assignments: [] }));
   }
 
   getScheduleById = () => {
@@ -173,7 +179,6 @@ class StudentCalendar extends React.Component {
     const newArray = this.state.scheduleArray;
     const { assignments } = this.state;
     const {
-      selectedStudent,
       selectedDay,
       selectedDate,
     } = this.state;
@@ -188,12 +193,8 @@ class StudentCalendar extends React.Component {
         }
       }
     }
-    this.setState({ scheduleArray: newArray });
-    this.props.history.push({
-      pathname: `/schedule/${selectedStudent}`,
-      state: {
-        scheduleArray: newArray, selectedDay, selectedDate, assignments, studentView: false,
-      },
+    this.setState({
+      scheduleArray: newArray, selectedDay, selectedDate, assignments, viewClassSchedule: true,
     });
   }
 
@@ -207,13 +208,16 @@ class StudentCalendar extends React.Component {
     if (studentId) {
       this.getAssignment(studentId);
       this.setState({ selectedStudent: studentId });
+      this.setState({ selectedDate: this.props.location.state.selectedDate, selectedDay: this.props.location.state.selectedDay });
       studentData.getStudentById(studentId)
         .then((response) => {
           this.setState({ singleStudent: response });
+          this.getScheduleById();
         })
         .catch((error) => console.error(error));
+    } else {
+      this.getCurrentDay();
     }
-    this.getCurrentDay();
   }
 
   render() {
@@ -221,6 +225,11 @@ class StudentCalendar extends React.Component {
       students,
       selectedStudent,
       singleStudent,
+      viewClassSchedule,
+      scheduleArray,
+      selectedDay,
+      selectedDate,
+      assignments,
     } = this.state;
 
     const { studentId } = this.props.match.params;
@@ -230,25 +239,40 @@ class StudentCalendar extends React.Component {
               { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
                 : ('')}
                 <h1>Class Schedule</h1>
-                <div className="form-inline d-flex justify-content-around">
-                <div className="col-auto my-2">
-                <label htmlFor="student" className="col-form-label">Student:</label>
-                <select type="select" className="custom-select mr-sm-2" id="student" onChange={this.studentChange} required>
-                { (studentId) ? (<option defaultValue={studentId}>{singleStudent.firstName}</option>)
-                  : (<option defaultValue="">Choose...</option>)}
-                    {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
-                </select>
-                </div>
-                </div>
-                <div className="row d-flex justify-content-center">
-                  <h4>Select a Day</h4>
-                </div>
-                <div className="row d-flex justify-content-center">
-                  <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} formatLongDate={this.formatDate}/>
-                </div>
-                <div className="row d-flex justify-content-around mt-4 buttonContainer">
-                  { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
-                    : (<Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>)}
+                <div className="d-flex row">
+                  <div className="block1 container w-50">
+                    <div className="form-inline d-flex justify-content-around">
+                      <div className="col-auto my-2">
+                      <label htmlFor="student" className="col-form-label">Student:</label>
+                      <select type="select" className="custom-select mr-sm-2" id="student" onChange={this.studentChange} required>
+                      { (studentId) ? (<option defaultValue={studentId}>{singleStudent.firstName}</option>)
+                        : (<option defaultValue="">Choose...</option>)}
+                          {students.map((student) => (<option key={student.studentId} value={student.studentId}>{student.firstName}</option>))}
+                      </select>
+                      </div>
+                      </div>
+                      <div className="row d-flex justify-content-center">
+                        <h4>Select a Day</h4>
+                      </div>
+                      <div className="row d-flex justify-content-center">
+                        <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} formatLongDate={this.formatDate}/>
+                      </div>
+                      <div className="row d-flex justify-content-around mt-4 buttonContainer">
+                        { selectedStudent === '' ? (<Button variant="secondary" disabled className="scheduleButton">View Class Schedule</Button>)
+                          : (<Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>)}
+                      </div>
+                  </div>
+                  <div className="block2 container w-50">
+                    { viewClassSchedule ? (<ScheduleSingleDay scheduleArray={scheduleArray}
+                    selectedDay={selectedDay}
+                    selectedDate={selectedDate}
+                    assignments={assignments}
+                    studentView={false}
+                    selectedStudent={selectedStudent}
+                    singleStudent={singleStudent}
+                    getScheduleById={this.getScheduleById} />)
+                      : ('')}
+                  </div>
                 </div>
             </div>
     );

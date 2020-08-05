@@ -1,6 +1,7 @@
 @import '../../../styles/variables';
 
 .ClassTable {
+
     .scheduleButton {
         font-family: $buttonFont;
         font-size: 1.25;
@@ -10,5 +11,7 @@
 
     .edit, .delete {
         box-shadow: 5px 10px 10px rgb(55, 55, 55);
+        width: 50px;
+        height: 40px;
     }
 }

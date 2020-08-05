@@ -74,7 +74,7 @@ class StudentClassSchedule extends React.Component {
                 <div className="d-flex row">
                     <div className="block1 container w-50">
                     { student === 'undefined' || student === {} ? ('')
-                      : (<CalendarComponent student={student} checkAssignment={this.checkAssignment} />)}
+                      : (<CalendarComponent student={student} checkAssignment={this.checkAssignment} studentLoggedIn={this.props.studentLoggedIn}/>)}
                     </div>
                     <div className="block2 container w-50">
                         { viewClassSchedule ? (<this.SingleDayView />)

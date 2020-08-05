@@ -73,7 +73,7 @@ class SingleAssignment extends React.Component {
                 {this.props.studentLoggedIn ? (<div><Link to="/viewschedule" className="btn btn-secondary backButton">Back To Schedule</Link>
                 <Link to={`/assignments/student/${this.props.student.studentId}`} className="btn btn-secondary backButton">Back To Assignments</Link></div>)
                   : ('')}
-                {this.props.teacherLoggedIn ? (<Link to="/manage/assignments" className="btn btn-secondary backButton">Back</Link>)
+                {this.props.teacherLoggedIn ? (<Link to="/manage/schedules" className="btn btn-secondary backButton">Back</Link>)
                   : ('')}
             </div>
       );
