@@ -176,7 +176,11 @@ class AssignmentsAdd extends React.Component {
             this.setState({ invalidAssignment: true });
           } else {
             this.setState({ invalidAssignment: false });
-            this.getSchedule();
+            if (this.props.fromSchedule) {
+              this.props.setAddAssignmentModalHide();
+            } else {
+              this.getSchedule();
+            }
           }
         })
         .catch((error) => console.error(error));
@@ -231,6 +235,16 @@ class AssignmentsAdd extends React.Component {
           this.setState({ assignments: this.props.assignments });
           this.setState({ studentId: this.props.selectedStudent });
           this.setState({ editMode: this.props.editMode });
+          if (this.props.fromSchedule) {
+            this.setState({
+              dayOfWeek: this.props.selectedDay,
+              assignedDate: this.props.selectedDate,
+              classId: this.props.classSlot.classId,
+              classTitle: this.props.classSlot.classTitle,
+              subjectId: this.props.classSlot.subjectId,
+            });
+          }
+
           if (this.props.editMode) {
             const dayOfWeek = moment(this.props.singleAssignment.dateAssigned.split('T')[0]).format('dddd').toLowerCase();
             this.setState({
@@ -283,7 +297,7 @@ class AssignmentsAdd extends React.Component {
             classId,
             assignmentTypeLabel,
           } = this.state;
-          const { assignmentTypes } = this.props;
+          const { assignmentTypes, fromSchedule } = this.props;
 
           return (
             <div className="AssignmentsAdd container">
@@ -293,14 +307,14 @@ class AssignmentsAdd extends React.Component {
                 <div className="col-auto ml-2">
                 <label htmlFor="weekday" className="col-form-label">Day of the Week:</label>
                 <select type="class" className="custom-select mr-sm-2" id="weekday" onChange={this.weekdayChange} required>
-                 {editMode ? (<option defaultValue={dayOfWeek}>{dayOfWeek}</option>)
+                 {editMode || fromSchedule ? (<option defaultValue={dayOfWeek}>{dayOfWeek}</option>)
                    : (<option defaultValue="">Choose...</option>)}
                   {weekDayArray.map((weekday) => (<option key={weekday} value={weekday}>{weekday}</option>))}
                 </select>
                 { dayOfWeek === '' ? ('')
                   : (<div className="classSelector"><label htmlFor="class" className="col-form-label">Class:</label>
                  <select className="custom-select mr-sm-2" id="class" onChange={this.classChange} required>
-                {editMode ? (<option defaultValue={classId}>{classTitle}</option>)
+                {editMode || fromSchedule ? (<option defaultValue={classId}>{classTitle}</option>)
                   : (<option defaultValue="">Choose...</option>) }
                   {filteredClasses.map((classSlot) => (<option key={classSlot.classId} value={`${classSlot.classId} ${classSlot.subjectId}`}>{classSlot.classTitle}</option>))}
                 </select></div>)}
