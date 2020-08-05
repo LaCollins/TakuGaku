@@ -27,6 +27,7 @@ class StudentCalendar extends React.Component {
       .then((response) => {
         this.setState({ selectedStudent: response.studentId });
         this.getAssignment(response.studentId);
+        this.reloadAssignments();
         this.setState({ singleStudent: response }, () => this.getScheduleById());
       })
       .catch((error) => console.error(error));
@@ -124,6 +125,14 @@ class StudentCalendar extends React.Component {
     this.setState({ selectedDate: newDateString });
   }
 
+  reloadAssignments = () => {
+    assignmentData.getAssignmentByStudentId(this.state.selectedStudent)
+      .then((assignments) => {
+        this.setState({ assignments }, () => this.getScheduleById());
+      })
+      .catch(() => this.setState({ assignments: [] }));
+  }
+
   getAssignment = (studentId) => {
     assignmentData.getAssignmentByStudentId(studentId)
       .then((assignments) => {
@@ -210,7 +219,7 @@ class StudentCalendar extends React.Component {
     if (studentId) {
       this.getAssignment(studentId);
       this.setState({ selectedStudent: studentId });
-      this.setState({ selectedDate: this.props.location.state.selectedDate, selectedDay: this.props.location.state.selectedDay });
+      this.getCurrentDay();
       studentData.getStudentById(studentId)
         .then((response) => {
           this.setState({ singleStudent: response });
@@ -270,7 +279,7 @@ class StudentCalendar extends React.Component {
                     singleStudent={singleStudent}
                     getScheduleById={this.getScheduleById}
                     checkAssignment={this.checkAssignment}
-                    getAssignment={this.getAssignment} />)
+                    reloadAssignments={this.reloadAssignments} />)
                       : ('')}
                   </div>
                 </div>
