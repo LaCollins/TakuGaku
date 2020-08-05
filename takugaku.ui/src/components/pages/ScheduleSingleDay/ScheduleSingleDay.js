@@ -152,8 +152,7 @@ class ScheduleSingleDay extends React.Component {
 
     setAddAssignmentModalHide = () => {
       this.setState({ addAssignmentModalShow: false });
-      this.props.getAssignment(this.props.singleStudent.studentId);
-      this.props.getScheduleById();
+      this.props.reloadAssignments();
     }
 
     componentDidMount() {

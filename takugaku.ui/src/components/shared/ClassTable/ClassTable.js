@@ -24,6 +24,12 @@ class ClassTable extends React.Component {
       this.props.setAddAssignmentModalShow(this.props.classSlot);
     }
 
+    componentDidMount() {
+      if (this.props.classSlot.assignment.assignmentTitle === '' && !this.props.studentView && this.props.classSlot.classTitle && this.props.classSlot.classTitle !== 'Lunch') {
+        this.setState({ addAssignment: true });
+      }
+    }
+
     render() {
       const {
         classSlot,
