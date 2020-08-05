@@ -208,13 +208,16 @@ class StudentCalendar extends React.Component {
     if (studentId) {
       this.getAssignment(studentId);
       this.setState({ selectedStudent: studentId });
+      this.setState({ selectedDate: this.props.location.state.selectedDate, selectedDay: this.props.location.state.selectedDay });
       studentData.getStudentById(studentId)
         .then((response) => {
           this.setState({ singleStudent: response });
+          this.getScheduleById();
         })
         .catch((error) => console.error(error));
+    } else {
+      this.getCurrentDay();
     }
-    this.getCurrentDay();
   }
 
   render() {
@@ -266,7 +269,8 @@ class StudentCalendar extends React.Component {
                     assignments={assignments}
                     studentView={false}
                     selectedStudent={selectedStudent}
-                    singleStudent={singleStudent} />)
+                    singleStudent={singleStudent}
+                    getScheduleById={this.getScheduleById} />)
                       : ('')}
                   </div>
                 </div>

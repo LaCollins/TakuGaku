@@ -39,7 +39,6 @@ class ClassForm extends React.Component {
     }
 
     getSubjects = () => {
-      const { classId } = this.props.match.params;
       subjectData.getAllSubjects()
         .then((response) => {
           response.sort((a, b) => {
@@ -48,7 +47,7 @@ class ClassForm extends React.Component {
             return 0;
           });
           this.setState({ subjects: response });
-          if (classId) {
+          if (this.props.editMode) {
             for (let i = 0; i < response.length; i += 1) {
               if (this.state.subjectId === response[i].subjectId) {
                 this.setState({ subjectTitle: response[i].subjectType });
@@ -58,75 +57,6 @@ class ClassForm extends React.Component {
         })
         .catch((error) => console.error(error, 'error from getSubjects'));
     }
-
-    getScheduleById = () => {
-      const { studentId } = this.state;
-      scheduleData.getScheduleByStudentId(studentId)
-        .then((response) => {
-          const schedule = response;
-          for (let i = 0; i < response.length; i += 1) {
-            schedule[i].assignment = { assignmentTitle: '' };
-          }
-          this.setState({ studentSchedule: schedule });
-          this.buildSchedule();
-        })
-        .catch((error) => console.error(error, 'error from getschedulebyid'));
-    }
-
-      buildSchedule = () => {
-        const { dayOfWeek } = this.state;
-        const { studentSchedule } = this.state;
-        const newArray = [
-          { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '09:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '10:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '11:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '12:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '13:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '14:00:00', assignment: { assignmentTitle: '' } },
-          { timeSlot: '15:00:00', assignment: { assignmentTitle: '' } },
-        ];
-
-        for (let i = 0; i < studentSchedule.length; i += 1) {
-          const time = studentSchedule[i].timeSlot.split('T')[1];
-          studentSchedule[i].timeSlot = time;
-          for (let j = 0; j < newArray.length; j += 1) {
-            if (studentSchedule[i].timeSlot === newArray[j].timeSlot && dayOfWeek === studentSchedule[i].dayOfWeek) {
-              newArray[j] = studentSchedule[i];
-            }
-          }
-        }
-        this.setState({ scheduleArray: newArray });
-        this.checkAssignment();
-      }
-
-      checkAssignment = () => {
-        const newArray = this.state.scheduleArray;
-        const { assignments } = this.state;
-        const {
-          studentId,
-          selectedDate,
-        } = this.state;
-        const selectedDay = this.state.dayOfWeek;
-
-        for (let i = 0; i < assignments.length; i += 1) {
-          const assignmentDate = assignments[i].dateAssigned.split('T');
-          if (assignmentDate[0] === selectedDate) {
-            for (let j = 0; j < newArray.length; j += 1) {
-              if (assignments[i].classId === newArray[j].classId) {
-                newArray[j].assignment = assignments[i];
-              }
-            }
-          }
-        }
-        this.setState({ scheduleArray: newArray });
-        this.props.history.push({
-          pathname: `/schedule/${studentId}`,
-          state: {
-            scheduleArray: newArray, selectedDay, selectedDate: this.props.location.state.selectedDate, assignments,
-          },
-        });
-      }
 
     saveClassEvent = () => {
       const subjectId = parseInt(this.state.subjectId, 10);
@@ -146,7 +76,8 @@ class ClassForm extends React.Component {
             if (response.data === 'A class already exists at that time, class not added.') {
               this.setState({ invalidClass: true });
             } else {
-              this.getScheduleById();
+              this.props.getScheduleById();
+              this.props.setClassModalHide();
               this.setState({ invalidClass: false });
             }
           })
@@ -155,7 +86,7 @@ class ClassForm extends React.Component {
     }
 
     classUpdateEvent = () => {
-      const { classId } = this.props.match.params;
+      const { classId } = this.props.classSlot;
       const subjectId = parseInt(this.state.subjectId, 10);
       const timeSlot = `1900-01-01T${this.state.timeSlot}`;
       const updatedClass = {
@@ -167,7 +98,8 @@ class ClassForm extends React.Component {
       };
       scheduleData.updateClass(classId, updatedClass)
         .then(() => {
-          this.getScheduleById();
+          this.props.getScheduleById();
+          this.props.setClassModalHide();
           this.setState({ invalidClass: false });
         })
         .catch((error) => console.error(error, 'error from classupdate'));
@@ -184,27 +116,26 @@ class ClassForm extends React.Component {
     }
 
     componentDidMount() {
-      const { classId } = this.props.match.params;
       this.getSubjects();
-      this.setState({ timeSlot: this.props.location.state.timeSlot });
-      this.setState({ studentId: this.props.location.state.student.studentId });
-      this.setState({ dayOfWeek: this.props.location.state.selectedDay });
-      this.setState({ assignments: this.props.location.state.assignments });
+      this.setState({ timeSlot: this.props.timeSlot });
+      this.setState({ studentId: this.props.student.studentId });
+      this.setState({ dayOfWeek: this.props.selectedDay });
+      this.setState({ assignments: this.props.assignments });
 
-      if (classId) {
-        this.setState({ timeSlot: this.props.location.state.classSlot.timeSlot });
-        this.setState({ classTitle: this.props.location.state.classSlot.classTitle });
-        this.setState({ subjectId: this.props.location.state.classSlot.subjectId });
+      if (this.props.editMode) {
+        this.setState({ timeSlot: this.props.timeSlot });
+        this.setState({ classTitle: this.props.classSlot.classTitle });
+        this.setState({ subjectId: this.props.classSlot.subjectId });
         this.setState({ editMode: true });
+        this.getSubjects();
       }
     }
 
     render() {
-      const { student, selectedDay } = this.props.location.state;
+      const { student, selectedDay, timeSlot } = this.props;
       const {
         classTitle,
         subjects,
-        timeSlot,
         invalidClass,
         noSubject,
         subjectId,
@@ -214,8 +145,6 @@ class ClassForm extends React.Component {
 
       return (
             <div className="ClassForm">
-            { !this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/' }} />)
-              : ('')}
             { invalidClass ? (<div className="warning">There is already a class scheduled for that time! Please pick a different day/time.</div>)
               : ('')}
                 {editMode ? (<h1>Edit {student.firstName}'s {selectedDay} schedule.</h1>)

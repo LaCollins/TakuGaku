@@ -1,16 +1,21 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
 import scheduleData from '../../../helpers/data/scheduleData';
 import ClassTable from '../../shared/ClassTable/ClassTable';
 import './ScheduleSingleDay.scss';
+import ClassForm from '../ClassForm/ClassForm';
 
 class ScheduleSingleDay extends React.Component {
     state = {
+      classModalShow: false,
+      editClassModalShow: false,
+      selectedTimeSlot: '',
       selectedDay: '',
       selectedDate: '',
       singleStudent: [],
+      classSlot: [],
       assignments: [],
       scheduleArray: [
         { timeSlot: '08:00:00', assignment: { assignmentTitle: '' } },
@@ -24,18 +29,60 @@ class ScheduleSingleDay extends React.Component {
       ],
     }
 
+    AddClassModal = (props) => (
+      <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered>
+          <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+                  Add A Class
+              </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                  <ClassForm
+                  student={this.props.singleStudent}
+                  timeSlot={this.state.selectedTimeSlot}
+                  selectedDate={this.props.selectedDate}
+                  selectedDay={this.props.selectedDay}
+                  assignments={this.props.assignments}
+                  getScheduleById={this.props.getScheduleById}
+                  setClassModalHide={this.setClassModalHide} />
+              </Modal.Body>
+          </Modal>
+    )
+
+    EditClassModal = (props) => (
+      <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered>
+          <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+                  Edit A Class
+              </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                  <ClassForm
+                  student={this.props.singleStudent}
+                  timeSlot={this.state.selectedTimeSlot}
+                  selectedDate={this.props.selectedDate}
+                  selectedDay={this.props.selectedDay}
+                  assignments={this.props.assignments}
+                  classSlot={this.state.classSlot}
+                  getScheduleById={this.props.getScheduleById}
+                  editMode={true}
+                  setClassModalHide={this.setEditClassModalHide} />
+              </Modal.Body>
+          </Modal>
+    )
+
     deleteClass = (classId) => {
-      const classArray = this.state.scheduleArray;
-      let timeSlot = '';
       scheduleData.deleteClassById(classId)
         .then(() => {
-          for (let i = 0; i < classArray.length; i += 1) {
-            if (classArray[i].classId === classId) {
-              timeSlot = classArray[i].timeSlot;
-              classArray[i] = { timeSlot, assignment: { assignmentTitle: '' } };
-            }
-          }
-          this.setState({ scheduleArray: classArray });
+          this.props.getScheduleById();
         })
         .catch((error) => console.error(error));
     }
@@ -43,6 +90,22 @@ class ScheduleSingleDay extends React.Component {
     checkDate = () => {
       const { selectedDate } = this.props;
       this.setState({ selectedDate });
+    }
+
+    setClassModalShow = (timeSlot) => {
+      this.setState({ selectedTimeSlot: timeSlot, classModalShow: true });
+    }
+
+    setClassModalHide = () => {
+      this.setState({ classModalShow: false });
+    }
+
+    setEditClassModalShow = (timeSlot, classSlot) => {
+      this.setState({ selectedTimeSlot: timeSlot, classSlot, editClassModalShow: true });
+    }
+
+    setEditClassModalHide = () => {
+      this.setState({ editClassModalShow: false });
     }
 
     componentDidMount() {
@@ -68,11 +131,15 @@ class ScheduleSingleDay extends React.Component {
         assignments,
       } = this.props;
 
+      const { classModalShow, editClassModalShow } = this.state;
+
       const viewingDate = moment(selectedDate).format('MMMM Do YYYY');
       return (
             <div className="ScheduleSingleDay">
                 <h4>{singleStudent.firstName}'s Class Schedule for {selectedDay.toUpperCase()}</h4>
                 <h5 className="mb-4">You are currently viewing assignments for {viewingDate}</h5>
+                <this.AddClassModal show={classModalShow} onHide={() => this.setState({ classModalShow: false })} />
+                <this.EditClassModal show={editClassModalShow} onHide={() => this.setState({ editClassModalShow: false })} />
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
@@ -89,7 +156,9 @@ class ScheduleSingleDay extends React.Component {
                         selectedDate={selectedDate}
                         selectedDay={selectedDay}
                         assignments={assignments}
-                        deleteClass={this.deleteClass} />)}
+                        deleteClass={this.deleteClass}
+                        setEditClassModalShow={this.setEditClassModalShow}
+                        setClassModalShow={this.setClassModalShow} />)}
                     </tbody>
                     </Table>
             </div>
