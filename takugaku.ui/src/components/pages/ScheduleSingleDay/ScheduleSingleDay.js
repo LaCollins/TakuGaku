@@ -36,9 +36,6 @@ class ScheduleSingleDay extends React.Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered>
           <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">
-                  Add A Class
-              </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                   <ClassForm
@@ -60,9 +57,6 @@ class ScheduleSingleDay extends React.Component {
           aria-labelledby="contained-modal-title-vcenter"
           centered>
           <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">
-                  Edit A Class
-              </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                   <ClassForm

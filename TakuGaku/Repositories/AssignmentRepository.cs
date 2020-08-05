@@ -207,7 +207,7 @@ namespace TakuGaku.Repositories
         public string CompleteAssignment(int assignmentId)
         {
             var sql = @"UPDATE assignment
-                        SET completed = 1
+                        SET completed = 1, DateComplete = GetDate()
                         WHERE assignmentId = @assignmentId";
 
             using (var db = new SqlConnection(ConnectionString))

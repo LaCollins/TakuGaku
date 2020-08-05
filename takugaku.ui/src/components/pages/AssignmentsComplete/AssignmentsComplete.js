@@ -99,17 +99,6 @@ class AssignmentsComplete extends React.Component {
                 <form className="formContainer" onSubmit={this.updateGrade}>
                 <div className="form-inline d-flex justify-content-center">
                     <div className="form-group row justify-content-around">
-                    <label htmlFor="pointsPossible" className="col-form-label">Possible Points:</label>
-                    <input
-                        type="number"
-                        className="form-control m-2"
-                        id="pointsPossible"
-                        value={this.state.pointsPossible}
-                        onChange={this.pointsPossibleChange}
-                        placeholder="100"
-                        required
-                        >
-                    </input>
                     <label htmlFor="pointsRecieved" className="col-form-label">Points Recieved:</label>
                     <input
                         type="number"
@@ -117,6 +106,17 @@ class AssignmentsComplete extends React.Component {
                         id="pointsRecieved"
                         value={this.state.pointsRecieved}
                         onChange={this.pointsRecievedChange}
+                        placeholder="100"
+                        required
+                        >
+                    </input>
+                    <label htmlFor="pointsPossible" className="col-form-label">Possible Points:</label>
+                    <input
+                        type="number"
+                        className="form-control m-2"
+                        id="pointsPossible"
+                        value={this.state.pointsPossible}
+                        onChange={this.pointsPossibleChange}
                         placeholder="100"
                         required
                         >
