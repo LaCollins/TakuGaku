@@ -68,7 +68,7 @@ class AssignmentTable extends React.Component {
       return (
             <tr className="AssignmentTable">
             <td>{assignment.className}</td>
-            { studentView && !complete ? (<td><Link to={{
+            { !complete ? (<td><Link to={{
               pathname: `/assignments/singleassignment/${assignment.assignmentId}`,
               state: { assignment, fromTable: true },
             }}>{assignment.assignmentTitle}</Link></td>)

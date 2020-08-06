@@ -104,7 +104,11 @@ class AssignmentsMain extends React.Component {
       getCompleteAssignments = (studentId) => {
         assignmentData.getCompletedAssignmentsByStudentId(studentId)
           .then((response) => {
-            const assignments = response;
+            const assignments = response.sort((a, b) => {
+              if (a.className < b.className) return -1;
+              if (a.className > b.className) return 1;
+              return 0;
+            });
             const filteredAssignments = assignments.filter((assignment) => assignment.className !== 'archive');
             this.setState({ completedAssignments: filteredAssignments });
           })
