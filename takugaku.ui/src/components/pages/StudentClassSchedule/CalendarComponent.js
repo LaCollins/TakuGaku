@@ -96,6 +96,7 @@ class CalendarComponent extends React.Component {
     const newDateString = `${year}-${month}-${day}`;
 
     this.setState({ selectedDate: newDateString });
+    this.getScheduleById(this.state.selectedStudent);
   }
 
   getAssignment = (studentId) => {
@@ -173,9 +174,6 @@ class CalendarComponent extends React.Component {
                 </div>
                 <div className="row d-flex justify-content-center">
                   <Calendar calendarType="US" onChange={this.selectDate} value={this.state.date} formatLongDate={this.formatDate}/>
-                </div>
-                <div className="row d-flex justify-content-around mt-4 buttonContainer">
-                <Button variant="secondary" className="scheduleButton" onClick={this.getStudentScheduleEvent}>View Class Schedule</Button>
                 </div>
             </div>
     );
