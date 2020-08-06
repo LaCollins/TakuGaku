@@ -1,6 +1,5 @@
 import React from 'react';
 import Calendar from 'react-calendar';
-import Button from 'react-bootstrap/Button';
 import './StudentClassSchedule.scss';
 import 'react-calendar/dist/Calendar.css';
 import assignmentData from '../../../helpers/data/assignmentData';
