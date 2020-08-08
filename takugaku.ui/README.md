@@ -38,10 +38,71 @@ I was inspired to build this application as many families are being forced to ho
 
 
 ## Screenshots
-Landing page - prior to school log in:
-![Main View]()
-Landing page - after school log in:
-![Main View 2]()
+Landing page - prior to school log in
+![Main View](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Main.PNG)
+
+Landing page - after school log in
+![Main View 2](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Main2.PNG)
+
+Teacher Registration
+![Teacher Registration](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-register.PNG)
+
+Teacher Log-In
+![Teacher Log In](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-log-in.PNG)
+
+Teacher Dashboard
+![Teacher Dashboard](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-dashboard.PNG)
+
+Manage Students
+![Manage Students](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-manage-students.PNG)
+
+Register Student
+![Register Student](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-register-student.PNG)
+
+Class Schedule - teacher view
+![Class Schedule](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-class-schedule.PNG)
+
+Add a class
+![Add class](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-add-class.PNG)
+
+Add assignment
+![Add assignment](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-add-assignment.PNG)
+
+Single Assignment View
+![Single assignment](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Assignment.PNG)
+
+Due assignments - teacher view
+![Due assignments](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-due-assignments.PNG)
+
+Completed Assignments - teacher view
+![Completed assignments](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-completedAssignments.PNG)
+
+Grade Assignment
+![Grade assignment](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-grade-assignment.PNG)
+
+Account management
+![Account management](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-account-management.PNG)
+
+Report Card
+![Report card](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-report-card.PNG)
+
+Print Report Card
+![Print report card](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Teacher-print-report-card.PNG)
+
+Student Log In
+![Student Log In](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Student-log-in.PNG)
+
+Student Dashboard
+![Student Dashboard](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Student-dashboard.PNG)
+
+Class schedule - student view
+![Class schedule](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Student-class-schedule.PNG)
+
+Due Assignments - student view
+![Due assignments](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Student-due-assignments.PNG)
+
+Completed Assignments - student view
+![Completed Assignments](https://raw.githubusercontent.com/LaCollins/TakuGaku/master/takugaku.ui/screenshots/Student-completedAssignments.PNG)
 
 
 ## Demo
