@@ -1,68 +1,56 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# TakuGaku
+# NSS Full Stack Web Development Capstone Project
 
-## Available Scripts
+## Specs
+* React
+* .Net/C#
+* Dapper ORM for mapping SQL database
+* Firebase Authentication
+* Bootstrap
+* Github Projects for planning
 
-In the project directory, you can run:
+## Technologies Used
+* HTML5, CSS, JavaScript
+* .Net/C#
+* Microsoft Sql Server
+* [React 16.13.1](https://reactjs.org/) for core app functionality
+* [React Bootstrap 1.2.2](https://react-bootstrap.github.io/) for navbar and modals
+* [Firebase 7.16.0](https://firebase.google.com/) for authentication
+* [axios 0.19.2](https://www.npmjs.com/package/axios)
+* [Moment 2.27.0](https://momentjs.com/)
+* [Dapper ORM](https://dapper-tutorial.net/dapper)
+* [Node-Sass 4.14.1](https://www.npmjs.com/package/node-sass?activeTab=versions) and [Bootstrap 4.5.0](https://getbootstrap.com/) for styling
+* [FontAwesome 5.12.0](https://fontawesome.com/) for icons
+* [React Calendar](https://www.npmjs.com/package/react-calendar)
+* [ReactToPrint](https://www.npmjs.com/package/react-to-print)
 
-### `yarn start`
+## Description
+TakuGaku is a homeschool support application that allows homeschooling families to build schedules, assign and grade homework, and generate report cards.
+TakuGaku allows students to log in and view their personal schedules, mark assignments as complete, and view their grades.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+I was inspired to build this application as many families are being forced to home school due to the Covid-19 pandemic. As someone who was homeschooled for my primary school years and later attended public school for high school, I felt that I had a unique insight into the troubles that families that are new to home schooling may face. I felt that students who are used to the routine structure of public school may have a difficult time transitioning if they are faced with too much change. With TakuGaku, it is easy to build a school schedule that is similar to a public school routine, as well as track assignments and grades. My hope is that such an application would make home schooling easier to manage.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `yarn test`
+### What's in store for the future of TakuGaku?
+* Allow users to filter completed assignments grades by class or assignment type.
+* Test and Worksheet creator that will allow teachers to create a worksheet or test as an assignment that automatically grades the test/assignment upon completion.
+* Resources page that has a list of outside resources such as worksheets, readings, and lesson plans for homeschooling.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Screenshots
+Landing page - prior to school log in:
+![Main View]()
+Landing page - after school log in:
+![Main View 2]()
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Demo
+[View the Project Here](https://www.youtube.com/watch?v=K-NQ_3i7_aA&feature=youtu.be)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## How to Run
+* Clone down this project from [GitHub](https://github.com/LaCollins/TakuGaku)
+* Install [http-server](https://www.npmjs.com/package/http-server)
+* In your browser, navigate to [https://localhost:3000](https://localhost:3000)
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Contributors
+[Laura Collins](https://github.com/LaCollins)

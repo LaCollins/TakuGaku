@@ -145,7 +145,8 @@ class StudentForm extends React.Component {
 
         return (
             <div className="StudentForm">
-                <h1>Register A Student</h1>
+                { editMode ? (<h1>Edit Student Information</h1>)
+                  : (<h1>Register A Student</h1>)}
                 <div className="container">
                 { invalidStudent ? (<div className="warning">User Name already exists. Please choose another.</div>)
                   : ('')}
