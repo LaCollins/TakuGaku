@@ -1,5 +1,5 @@
 # TakuGaku
-# NSS Full Stack Web Development Capstone Project
+## NSS Full Stack Web Development Capstone Project
 
 ## Specs
 * React
