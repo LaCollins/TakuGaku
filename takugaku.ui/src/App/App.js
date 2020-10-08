@@ -110,7 +110,7 @@ class App extends React.Component {
   }
 
   setSchool = (schoolInfo) => {
-    this.setState({ school: schoolInfo });
+    this.setState({ school: schoolInfo, schoolExists: true });
   }
 
   setTeacher = (teacherInfo) => {
@@ -188,7 +188,8 @@ class App extends React.Component {
             uid={uid}
             school={school}
             teacherLoggedIn={teacherLoggedIn}
-            studentLoggedIn={studentLoggedIn} />} />
+            studentLoggedIn={studentLoggedIn}
+            schoolExists={schoolExists} />} />
             <Route path="/register/school" exact render={(props) => <SchoolForm {...props} authed={authed}
               uid={uid}
               school={school}

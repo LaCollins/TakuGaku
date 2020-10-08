@@ -19,6 +19,8 @@ class Home extends React.Component {
 
     return (
             <div className="Home container">
+              { !this.props.schoolExists && this.props.uid !== '' ? (<Redirect push to={{ pathname: '/register/school' }} />)
+                : ('')}
               { this.props.teacherLoggedIn ? (<Redirect push to={{ pathname: '/teacher/dashboard' }} />)
                 : ('')}
               { this.props.studentLoggedIn ? (<Redirect push to={{ pathname: '/student/dashboard' }} />)
