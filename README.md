@@ -111,6 +111,8 @@ Completed Assignments - student view
 ## How to Run
 * Clone down this project from [GitHub](https://github.com/LaCollins/TakuGaku)
 * Install [http-server](https://www.npmjs.com/package/http-server)
+* Run DBSetup.sql in SQL Server to build database.
+* Run C# API with Visual Studio and front end using local host.
 * In your browser, navigate to [https://localhost:3000](https://localhost:3000)
 
 ## Contributors
